@@ -406,7 +406,7 @@ Spec §3 makes this the central rule of the system: **chartreuse is a shape, nev
 **Files:**
 - Create: `tests/unit/accent-rule.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 import { describe, it, expect } from 'vitest'
@@ -447,7 +447,7 @@ describe('accent rule: chartreuse is a shape, never a letter', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it passes on an empty codebase, then verify it actually catches violations**
+- [x] **Step 2: Run the test to verify it passes on an empty codebase, then verify it actually catches violations**
 
 Run: `npm test -- accent-rule`
 Expected: PASS (nothing to catch yet).
@@ -466,7 +466,7 @@ Expected: FAIL, listing `src/App.jsx:<line>`.
 
 A test you have never seen fail is not a test.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add tests/unit/accent-rule.test.js
