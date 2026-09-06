@@ -126,16 +126,26 @@ summit-rebrand/
 **Files:**
 - Create: `package.json`, `vite.config.js`, `index.html`, `src/main.jsx`, `src/App.jsx`, `src/index.css`
 
-- [ ] **Step 1: Create the project**
+- [x] **Step 1: Create the project**
+
+Scaffolding into `.` prompts interactively because the directory is not empty, which hangs a
+non-interactive shell. Scaffold into a temp directory and move the files up instead:
 
 ```bash
-cd summit-rebrand
-npm create vite@latest . -- --template react
+npm create vite@latest .vite-tmp -- --template react
+mv .vite-tmp/package.json .vite-tmp/vite.config.js .vite-tmp/index.html .vite-tmp/eslint.config.js .
+mv .vite-tmp/src .vite-tmp/public .
+rm -rf .vite-tmp
+ls
 ```
 
-When prompted about the non-empty directory, choose **"Ignore files and continue"**. This preserves `docs/` and `.gitignore`.
+Expected: `docs`, `index.html`, `package.json`, `public`, `src`, `vite.config.js` present,
+`.vite-tmp` gone. `docs/` and `.gitignore` untouched.
 
-- [ ] **Step 2: Install dependencies**
+If `eslint.config.js` does not exist in the scaffold output, skip it in the `mv` — the Vite
+template's exact file list varies by version. Everything else is required.
+
+- [x] **Step 2: Install dependencies**
 
 ```bash
 npm install react-router-dom@^7 framer-motion@^11
@@ -143,7 +153,7 @@ npm install -D tailwindcss@^4 @tailwindcss/vite vitest @vitest/ui jsdom \
   @testing-library/react @testing-library/jest-dom @playwright/test
 ```
 
-- [ ] **Step 3: Verify Tailwind major version**
+- [x] **Step 3: Verify Tailwind major version**
 
 ```bash
 npm ls tailwindcss
@@ -151,7 +161,7 @@ npm ls tailwindcss
 
 Expected: `tailwindcss@4.x.x`. **If it resolves to 3.x, stop** — this plan uses v4's CSS-first `@theme` syntax, which does not exist in v3. Re-run with `npm install -D tailwindcss@4`.
 
-- [ ] **Step 4: Configure Vite**
+- [x] **Step 4: Configure Vite**
 
 Replace `vite.config.js`:
 
@@ -165,15 +175,19 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 5: Run the dev server**
+- [x] **Step 5: Verify the toolchain builds**
+
+`npm run dev` blocks forever and cannot be stopped from a non-interactive shell. Build
+instead — it exercises the same Vite and Tailwind pipeline and exits on its own.
 
 ```bash
-npm run dev
+npm run build
 ```
 
-Expected: server starts, `http://localhost:5173` renders the Vite React starter page. Stop it with Ctrl-C.
+Expected: `✓ built in <time>`, exit code 0, and a `dist/` directory containing
+`index.html` and an `assets/` folder. No warnings about a missing Tailwind plugin.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add -A
@@ -672,7 +686,7 @@ git commit -m "feat: pricing data with discount framing removed"
 
 ---
 
-## Task 6: Content data — the sixteen concept builds
+## Task 6: Content data — the fifteen concept builds
 
 Spec §2 and §4.2. Every build must be flagged as a concept build; nothing may imply a client.
 
