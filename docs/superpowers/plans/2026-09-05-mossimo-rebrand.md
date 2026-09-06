@@ -636,7 +636,7 @@ Spec §6 removes discount framing while keeping prices identical. The test enfor
 - Modify: `tests/unit/voice.test.js`
 - Test: `tests/unit/pricing.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/unit/pricing.test.js`:
 
@@ -679,12 +679,12 @@ describe('pricing data', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- pricing`
 Expected: FAIL — `Cannot find module '../../src/lib/plans.js'`.
 
-- [ ] **Step 3: Write `src/lib/plans.js`**
+- [x] **Step 3: Write `src/lib/plans.js`**
 
 Prices from `../SummitSites/src/components/Pricing.jsx:4-85`. The third plan is renamed `Summit` → `Everything`, since "Summit" was the old brand.
 
@@ -772,7 +772,7 @@ export const PRICING_NOTE =
   'Every monthly plan includes two hours of work per month. The Everything plan includes unlimited edits. Work beyond those two hours may be billed separately.'
 ```
 
-- [ ] **Step 4: Extend the voice test to cover pricing**
+- [x] **Step 4: Extend the voice test to cover pricing**
 
 Append to `tests/unit/voice.test.js`:
 
@@ -787,12 +787,12 @@ describe('pricing copy', () => {
 })
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS. Pricing 5 tests, voice 4 tests.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/plans.js tests/unit/pricing.test.js tests/unit/voice.test.js

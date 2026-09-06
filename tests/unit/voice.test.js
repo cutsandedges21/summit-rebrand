@@ -23,3 +23,12 @@ describe('process copy', () => {
     }
   })
 })
+
+import { PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE } from '../../src/lib/plans.js'
+
+describe('pricing copy', () => {
+  it('is written in first person singular', () => {
+    const blob = JSON.stringify({ PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE })
+    expect(blob).not.toMatch(PLURAL)
+  })
+})
