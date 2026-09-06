@@ -4,7 +4,7 @@
 
 **Goal:** Build the mossimo site from scratch in `summit-rebrand/` — bone-paper editorial design, chartreuse fill-only accent, three signature scroll interactions — replacing Summit Sites without porting any of its components.
 
-**Architecture:** Vite + React 19 + Tailwind v4 (CSS-first `@theme` config) + react-router 7 + framer-motion. Content lives in plain data modules under `src/lib/` so copy is testable independently of components. Native scrolling throughout — no wheel hijacking — because `position: sticky` powers the Process section. Design rules that matter (fill-only accent, first-person voice, no discount language) are enforced by tests, not by discipline.
+**Architecture:** Vite + React 19 + Tailwind v4 (CSS-first `@theme` config) + react-router 7 + framer-motion. Content lives in plain data modules under `src/lib/` so copy is testable independently of components. Native scrolling throughout — no wheel hijacking — because `position: sticky` powers the Process section. Design rules that matter (fill-only accent, plural voice, no discount language) are enforced by tests, not by discipline.
 
 **Tech Stack:** Vite 8 · React 19 · Tailwind v4 · react-router-dom 7 · framer-motion 11 · Vitest + React Testing Library · Playwright
 
@@ -65,7 +65,7 @@ pass.
    content, never chrome.
 3. **No containers.** No cards, borders, shadows or rounded panels. Hairline `border-rule`
    only. Type sits directly on the paper.
-4. **First person singular.** Never `we`, `our`, `us`. Enforced by
+4. **First person PLURAL.** The site says `we`, never `I`. Enforced by
    `tests/unit/voice.test.js`.
 5. **Native scrolling only.** Never `preventDefault` a wheel or touch event, never animate
    `translateY` for scroll. `position: sticky` depends on this and the Process section
@@ -102,7 +102,7 @@ summit-rebrand/
 │   │   ├── builds.js      # 16 concept builds + filterBuilds()
 │   │   ├── plans.js       # 3 plans + add-ons (no discount fields)
 │   │   ├── services.js
-│   │   ├── process.js     # 4 steps, first person
+│   │   ├── process.js     # 4 steps, plural voice
 │   │   ├── faq.js
 │   │   └── motion.js      # useReducedMotion, useIsMobile
 │   ├── components/
@@ -541,9 +541,11 @@ git commit -m "test: enforce fill-only accent rule"
 
 ---
 
-## Task 4: Content data — process steps, first person
+## Task 4: Content data — process steps, plural voice
 
-Spec §6 requires first-person voice everywhere. Source copy is third-person plural.
+Spec §6: the site speaks as *we*, never *I*, even though the brand is a personal name. The
+old site already said "we", so this copy keeps that — what changes is the brand name and the
+tone, not the grammatical person.
 
 **Files:**
 - Create: `src/lib/process.js`
@@ -555,8 +557,30 @@ Spec §6 requires first-person voice everywhere. Source copy is third-person plu
 import { describe, it, expect } from 'vitest'
 import { STEPS } from '../../src/lib/process.js'
 
-// Whole-word match. "web" must not trip the "we" rule.
-const PLURAL = /\b(we|we'll|we've|we're|our|ours|us)\b/i
+// The brand is a personal name, but the site speaks as "we" — decided 2026-09-06,
+// reversing the earlier first-person-singular direction. This guard keeps that
+// consistent: singular "I / my / me / mine" must never leak back in.
+//
+// Whole-word matching throughout, so "Business" does not trip "us" and "time"
+// does not trip "me". Verified by the self-test below.
+export const SINGULAR = /\bI\b|\bI'[a-z]+|\b(?:my|mine|me)\b/i
+
+describe('the voice guard itself', () => {
+  // A guard nobody has watched work is not a guard. These pin its exact edges,
+  // because the whole-word behaviour is the only thing keeping it from firing
+  // on ordinary words that happen to contain "me" or "my".
+  it('catches first person singular', () => {
+    for (const bad of ['I build websites', "I'm available", 'my process', 'tell me more']) {
+      expect(bad).toMatch(SINGULAR)
+    }
+  })
+
+  it('does not fire on ordinary words that contain those letters', () => {
+    for (const ok of ['We build websites', 'Business email setup', 'Sometimes', 'company']) {
+      expect(ok).not.toMatch(SINGULAR)
+    }
+  })
+})
 
 describe('process copy', () => {
   it('has four steps', () => {
@@ -571,9 +595,9 @@ describe('process copy', () => {
     }
   })
 
-  it('is written in first person singular', () => {
+  it('speaks as "we", never as "I"', () => {
     for (const step of STEPS) {
-      expect(`${step.title} ${step.body}`).not.toMatch(PLURAL)
+      expect(`${step.title} ${step.body}`).not.toMatch(SINGULAR)
     }
   })
 })
@@ -592,22 +616,22 @@ Converted from `../SummitSites/src/components/Process.jsx:6-27`.
 export const STEPS = [
   {
     num: '01',
-    title: 'Tell me about your business.',
-    body: "A short form. I learn your goals, your customers, and what you're actually trying to fix — in under ten minutes. No discovery call you have to dress up for.",
+    title: 'Tell us about your business.',
+    body: "A short form. We learn your goals, your customers, and what you're actually trying to fix — in under ten minutes. No discovery call you have to dress up for.",
   },
   {
     num: '02',
-    title: 'I design and build.',
-    body: "Design, copy, development — all of it. You review, you tell me what's wrong, I refine until it's right.",
+    title: 'We design and build.',
+    body: "Design, copy, development — all of it. You review, you tell us what's wrong, we refine until it's right.",
   },
   {
     num: '03',
     title: 'Launch and go live.',
-    body: 'Domain, hosting, performance, the lot. I handle the parts that break at 2am, so you hear about them from me and not from a customer.',
+    body: 'Domain, hosting, performance, the lot. We handle the parts that break at 2am, so you hear about them from us and not from a customer.',
   },
   {
     num: '04',
-    title: 'I stay on after launch.',
+    title: 'We stay on after launch.',
     body: 'Updates, fixes, new pages. One flat rate, no surprise invoices, no disappearing act.',
   },
 ]
@@ -622,7 +646,7 @@ Expected: PASS, 3 tests.
 
 ```bash
 git add src/lib/process.js tests/unit/voice.test.js
-git commit -m "feat: process steps in first person"
+git commit -m "feat: process steps in plural voice"
 ```
 
 ---
@@ -780,9 +804,9 @@ Append to `tests/unit/voice.test.js`:
 import { PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE } from '../../src/lib/plans.js'
 
 describe('pricing copy', () => {
-  it('is written in first person singular', () => {
+  it('speaks as "we", never as "I"', () => {
     const blob = JSON.stringify({ PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE })
-    expect(blob).not.toMatch(PLURAL)
+    expect(blob).not.toMatch(SINGULAR)
   })
 })
 ```
@@ -897,6 +921,10 @@ worse, not better. Fifteen builds, not sixteen.
 Categories are assigned from what each build actually is. Adjust a category if a build turns out to be something else once you look at the image — the test only requires the value be one of `CATEGORIES`.
 
 ```js
+// NOTE: one build is named "Laser and Me", which the SINGULAR voice guard in
+// tests/unit/voice.test.js would match on \bme\b. That is why BUILDS is NOT
+// covered by the voice test — these are proper nouns, not brand voice. Do not
+// add BUILDS to that check, and do not rename the build to satisfy it.
 export const CATEGORIES = [
   'Hospitality',
   'Food & drink',
@@ -967,8 +995,8 @@ describe('services copy', () => {
     expect(SERVICES).toHaveLength(4)
   })
 
-  it('is written in first person singular', () => {
-    expect(JSON.stringify(SERVICES)).not.toMatch(PLURAL)
+  it('speaks as "we", never as "I"', () => {
+    expect(JSON.stringify(SERVICES)).not.toMatch(SINGULAR)
   })
 })
 
@@ -981,8 +1009,10 @@ describe('faq copy', () => {
     }
   })
 
-  it('is written in first person singular', () => {
-    expect(JSON.stringify(FAQS)).not.toMatch(PLURAL)
+  // Only the ANSWERS are brand voice. The questions are the customer speaking,
+  // so "Do I own the site?" is correct and must not be flagged.
+  it('answers as "we", never as "I"', () => {
+    expect(FAQS.map((f) => f.a).join(' ')).not.toMatch(SINGULAR)
   })
 })
 ```
@@ -994,7 +1024,7 @@ Expected: FAIL — modules not found.
 
 - [ ] **Step 3: Write `src/lib/services.js`**
 
-From `../SummitSites/src/components/Services.jsx:4-29`, converted to first person. Icons are dropped — the reference language has no iconography.
+From `../SummitSites/src/components/Services.jsx:4-29`, converted to the plural voice. Icons are dropped — the reference language has no iconography.
 
 ```js
 export const SERVICES = [
@@ -1030,7 +1060,7 @@ export const SERVICES = [
   },
   {
     title: 'Care and growth',
-    blurb: 'I keep it fast, secure and improving. Nothing for you to do.',
+    blurb: 'We keep it fast, secure and improving. Nothing for you to do.',
     includes: [
       'Hosting, security and updates',
       'Uptime monitoring',
@@ -1043,33 +1073,37 @@ export const SERVICES = [
 
 - [ ] **Step 4: Write `src/lib/faq.js`**
 
-Read `../SummitSites/src/components/FAQ.jsx` for the current entries and convert each to first person. If an entry references the old brand, rewrite it. Minimum viable set, all first person:
+Read `../SummitSites/src/components/FAQ.jsx` for the current entries. If an entry references the old brand, rewrite it.
+
+Note the questions are written from the customer's point of view, so they legitimately
+contain "I" and "my" — "Do I own the site?" is the customer speaking. Only the **answers**
+are brand voice, which is why the test above checks `f.a` and not `f.q`.
 
 ```js
 export const FAQS = [
   {
     q: 'Who actually builds the site?',
-    a: 'I do. Design, copy, development, launch and everything after it. You will never be handed to an account manager, because there is not one.',
+    a: 'The same people you email. Design, copy, development, launch and everything after it. You will never be handed to an account manager, because there is not one.',
   },
   {
     q: 'How long does it take?',
-    a: 'Two to four weeks from the day I have your content, depending on the plan. The slow part is almost always waiting on photos and text, so the sooner you send them the sooner you launch.',
+    a: 'Two to four weeks from the day we have your content, depending on the plan. The slow part is almost always waiting on photos and text, so the sooner you send them the sooner you launch.',
   },
   {
     q: 'What happens if I want changes after launch?',
-    a: 'Every plan includes two hours of edits a month. Send them over and I turn them around. Bigger pieces of work get quoted first so there is never a surprise invoice.',
+    a: 'Every plan includes two hours of edits a month. Send them over and we turn them around. Bigger pieces of work get quoted first, so there is never a surprise invoice.',
   },
   {
     q: 'Do I own the site?',
-    a: 'Yes. The design and content are yours. The monthly fee covers hosting, upkeep and my ongoing time — not permission to keep using your own website.',
+    a: 'Yes. The design and content are yours. The monthly fee covers hosting, upkeep and ongoing time — not permission to keep using your own website.',
   },
   {
     q: 'What if I want to leave?',
-    a: 'No lock-in. Give me a month of notice and I will hand over the files and help you move.',
+    a: 'No lock-in. Give us a month of notice and we will hand over the files and help you move.',
   },
   {
     q: 'Is the work on the site real client work?',
-    a: 'No, and I would rather say so plainly. The builds shown are concept builds — made to show what I do rather than to dress up a client list I do not have yet.',
+    a: 'No, and we would rather say so plainly. The builds shown are concept builds — made to show what we can do rather than to dress up a client list we do not have yet.',
   },
 ]
 ```
@@ -1083,7 +1117,7 @@ Expected: PASS.
 
 ```bash
 git add src/lib/services.js src/lib/faq.js tests/unit/voice.test.js
-git commit -m "feat: services and faq copy in first person"
+git commit -m "feat: services and faq copy"
 ```
 
 ---
@@ -1723,7 +1757,7 @@ export default function ArcHero() {
             textShadow: '0 2px 28px rgba(240,235,232,0.92)',
           }}
         >
-          I build <em>websites</em> for businesses
+          We build <em>websites</em> for businesses
           <br />
           that <em>answer</em> the phone.
         </h1>
@@ -2395,7 +2429,7 @@ export default function Work() {
           Fifteen concept builds.
         </h1>
         <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-          These are concept builds — made to show what I do, not to dress up a client list I
+          These are concept builds — made to show what we can do, not to dress up a client list we
           do not have yet. When there is client work worth showing, it will lead this page.
         </p>
       </header>
@@ -2414,7 +2448,7 @@ import { SERVICES } from '../lib/services.js'
 export default function Services() {
   return (
     <div data-testid="services-page" className="px-6 py-16 md:px-12">
-      <p className="label mb-4">What I do</p>
+      <p className="label mb-4">What we do</p>
       <h1
         className="font-display leading-[1.04] tracking-tight"
         style={{ fontSize: 'var(--text-section)' }}
@@ -2668,22 +2702,22 @@ export default function About() {
         className="font-display leading-[1.04] tracking-tight"
         style={{ fontSize: 'var(--text-section)' }}
       >
-        Hi — I'm Mossimo.
+        Small studio. Montreal.
       </h1>
       <div className="mt-8 max-w-xl font-sans leading-relaxed text-ink-muted">
         <p>
-          I design and build websites for local businesses, from Montreal, for clients across
-          Canada. The person you email is the person who builds the site, and the person who
-          fixes it when something breaks at nine at night.
+          We design and build websites for local businesses — from Montreal, for clients
+          across Canada. The person you email is the person who builds the site, and the
+          person who fixes it when something breaks at nine at night.
         </p>
         <p className="mt-4">
           There is no account manager, no offshore team, and nobody who will forward your
           message on and then go quiet. That is the whole pitch, and it is the reason the
-          business has my name on it.
+          studio carries a name instead of an acronym.
         </p>
         <p className="mt-4">
-          Most of what I build is for businesses where the website has one job — get someone
-          to call, book, or walk in. I care much more about whether that happens than about
+          Most of what we build is for businesses where the website has one job — get someone
+          to call, book, or walk in. We care far more about whether that happens than about
           whether the site wins an award.
         </p>
       </div>
@@ -2749,11 +2783,11 @@ export default function Contact() {
         Let's build something.
       </h1>
       <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-        Tell me about your business — no commitment, no pressure. I reply within 24 hours.
+        Tell us about your business — no commitment, no pressure. We reply within 24 hours.
       </p>
 
       <div className="mt-14 max-w-2xl border-t border-ink pt-6">
-        <p className="label mb-3">Email me</p>
+        <p className="label mb-3">Email us</p>
         <a
           href={`mailto:${EMAIL}`}
           className="font-display leading-none underline decoration-accent decoration-4 underline-offset-8"
@@ -2763,7 +2797,7 @@ export default function Contact() {
         </a>
         <p className="mt-6 font-sans leading-relaxed text-ink-muted">
           Include your business name and a few lines about what you need. The more you share,
-          the sharper my first reply.
+          the sharper our first reply.
         </p>
       </div>
 
@@ -2796,9 +2830,8 @@ Both source files already hold their copy in a `SECTIONS` array of
 string:
 
 1. `Summit Sites` → `mossimo`
-2. First person singular: `we` → `I`, `our` → `my`, `us` → `me`, and fix the verb.
-   `We do not sell your personal information` → `I do not sell your personal information`.
-   `we collect` → `I collect`. `Our site` → `My site`.
+2. **Nothing else.** The source is already in the plural voice the site uses, so `we`, `our`
+   and `us` all stay exactly as written.
 
 Do not reword anything else. This is legal copy; paraphrasing it changes what it commits you
 to.
@@ -2821,9 +2854,9 @@ describe('legal copy', () => {
     }
   })
 
-  it('is written in first person singular', () => {
+  it('speaks as "we", never as "I"', () => {
     const blob = JSON.stringify({ PRIVACY_SECTIONS, TERMS_SECTIONS })
-    expect(blob).not.toMatch(PLURAL)
+    expect(blob).not.toMatch(SINGULAR)
   })
 
   it('never names the retired brand', () => {
@@ -3093,7 +3126,7 @@ Expected: FAIL — the scaffold title is "Vite + React".
     <title>mossimo — websites for businesses that answer the phone</title>
     <meta
       name="description"
-      content="I design, build and look after websites for local businesses. Based in Montreal, working across Canada."
+      content="We design, build and look after websites for local businesses. Based in Montreal, working across Canada."
     />
     <meta name="theme-color" content="#f0ebe8" />
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />

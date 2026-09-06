@@ -16,9 +16,19 @@ plans with a one-time build fee, plus add-ons.
 
 ### Why a personal name changes more than the logo
 
-"Summit Sites" reads as a company. "mossimo" reads as a person. Every line of copy on the
-current site says *we*, and a two-person-sounding *we* under a one-person name is the kind
-of small dishonesty buyers notice. All copy moves to first person.
+"Summit Sites" reads as a company. "mossimo" reads as a person — and that shift is the point
+of the rebrand.
+
+**The copy stays in first person plural: *we*, not *I*.** (Decided 2026-09-06, reversing an
+earlier call to move everything to *I*.) A personal name paired with a plural voice reads as
+a small studio rather than a freelancer, which is the more credible register for the buyer
+here — a local business owner spending $1,399 on a build wants to hear from something that
+will still exist next year. It also leaves room to subcontract without rewriting the site.
+
+The tradeoff, stated plainly so nobody rediscovers it later: a name-brand saying *we* invites
+"how many of you are there?", and the honest answer is one. The copy therefore never claims
+a team, a size, or an office. It says *we* the way a studio does, and it never elaborates.
+`tests/unit/voice.test.js` enforces the consistency mechanically.
 
 The same shift makes the current pricing page a liability. It carries
 `Summer Sale: Was Previously $168`, `≈ $2.23/day`, and `Save $676/mo`. Under a scrappy
@@ -221,7 +231,7 @@ worth seeing.
 
 ## 6. Voice and copy
 
-- **First person throughout.** Every `we`/`our`/`us` becomes `I`/`my`/`me`.
+- **First person plural throughout.** The site says `we`, never `I`. The copy never claims a team size, an office, or a headcount — it says `we` the way a studio does and does not elaborate.
 - **Location:** based in Montreal, working across Canada. State it in the hero and footer —
   it earns local search ranking for a service that is itself sold as local SEO.
 - **No discount language.** Remove `Summer Sale`, `Was Previously $168`, `≈ $2.23/day`,
