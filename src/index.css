@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap');
+/* Fonts are loaded via <link> in index.html, not here.
+   Tailwind inlines its own @import in place, which pushes any later @import
+   past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
 @theme {
   --color-paper: #f0ebe8;

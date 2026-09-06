@@ -250,6 +250,29 @@ describe('design tokens', () => {
     expect(css).toMatch(/--font-sans\s*:.*Instrument Sans/)
   })
 })
+
+// Naming a font family in a token does not fetch it. Tailwind v4 inlines its own
+// @import in place, which pushes any later @import past ~19kB of rules into an
+// illegal position and Lightning CSS silently drops it — so the fonts load from
+// index.html instead. Without this test that regression is invisible: the tokens
+// still resolve and the build still passes, but everything renders in Georgia.
+describe('webfont loading', () => {
+  const html = readFileSync(resolve(__dirname, '../../index.html'), 'utf8')
+
+  it('loads both Instrument families from index.html', () => {
+    expect(html).toMatch(/<link[^>]+fonts\.googleapis\.com[^>]+rel="stylesheet"/s)
+    expect(html).toMatch(/Instrument\+Serif/)
+    expect(html).toMatch(/Instrument\+Sans/)
+  })
+
+  it('requests the italic display axis the design relies on', () => {
+    expect(html).toMatch(/Instrument\+Serif:ital@0;1/)
+  })
+
+  it('does not try to load fonts from the stylesheet, where they get stripped', () => {
+    expect(css).not.toMatch(/@import\s+url\([^)]*googleapis/)
+  })
+})
 ```
 
 - [x] **Step 2: Configure Vitest and run the test to see it fail**
@@ -288,10 +311,30 @@ Expected: FAIL — all token assertions fail against the Vite starter CSS.
 
 - [x] **Step 3: Write `src/index.css`**
 
+Note there is **no** `@import url(...)` for the fonts here. Tailwind v4 inlines its own
+`@import` in place, so a font import written after it lands ~19kB into the file, becomes an
+illegal `@import` position, and Lightning CSS drops it without failing the build. The tokens
+still resolve, so the only symptom is that the whole site silently renders in Georgia. The
+fonts are loaded with `<link>` from `index.html` instead — which is faster anyway, since it
+avoids a CSS round-trip before the font request starts.
+
+Add this to `index.html` in the same step (Task 18 rewrites that file later and must keep it):
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+```
+
 ```css
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap');
+/* Fonts are loaded via <link> in index.html, not here.
+   Tailwind inlines its own @import in place, which pushes any later @import
+   past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
 @theme {
   --color-paper: #f0ebe8;
@@ -345,7 +388,7 @@ Expected: FAIL — all token assertions fail against the Vite starter CSS.
 - [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test`
-Expected: PASS, 10 tests.
+Expected: PASS, 12 tests.
 
 - [x] **Step 5: Commit**
 
@@ -2989,6 +3032,14 @@ Expected: FAIL — the scaffold title is "Vite + React".
     <meta name="theme-color" content="#f0ebe8" />
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+    <!-- Fonts MUST stay here. They cannot live in index.css — see Task 2 Step 3.
+         tests/unit/tokens.test.js fails if these links go missing. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>

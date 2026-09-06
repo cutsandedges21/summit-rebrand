@@ -31,3 +31,26 @@ describe('design tokens', () => {
     expect(css).toMatch(/--font-sans\s*:.*Instrument Sans/)
   })
 })
+
+// Naming a font family in a token does not fetch it. Tailwind v4 inlines its own
+// @import in place, which pushes any later @import past ~19kB of rules into an
+// illegal position and Lightning CSS silently drops it — so the fonts load from
+// index.html instead. Without this test that regression is invisible: the tokens
+// still resolve and the build still passes, but everything renders in Georgia.
+describe('webfont loading', () => {
+  const html = readFileSync(resolve(__dirname, '../../index.html'), 'utf8')
+
+  it('loads both Instrument families from index.html', () => {
+    expect(html).toMatch(/<link[^>]+fonts\.googleapis\.com[^>]+rel="stylesheet"/s)
+    expect(html).toMatch(/Instrument\+Serif/)
+    expect(html).toMatch(/Instrument\+Sans/)
+  })
+
+  it('requests the italic display axis the design relies on', () => {
+    expect(html).toMatch(/Instrument\+Serif:ital@0;1/)
+  })
+
+  it('does not try to load fonts from the stylesheet, where they get stripped', () => {
+    expect(css).not.toMatch(/@import\s+url\([^)]*googleapis/)
+  })
+})
