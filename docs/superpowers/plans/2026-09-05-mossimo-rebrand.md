@@ -833,7 +833,7 @@ Spec §2 and §4.2. Every build must be flagged as a concept build; nothing may 
 - Create: `src/lib/builds.js`
 - Test: `tests/unit/builds.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 import { describe, it, expect } from 'vitest'
@@ -881,12 +881,12 @@ describe('concept builds', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- builds`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Copy the build images across**
+- [x] **Step 3: Copy the build images across**
 
 ```bash
 mkdir -p public/builds
@@ -916,7 +916,7 @@ not featured — so putting it in a list labelled "concept builds" would be a fa
 real client work, which is the exact failure mode §2 exists to prevent. Renaming it would be
 worse, not better. Fifteen builds, not sixteen.
 
-- [ ] **Step 4: Write `src/lib/builds.js`**
+- [x] **Step 4: Write `src/lib/builds.js`**
 
 Categories are assigned from what each build actually is. Adjust a category if a build turns out to be something else once you look at the image — the test only requires the value be one of `CATEGORIES`.
 
@@ -962,16 +962,16 @@ export function filterBuilds(builds, category) {
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `npm test -- builds`
 Expected: PASS, 7 tests.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/builds.js public/builds tests/unit/builds.test.js
-git commit -m "feat: sixteen concept builds with category filter"
+git commit -m "feat: fifteen concept builds with category filter"
 ```
 
 ---
