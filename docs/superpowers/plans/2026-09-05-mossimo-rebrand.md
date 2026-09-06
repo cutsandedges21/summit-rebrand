@@ -210,7 +210,7 @@ The palette, type scale, and grain from spec §3. Tailwind v4 declares tokens in
 - Modify: `src/index.css` (replace entirely)
 - Test: `tests/unit/tokens.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 This test reads the CSS as text and asserts every spec token is present with the exact value. It catches typo'd hex codes, which are otherwise invisible until someone eyeballs a screenshot.
 
@@ -252,7 +252,7 @@ describe('design tokens', () => {
 })
 ```
 
-- [ ] **Step 2: Configure Vitest and run the test to see it fail**
+- [x] **Step 2: Configure Vitest and run the test to see it fail**
 
 `vitest.config.js`:
 
@@ -286,7 +286,7 @@ Add to `package.json` scripts:
 Run: `npm test`
 Expected: FAIL — all token assertions fail against the Vite starter CSS.
 
-- [ ] **Step 3: Write `src/index.css`**
+- [x] **Step 3: Write `src/index.css`**
 
 ```css
 @import "tailwindcss";
@@ -342,12 +342,12 @@ Expected: FAIL — all token assertions fail against the Vite starter CSS.
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test`
 Expected: PASS, 10 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/index.css vitest.config.js tests/ package.json
