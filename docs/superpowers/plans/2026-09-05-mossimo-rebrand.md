@@ -12,6 +12,69 @@
 
 ---
 
+## Resuming after an interrupted session
+
+**This plan file is the only durable record of progress.** Agents are ephemeral; if a session
+ends mid-build, nothing about the agent survives. Two things do: the checkboxes below, and
+git history.
+
+### The rule that makes resumption work
+
+> **Every task's final commit must include this plan file with that task's checkboxes ticked.**
+
+Not a separate commit. The same one:
+
+```bash
+git add <the files this task touched> docs/superpowers/plans/2026-09-05-mossimo-rebrand.md
+git commit -m "feat: <what this task built>"
+```
+
+If the code lands and the checkbox does not, the next session reads a stale plan and redoes
+finished work — or worse, skips unfinished work because a neighbouring box was ticked
+optimistically.
+
+Tick a box only after the step's stated expected output actually appeared. A ticked box is a
+claim that the command ran and passed.
+
+### To resume
+
+1. `git log --oneline` — the last commit message names the last completed task.
+2. Open this file and find the first unticked `- [ ]`.
+3. **Reconcile the two.** If they disagree, git wins — the checkbox may have been ticked in a
+   commit that never landed, or code may have landed without the tick. Run `npm test` to
+   establish the true state before writing anything.
+4. Re-read the **Standing rules** below. They apply to every task and are not repeated in
+   each one.
+5. Resume at that task, from step 1 of that task. Do not resume mid-task — steps within a
+   task are small enough to redo cheaply, and a half-finished task has no reliable marker.
+
+### Standing rules — apply to every task, never restated
+
+These are invariants from the spec. Violating one is a defect even if the task's own steps
+pass.
+
+1. **Chartreuse `#C6D42B` is a fill, never a letter.** No `text-accent`, no
+   `color: #c6d42b`. Enforced by `tests/unit/accent-rule.test.js`.
+2. **No dark sections.** The only dark rectangles are work screenshots and recordings —
+   content, never chrome.
+3. **No containers.** No cards, borders, shadows or rounded panels. Hairline `border-rule`
+   only. Type sits directly on the paper.
+4. **First person singular.** Never `we`, `our`, `us`. Enforced by
+   `tests/unit/voice.test.js`.
+5. **Native scrolling only.** Never `preventDefault` a wheel or touch event, never animate
+   `translateY` for scroll. `position: sticky` depends on this and the Process section
+   depends on sticky.
+6. **Never import from `../SummitSites`.** Read it for copy, retype what you need. It is a
+   separate git repo and not a dependency.
+7. **No discount language.** No "sale", "was $X", "$X/day", "save $X". Prices are stated
+   plainly. Enforced by `tests/unit/pricing.test.js`.
+8. **Every interaction needs a static fallback** for `prefers-reduced-motion` and for
+   viewports under 768px.
+9. **Never mark a step done on a failing command.** Paste the real output. If a test fails,
+   fix it or stop and say so — do not proceed to the next task.
+
+---
+
 ## File Structure
 
 ```
