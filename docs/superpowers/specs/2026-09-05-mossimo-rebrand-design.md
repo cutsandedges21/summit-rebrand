@@ -30,7 +30,7 @@ not change. The discount framing is removed entirely.**
 Considered and rejected: repositioning as a premium solo studio with project-based pricing.
 That sale is made on proof — named clients, results, case studies. There is exactly one live
 client site (`gloryncustom.com`) and it isn't representative of the work worth showing. The
-portfolio is sixteen concept builds. Premium positioning would be writing checks the work
+portfolio is fifteen concept builds. Premium positioning would be writing checks the work
 can't cash yet.
 
 The route back to premium stays open: once there are two or three client builds worth
@@ -40,12 +40,18 @@ naming, the portfolio leads with them and the pricing can move.
 
 ## 2. Portfolio honesty
 
-Sixteen concept builds, **labelled as concept builds**. Not "our work", not implied clients.
+Fifteen concept builds, **labelled as concept builds**. Not "our work", not implied clients.
 
-Framed correctly, sixteen speculative builds read as *range*. Framed ambiguously, they read
+Framed correctly, fifteen speculative builds read as *range*. Framed ambiguously, they read
 as deception the moment someone clicks through and finds no real business behind Halcyon.
 
-`gloryncustom.com` is not featured.
+`gloryncustom.com` is not featured, and this has a concrete consequence: the old site's
+`public/glorync-hero.jpeg` is **not carried over**. It is the live client site, so placing it
+in a list labelled "concept builds" would be a false claim about real client work — precisely
+the failure this section exists to prevent. Renaming it to disguise the association would be
+worse. That is why the count is fifteen rather than sixteen.
+
+See `docs/references/` for the reference sites this design was derived from.
 
 ---
 
@@ -150,7 +156,7 @@ strength that never reads as a mistake. It would at heavier settings.
 
 ### 4.1 Arc hero — `/`
 
-Adapted from melius.com. The sixteen concept-build screenshots form a curved corridor in
+Adapted from melius.com. The fifteen concept-build screenshots form a curved corridor in
 perspective, converging toward the centre of the viewport, headline overlaid. On scroll the
 arc **flies apart and past the camera**, revealing the page beneath.
 
@@ -167,8 +173,8 @@ Chosen over the pinned treatment deliberately: a list stays scannable, and someo
 for a restaurant build shouldn't have to scroll past a hotel to find one.
 
 Industry filter, with the active filter as a chartreuse fill. Categories are derived from
-the sixteen builds that actually exist (Halcyon, Piment, Meridian, Khufus, Drinksom,
-Sterling, Lamborghini, Elixir Hotel, Air Center, Brand Cosmetics, Cuts and Edges, Glorync,
+the fifteen builds that actually exist (Halcyon, Piment, Meridian, Khufus, Drinksom,
+Sterling, Lamborghini, Elixir Hotel, Air Center, Brand Cosmetics, Cuts and Edges,
 Handhold, Laser and Me, Monads, Vorszk) — not invented up front. Grouping is a build-time
 task once each build is reviewed.
 
@@ -197,7 +203,7 @@ problem.
 | Route | Notes |
 |---|---|
 | `/` | Arc hero → work preview → pinned Process → services → pricing preview → contact |
-| `/work` | Full sixteen builds, industry filter |
+| `/work` | Full fifteen builds, industry filter |
 | `/portfolio`, `/inspiration` | 301 → `/work` |
 | `/services` | Four services |
 | `/pricing` | Three plans, add-ons, Care+ bundle |
@@ -251,7 +257,7 @@ react-router 7.
 
 | Asset | Disposition |
 |---|---|
-| `public/*-hero.jpeg` ×16 | **Carry over.** These become the arc and the work list. |
+| `public/*-hero.jpeg` ×15 | **Carry over.** These become the arc and the work list. |
 | `fonts/` (Avaleigh, Itoya, Moho, Grinola, Zorvain) | **Drop all.** Replaced by Instrument Serif + Sans. |
 | `public/*.mp4` ×5 | **Drop.** These are AI-generated cinematic clips, not screen recordings. They belong to the old atmospheric language. |
 | `favicon_io/` | **Regenerate** for the new mark. |
@@ -259,7 +265,7 @@ react-router 7.
 
 **Gap to fill:** the work section needs silent screen recordings of each concept build
 scrolling. **These do not exist yet.** The five existing MP4s are not screen recordings.
-Recording sixteen of them is a real task — budget it, or launch with static screenshots and
+Recording fifteen of them is a real task — budget it, or launch with static screenshots and
 add recordings progressively.
 
 ---
@@ -269,7 +275,7 @@ add recordings progressively.
 **Pinned scroll sections are the single most common place this pattern breaks.**
 
 - Process **must** collapse to a plain stacked list under `768px`. No pinning, no sticky.
-- The arc hero collapses to a single centred still or a much shallower arc. A sixteen-image
+- The arc hero collapses to a single centred still or a much shallower arc. A fifteen-image
   perspective corridor on a phone is a jank generator.
 - Work list hover-to-play has no hover on touch. Tap opens the recording inline, or the
   recording autoplays muted when the row scrolls into view.
@@ -296,7 +302,7 @@ These are build requirements, not polish.
    a site no longer called that. Accepted for launch, to be swapped later. This is the one
    place the rebrand is visibly incomplete.
 2. **Tagline** not finalised.
-3. **Screen recordings** for sixteen builds don't exist (§7).
+3. **Screen recordings** for fifteen builds don't exist (§7).
 4. **Domain** not chosen.
 5. **Photo of the owner** needed for `/about`. Not required for launch if `/about` ships
    text-only, but the personal-brand positioning is weaker without it.
