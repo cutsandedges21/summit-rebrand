@@ -549,7 +549,7 @@ Spec §6 requires first-person voice everywhere. Source copy is third-person plu
 - Create: `src/lib/process.js`
 - Test: `tests/unit/voice.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 import { describe, it, expect } from 'vitest'
@@ -579,12 +579,12 @@ describe('process copy', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- voice`
 Expected: FAIL — `Cannot find module '../../src/lib/process.js'`.
 
-- [ ] **Step 3: Write `src/lib/process.js`**
+- [x] **Step 3: Write `src/lib/process.js`**
 
 Converted from `../SummitSites/src/components/Process.jsx:6-27`.
 
@@ -613,12 +613,12 @@ export const STEPS = [
 ]
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- voice`
 Expected: PASS, 3 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/process.js tests/unit/voice.test.js
