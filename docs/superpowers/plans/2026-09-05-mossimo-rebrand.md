@@ -4,9 +4,15 @@
 
 **Goal:** Build the mossimo site from scratch in `summit-rebrand/` — bone-paper editorial design, chartreuse fill-only accent, three signature scroll interactions — replacing Summit Sites without porting any of its components.
 
-**Architecture:** Vite + React 18 + Tailwind v4 (CSS-first `@theme` config) + react-router 7 + framer-motion. Content lives in plain data modules under `src/lib/` so copy is testable independently of components. Native scrolling throughout — no wheel hijacking — because `position: sticky` powers the Process section. Design rules that matter (fill-only accent, first-person voice, no discount language) are enforced by tests, not by discipline.
+**Architecture:** Vite + React 19 + Tailwind v4 (CSS-first `@theme` config) + react-router 7 + framer-motion. Content lives in plain data modules under `src/lib/` so copy is testable independently of components. Native scrolling throughout — no wheel hijacking — because `position: sticky` powers the Process section. Design rules that matter (fill-only accent, first-person voice, no discount language) are enforced by tests, not by discipline.
 
-**Tech Stack:** Vite 5 · React 18 · Tailwind v4 · react-router-dom 7 · framer-motion 11 · Vitest + React Testing Library · Playwright
+**Tech Stack:** Vite 8 · React 19 · Tailwind v4 · react-router-dom 7 · framer-motion 11 · Vitest + React Testing Library · Playwright
+
+> **Versions resolved during Task 1** (`npm create vite@latest` ships the current templates):
+> react 19.2.8, vite 8.2.2, tailwindcss 4.3.3, react-router-dom 7.18.3, framer-motion 11.18.2,
+> vitest 5.0.0, @testing-library/react 16.3.3, @playwright/test 1.63.0. React 19 rather than 18
+> is deliberate and accepted — framer-motion 11, react-router 7 and RTL 16 all support it, and
+> no code in this plan relies on React 18 semantics.
 
 **Spec:** `docs/superpowers/specs/2026-09-05-mossimo-rebrand-design.md`
 
@@ -1223,15 +1229,28 @@ createRoot(document.getElementById('root')).render(
 )
 ```
 
-- [ ] **Step 7: Run the test to verify it passes**
+- [ ] **Step 7: Delete the Vite starter boilerplate**
+
+Task 1 left the scaffold's demo files in place, and this is the task that stops referencing
+them. Nothing else in the plan removes them, so they would otherwise ship.
+
+```bash
+rm -rf src/App.css src/assets
+grep -rn "App.css\|src/assets" src/ || echo "no references remain"
+```
+
+Expected: `no references remain`. If `grep` finds anything, you have missed an import —
+`App.jsx` and `main.jsx` are the only files that referenced them.
+
+- [ ] **Step 8: Run the test to verify it passes**
 
 Run: `npm test -- routes`
 Expected: PASS, 11 tests.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
-git add src/App.jsx src/main.jsx src/pages src/components/Layout.jsx tests/unit/routes.test.jsx
+git add -A
 git commit -m "feat: routes with /portfolio and /inspiration redirects"
 ```
 
@@ -2982,7 +3001,11 @@ Expected: FAIL — the scaffold title is "Vite + React".
 
 Spec §10 records that no mark is designed yet. Ship an interim one rather than a 404: a chartreuse square, which is on-brand precisely because the accent is a shape.
 
+First remove the Vite scaffold's icons, which nothing references once `index.html` is
+rewritten:
+
 ```bash
+rm -f public/favicon.svg public/icons.svg
 mkdir -p public/favicon
 ```
 
