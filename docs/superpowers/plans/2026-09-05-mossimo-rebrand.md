@@ -2430,10 +2430,10 @@ git commit -m "feat: home page"
 
 ---
 
-## Task 15: Work, Services and Pricing pages
+## Task 15: Portfolio, Services and Pricing pages
 
 **Files:**
-- Modify: `src/pages/Work.jsx`, `src/pages/Services.jsx`, `src/pages/Pricing.jsx`
+- Modify: `src/pages/Portfolio.jsx`, `src/pages/Services.jsx`, `src/pages/Pricing.jsx`
 - Test: `tests/unit/pages.test.jsx`
 
 - [ ] **Step 1: Write the failing test**
@@ -2442,21 +2442,21 @@ git commit -m "feat: home page"
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import Work from '../../src/pages/Work.jsx'
+import Portfolio from '../../src/pages/Portfolio.jsx'
 import Services from '../../src/pages/Services.jsx'
 import Pricing from '../../src/pages/Pricing.jsx'
 
 const wrap = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
-describe('work page', () => {
+describe('portfolio page', () => {
   it('shows all fourteen builds with the filter', () => {
-    wrap(<Work />)
+    wrap(<Portfolio />)
     expect(screen.getAllByTestId('work-row')).toHaveLength(14)
     expect(screen.getByTestId('work-filter')).toBeInTheDocument()
   })
 
   it('says plainly that these are not client sites', () => {
-    const { container } = wrap(<Work />)
+    const { container } = wrap(<Portfolio />)
     expect(container.textContent).toMatch(/concept build/i)
   })
 })
@@ -2488,26 +2488,27 @@ describe('pricing page', () => {
 Run: `npm test -- pages`
 Expected: FAIL — stubs render empty divs.
 
-- [ ] **Step 3: Write `src/pages/Work.jsx`**
+- [ ] **Step 3: Write `src/pages/Portfolio.jsx`**
 
 ```jsx
 import WorkList from '../components/WorkList.jsx'
 import { BUILDS } from '../lib/builds.js'
 
-export default function Work() {
+export default function Portfolio() {
   return (
-    <div data-testid="work-page">
+    <div data-testid="portfolio-page">
       <header className="px-6 pt-16 md:px-12">
-        <p className="label mb-4">The work</p>
+        <p className="label mb-4">The portfolio</p>
         <h1
           className="font-display leading-[1.04] tracking-tight"
           style={{ fontSize: 'var(--text-section)' }}
         >
-          Fifteen concept builds.
+          Fourteen sites, seven of them ours.
         </h1>
         <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-          These are concept builds — made to show what we can do, not to dress up a client list we
-          do not have yet. When there is client work worth showing, it will lead this page.
+          Seven of these we built — concept builds, made to show what we can do rather than to
+          dress up a client list we do not have yet. The rest are sites we admire, studied for
+          what they get right. Every case study says which is which.
         </p>
       </header>
       <WorkList builds={BUILDS} />
@@ -2595,13 +2596,17 @@ export default function Pricing() {
       <div className="mt-16 grid gap-10 md:grid-cols-3">
         {PLANS.map((plan) => (
           <div key={plan.name} data-testid="plan-block" className="border-t border-ink pt-4">
-            {plan.featured ? (
-              <span className="mb-3 inline-block bg-accent px-2 py-0.5 font-sans text-[11px] font-semibold">
-                {plan.name}
-              </span>
-            ) : (
-              <p className="mb-3 font-sans text-[11px] font-semibold">{plan.name}</p>
-            )}
+            {/* Both branches carry identical box metrics so the three prices sit
+                on one line; only the background differs. A padded chip against a
+                plain paragraph dropped the featured column's price by ~6px on the
+                homepage before this was fixed there. */}
+            <p
+              className={`mb-3 inline-block px-2 py-0.5 font-sans text-[11px] font-semibold ${
+                plan.featured ? 'bg-accent' : '-ml-2'
+              }`}
+            >
+              {plan.name}
+            </p>
             <p className="font-display leading-none" style={{ fontSize: 'var(--text-sub)' }}>
               {plan.price}
               <span className="ml-1 font-sans text-[12px] text-ink-muted">/mo</span>
@@ -2695,7 +2700,7 @@ Expected: PASS, 5 tests.
 
 ```bash
 git add src/pages tests/unit/pages.test.jsx
-git commit -m "feat: work, services and pricing pages"
+git commit -m "feat: portfolio, services and pricing pages"
 ```
 
 ---
