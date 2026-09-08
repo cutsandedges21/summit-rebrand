@@ -2,6 +2,19 @@
 // tests/unit/voice.test.js would match on \bme\b. That is why BUILDS is NOT
 // covered by the voice test — these are proper nouns, not brand voice. Do not
 // add BUILDS to that check, and do not rename the build to satisfy it.
+//
+// NOTE: `cutsandedges-hero.jpeg` was removed on 2026-09-08 and must not come
+// back. It is a live lawn-care business, not a speculative build: the screenshot
+// carries a working phone number, (514) 561-9746, and cutsandedges21@gmail.com,
+// which is the owner's own address. Listing a real business in a set labelled
+// "concept builds" is the same false claim about real work that keeps
+// `glorync-hero.jpeg` out — see spec §2. Fourteen builds, not fifteen.
+//
+// Every blurb below was written with the screenshot open. Nothing here may
+// assert a fact the image does not show — no phone numbers, no stockists, no
+// industry that is only a guess. Vorszk and Air Center are brand-statement
+// pages with no visible product or service, which is why 'Brand' exists as a
+// category and why their blurbs describe the page rather than the business.
 export const CATEGORIES = [
   'Hospitality',
   'Food & drink',
@@ -9,22 +22,23 @@ export const CATEGORIES = [
   'Services',
   'Automotive',
   'Studio',
+  'Technology',
+  'Brand',
 ]
 
 export const BUILDS = [
-  { slug: 'halcyon',        name: 'Halcyon',        category: 'Hospitality',  image: '/builds/halcyon-hero.jpeg',         blurb: 'Boutique hotel. Built to make one thing easy: checking availability without leaving the page.' },
+  { slug: 'halcyon',        name: 'Halcyon',        category: 'Hospitality',  image: '/builds/halcyon-hero.jpeg',         blurb: 'Day spa and retreat. Atmosphere doing the selling, with Book the only thing to click.' },
   { slug: 'elixir',         name: 'Elixir',         category: 'Hospitality',  image: '/builds/elixir-hotel-hero.jpeg',    blurb: 'City hotel. Rooms, rates and a booking flow that survives being used on a phone in a taxi.' },
   { slug: 'piment',         name: 'Piment',         category: 'Food & drink', image: '/builds/piment-hero.jpeg',          blurb: 'Restaurant. Menu, hours and a reservation link above the fold, because that is all anyone came for.' },
-  { slug: 'drinksom',       name: 'Drinksom',       category: 'Food & drink', image: '/builds/drinksom-hero.jpeg',        blurb: 'Drinks brand. Product-led layout with the stockist list one tap away.' },
+  { slug: 'drinksom',       name: 'Drinksom',       category: 'Food & drink', image: '/builds/drinksom-hero.jpeg',        blurb: 'Drinks brand. One product, one claim, and a waitlist button where the shop would be.' },
   { slug: 'khufus',         name: 'Khufus',         category: 'Food & drink', image: '/builds/khufus-hero.jpeg',          blurb: 'Restaurant. Heavy on photography, light on everything else.' },
   { slug: 'meridian',       name: 'Meridian',       category: 'Studio',       image: '/builds/meridian-hero.png',         blurb: 'Design studio. A portfolio that gets out of the way of the work.' },
-  { slug: 'monads',         name: 'Monads',         category: 'Studio',       image: '/builds/monads-hero.jpeg',          blurb: 'Creative studio. Editorial grid, long scroll, minimal chrome.' },
-  { slug: 'vorszk',         name: 'Vorszk',         category: 'Studio',       image: '/builds/vorszk-hero.jpeg',          blurb: 'Motion studio. Built around a showreel that loads fast enough to actually get watched.' },
-  { slug: 'sterling',       name: 'Sterling',       category: 'Services',     image: '/builds/sterling-hero.jpeg',        blurb: 'Professional services. Credibility first — team, credentials, and a clear way to make contact.' },
-  { slug: 'handhold',       name: 'Handhold',       category: 'Services',     image: '/builds/handhold-hero.jpeg',        blurb: 'Care service. Written for a worried person reading it at midnight.' },
+  { slug: 'monads',         name: 'Monads',         category: 'Technology',   image: '/builds/monads-hero.jpeg',          blurb: 'Enterprise IT consultancy. SAP and agile work introduced in one plain sentence, not a capability deck.' },
+  { slug: 'vorszk',         name: 'Vorszk',         category: 'Brand',        image: '/builds/vorszk-hero.jpeg',          blurb: 'Brand statement. One line, one button — the whole page held together by atmosphere.' },
+  { slug: 'sterling',       name: 'Sterling',       category: 'Automotive',   image: '/builds/sterling-hero.jpeg',        blurb: 'Luxury car dealership. The marque, the lineup and the gallery up top — Reserve pinned to the corner.' },
+  { slug: 'handhold',       name: 'Handhold',       category: 'Technology',   image: '/builds/handhold-hero.jpeg',        blurb: 'B2B software. One promise, one demo button, and a row of logos doing the rest of the work.' },
   { slug: 'laser-and-me',   name: 'Laser and Me',   category: 'Services',     image: '/builds/laserandme-hero.jpeg',      blurb: 'Clinic. Treatments, pricing and booking, with none of the usual coyness about cost.' },
-  { slug: 'cuts-and-edges', name: 'Cuts and Edges', category: 'Services',     image: '/builds/cutsandedges-hero.jpeg',    blurb: 'Barbershop. Book, find, and see the work — nothing else on the page.' },
-  { slug: 'air-center',     name: 'Air Center',     category: 'Services',     image: '/builds/aircenter-hero.jpg',        blurb: 'Trade business. Services, service area, and a phone number that is never more than a thumb away.' },
+  { slug: 'air-center',     name: 'Air Center',     category: 'Brand',        image: '/builds/aircenter-hero.jpg',        blurb: 'Brand teaser. Three letters, one line of copy, one button — and nothing else on the screen.' },
   { slug: 'brand-cosmetics',name: 'Brand Cosmetics',category: 'Retail',       image: '/builds/brand-cosmetics-hero.jpeg', blurb: 'Cosmetics. Product grid built to survive a catalogue three times the size.' },
   { slug: 'lamborghini',    name: 'Lamborghini',    category: 'Automotive',   image: '/builds/lamborghini-hero.jpeg',     blurb: 'Concept exercise. An excuse to build something loud and see how far the layout stretches.' },
 ]

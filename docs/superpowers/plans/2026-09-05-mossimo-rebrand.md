@@ -825,7 +825,7 @@ git commit -m "feat: pricing data with discount framing removed"
 
 ---
 
-## Task 6: Content data — the fifteen concept builds
+## Task 6: Content data — the fourteen concept builds
 
 Spec §2 and §4.2. Every build must be flagged as a concept build; nothing may imply a client.
 
@@ -840,8 +840,8 @@ import { describe, it, expect } from 'vitest'
 import { BUILDS, CATEGORIES, filterBuilds } from '../../src/lib/builds.js'
 
 describe('concept builds', () => {
-  it('has fifteen builds', () => {
-    expect(BUILDS).toHaveLength(15)
+  it('has fourteen builds', () => {
+    expect(BUILDS).toHaveLength(14)
   })
 
   it('gives every build a slug, name, category and image', () => {
@@ -854,7 +854,7 @@ describe('concept builds', () => {
   })
 
   it('uses unique slugs', () => {
-    expect(new Set(BUILDS.map((b) => b.slug)).size).toBe(15)
+    expect(new Set(BUILDS.map((b) => b.slug)).size).toBe(14)
   })
 
   it('never claims a build is client work', () => {
@@ -864,12 +864,17 @@ describe('concept builds', () => {
     }
   })
 
-  it('does not feature the live client site', () => {
+  // Two of the old screenshots are real businesses, not speculative work:
+  // gloryncustom.com is the one live site, and Cuts & Edges is a working
+  // lawn-care company (real phone number, owner's own email on the page).
+  // Neither may appear in a set labelled "concept builds". Spec §2.
+  it('does not feature a real business', () => {
     expect(JSON.stringify(BUILDS)).not.toMatch(/gloryn/i)
+    expect(JSON.stringify(BUILDS)).not.toMatch(/cuts.?and.?edges/i)
   })
 
   it('filters by category and returns everything for "all"', () => {
-    expect(filterBuilds(BUILDS, 'all')).toHaveLength(15)
+    expect(filterBuilds(BUILDS, 'all')).toHaveLength(14)
     const hospitality = filterBuilds(BUILDS, 'Hospitality')
     expect(hospitality.length).toBeGreaterThan(0)
     expect(hospitality.every((b) => b.category === 'Hospitality')).toBe(true)
@@ -892,7 +897,6 @@ Expected: FAIL — module not found.
 mkdir -p public/builds
 cp ../SummitSites/public/aircenter-hero.jpg public/builds/
 cp ../SummitSites/public/brand-cosmetics-hero.jpeg public/builds/
-cp ../SummitSites/public/cutsandedges-hero.jpeg public/builds/
 cp ../SummitSites/public/drinksom-hero.jpeg public/builds/
 cp ../SummitSites/public/elixir-hotel-hero.jpeg public/builds/
 cp ../SummitSites/public/halcyon-hero.jpeg public/builds/
@@ -908,23 +912,42 @@ cp ../SummitSites/public/vorszk-hero.jpeg public/builds/
 ls public/builds | wc -l
 ```
 
-Expected: `15`.
+Expected: `14`.
 
-**`glorync-hero.jpeg` is deliberately not copied.** It is the live client site
-`gloryncustom.com`. Spec §2 says the portfolio is concept builds only and that this site is
-not featured — so putting it in a list labelled "concept builds" would be a false claim about
-real client work, which is the exact failure mode §2 exists to prevent. Renaming it would be
-worse, not better. Fifteen builds, not sixteen.
+**Two screenshots are deliberately not copied, because both are real businesses.**
+
+`glorync-hero.jpeg` is the live client site `gloryncustom.com`. `cutsandedges-hero.jpeg` is a
+working lawn-care company — the screenshot carries a live phone number, (514) 561-9746, and
+`cutsandedges21@gmail.com`, which is the owner's own address. Spec §2 says the portfolio is
+concept builds only, so putting either in a list labelled "concept builds" would be a false
+claim about real client work, which is the exact failure mode §2 exists to prevent. Renaming
+them would be worse, not better. Fourteen builds, not sixteen.
+
+`cutsandedges-hero.jpeg` was copied in the original pass and removed on 2026-09-08 once the
+owner confirmed the business is real. Do not add it back.
 
 - [x] **Step 4: Write `src/lib/builds.js`**
 
-Categories are assigned from what each build actually is. Adjust a category if a build turns out to be something else once you look at the image — the test only requires the value be one of `CATEGORIES`.
+Categories are assigned from what each build actually is, and every blurb is written with the screenshot open — no claim that the image does not support. `Technology` and `Brand` were added on 2026-09-08 when the screenshots were finally reviewed: Monads is an SAP consultancy and Handhold is B2B software, while Vorszk and Air Center are brand-statement pages with no visible industry at all. The test only requires the value be one of `CATEGORIES`.
 
 ```js
 // NOTE: one build is named "Laser and Me", which the SINGULAR voice guard in
 // tests/unit/voice.test.js would match on \bme\b. That is why BUILDS is NOT
 // covered by the voice test — these are proper nouns, not brand voice. Do not
 // add BUILDS to that check, and do not rename the build to satisfy it.
+//
+// NOTE: `cutsandedges-hero.jpeg` was removed on 2026-09-08 and must not come
+// back. It is a live lawn-care business, not a speculative build: the screenshot
+// carries a working phone number, (514) 561-9746, and cutsandedges21@gmail.com,
+// which is the owner's own address. Listing a real business in a set labelled
+// "concept builds" is the same false claim about real work that keeps
+// `glorync-hero.jpeg` out — see spec §2. Fourteen builds, not fifteen.
+//
+// Every blurb below was written with the screenshot open. Nothing here may
+// assert a fact the image does not show — no phone numbers, no stockists, no
+// industry that is only a guess. Vorszk and Air Center are brand-statement
+// pages with no visible product or service, which is why 'Brand' exists as a
+// category and why their blurbs describe the page rather than the business.
 export const CATEGORIES = [
   'Hospitality',
   'Food & drink',
@@ -932,22 +955,23 @@ export const CATEGORIES = [
   'Services',
   'Automotive',
   'Studio',
+  'Technology',
+  'Brand',
 ]
 
 export const BUILDS = [
-  { slug: 'halcyon',        name: 'Halcyon',        category: 'Hospitality',  image: '/builds/halcyon-hero.jpeg',         blurb: 'Boutique hotel. Built to make one thing easy: checking availability without leaving the page.' },
+  { slug: 'halcyon',        name: 'Halcyon',        category: 'Hospitality',  image: '/builds/halcyon-hero.jpeg',         blurb: 'Day spa and retreat. Atmosphere doing the selling, with Book the only thing to click.' },
   { slug: 'elixir',         name: 'Elixir',         category: 'Hospitality',  image: '/builds/elixir-hotel-hero.jpeg',    blurb: 'City hotel. Rooms, rates and a booking flow that survives being used on a phone in a taxi.' },
   { slug: 'piment',         name: 'Piment',         category: 'Food & drink', image: '/builds/piment-hero.jpeg',          blurb: 'Restaurant. Menu, hours and a reservation link above the fold, because that is all anyone came for.' },
-  { slug: 'drinksom',       name: 'Drinksom',       category: 'Food & drink', image: '/builds/drinksom-hero.jpeg',        blurb: 'Drinks brand. Product-led layout with the stockist list one tap away.' },
+  { slug: 'drinksom',       name: 'Drinksom',       category: 'Food & drink', image: '/builds/drinksom-hero.jpeg',        blurb: 'Drinks brand. One product, one claim, and a waitlist button where the shop would be.' },
   { slug: 'khufus',         name: 'Khufus',         category: 'Food & drink', image: '/builds/khufus-hero.jpeg',          blurb: 'Restaurant. Heavy on photography, light on everything else.' },
   { slug: 'meridian',       name: 'Meridian',       category: 'Studio',       image: '/builds/meridian-hero.png',         blurb: 'Design studio. A portfolio that gets out of the way of the work.' },
-  { slug: 'monads',         name: 'Monads',         category: 'Studio',       image: '/builds/monads-hero.jpeg',          blurb: 'Creative studio. Editorial grid, long scroll, minimal chrome.' },
-  { slug: 'vorszk',         name: 'Vorszk',         category: 'Studio',       image: '/builds/vorszk-hero.jpeg',          blurb: 'Motion studio. Built around a showreel that loads fast enough to actually get watched.' },
-  { slug: 'sterling',       name: 'Sterling',       category: 'Services',     image: '/builds/sterling-hero.jpeg',        blurb: 'Professional services. Credibility first — team, credentials, and a clear way to make contact.' },
-  { slug: 'handhold',       name: 'Handhold',       category: 'Services',     image: '/builds/handhold-hero.jpeg',        blurb: 'Care service. Written for a worried person reading it at midnight.' },
+  { slug: 'monads',         name: 'Monads',         category: 'Technology',   image: '/builds/monads-hero.jpeg',          blurb: 'Enterprise IT consultancy. SAP and agile work introduced in one plain sentence, not a capability deck.' },
+  { slug: 'vorszk',         name: 'Vorszk',         category: 'Brand',        image: '/builds/vorszk-hero.jpeg',          blurb: 'Brand statement. One line, one button — the whole page held together by atmosphere.' },
+  { slug: 'sterling',       name: 'Sterling',       category: 'Automotive',   image: '/builds/sterling-hero.jpeg',        blurb: 'Luxury car dealership. The marque, the lineup and the gallery up top — Reserve pinned to the corner.' },
+  { slug: 'handhold',       name: 'Handhold',       category: 'Technology',   image: '/builds/handhold-hero.jpeg',        blurb: 'B2B software. One promise, one demo button, and a row of logos doing the rest of the work.' },
   { slug: 'laser-and-me',   name: 'Laser and Me',   category: 'Services',     image: '/builds/laserandme-hero.jpeg',      blurb: 'Clinic. Treatments, pricing and booking, with none of the usual coyness about cost.' },
-  { slug: 'cuts-and-edges', name: 'Cuts and Edges', category: 'Services',     image: '/builds/cutsandedges-hero.jpeg',    blurb: 'Barbershop. Book, find, and see the work — nothing else on the page.' },
-  { slug: 'air-center',     name: 'Air Center',     category: 'Services',     image: '/builds/aircenter-hero.jpg',        blurb: 'Trade business. Services, service area, and a phone number that is never more than a thumb away.' },
+  { slug: 'air-center',     name: 'Air Center',     category: 'Brand',        image: '/builds/aircenter-hero.jpg',        blurb: 'Brand teaser. Three letters, one line of copy, one button — and nothing else on the screen.' },
   { slug: 'brand-cosmetics',name: 'Brand Cosmetics',category: 'Retail',       image: '/builds/brand-cosmetics-hero.jpeg', blurb: 'Cosmetics. Product grid built to survive a catalogue three times the size.' },
   { slug: 'lamborghini',    name: 'Lamborghini',    category: 'Automotive',   image: '/builds/lamborghini-hero.jpeg',     blurb: 'Concept exercise. An excuse to build something loud and see how far the layout stretches.' },
 ]
@@ -971,7 +995,7 @@ Expected: PASS, 7 tests.
 
 ```bash
 git add src/lib/builds.js public/builds tests/unit/builds.test.js
-git commit -m "feat: fifteen concept builds with category filter"
+git commit -m "feat: fourteen concept builds with category filter"
 ```
 
 ---
@@ -1633,7 +1657,7 @@ describe('ArcHero', () => {
 
   it('renders one tile per build', () => {
     renderHero()
-    expect(screen.getAllByTestId('arc-tile')).toHaveLength(15)
+    expect(screen.getAllByTestId('arc-tile')).toHaveLength(14)
   })
 
   it('hides decorative tiles from assistive technology', () => {
@@ -1687,7 +1711,8 @@ const CENTRE = (BUILDS.length - 1) / 2
 
 /**
  * Signed distance from the middle of the arc. Works for any build count:
- * with 15 builds the centre tile gets offset 0 and faces straight at you.
+ * with an odd count the centre tile gets offset 0 and faces straight at you;
+ * with the current 14 the two middle tiles sit at -0.5 and +0.5 instead.
  */
 function offsetFor(index) {
   return index - CENTRE
@@ -1810,7 +1835,7 @@ import { BUILDS } from '../../src/lib/builds.js'
 describe('WorkList', () => {
   it('lists every build by default', () => {
     render(<WorkList builds={BUILDS} />)
-    expect(screen.getAllByTestId('work-row')).toHaveLength(15)
+    expect(screen.getAllByTestId('work-row')).toHaveLength(14)
   })
 
   it('limits the list when given a limit', () => {
@@ -2239,7 +2264,7 @@ describe('home page', () => {
     expect(screen.getByTestId('arc-stage')).toBeInTheDocument()
   })
 
-  it('previews five builds, not all fifteen', () => {
+  it('previews five builds, not all fourteen', () => {
     renderHome()
     expect(screen.getAllByTestId('work-row')).toHaveLength(5)
   })
@@ -2285,7 +2310,7 @@ export default function Home() {
 
       <div className="px-6 md:px-12">
         <Link to="/work" className="label underline">
-          All fifteen builds →
+          All fourteen builds →
         </Link>
       </div>
 
@@ -2372,9 +2397,9 @@ import Pricing from '../../src/pages/Pricing.jsx'
 const wrap = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('work page', () => {
-  it('shows all fifteen builds with the filter', () => {
+  it('shows all fourteen builds with the filter', () => {
     wrap(<Work />)
-    expect(screen.getAllByTestId('work-row')).toHaveLength(15)
+    expect(screen.getAllByTestId('work-row')).toHaveLength(14)
     expect(screen.getByTestId('work-filter')).toBeInTheDocument()
   })
 
