@@ -2075,7 +2075,7 @@ Spec §4.3. Left column pins; right column scrolls; chartreuse marker walks the 
 - Create: `src/components/PinnedProcess.jsx`
 - Test: `tests/unit/pinned-process.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -2146,12 +2146,12 @@ describe('PinnedProcess', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- pinned-process`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `src/components/PinnedProcess.jsx`**
+- [x] **Step 3: Write `src/components/PinnedProcess.jsx`**
 
 `IntersectionObserver` drives the active index. `position: sticky` does the pinning — which only works because Layout uses native scroll.
 
@@ -2230,7 +2230,7 @@ export default function PinnedProcess() {
           </ol>
 
           <p className="mt-8 font-sans text-[12px] text-ink-muted">
-            One person for all four. No handoffs.
+            Whoever answers your email handles all four. No handoffs.
           </p>
         </div>
 
@@ -2275,12 +2275,12 @@ motion consumer. **Do not append them again** — a second `Element.prototype.sc
 assignment is harmless, but a second `global.IntersectionObserver` would clobber any
 per-test override installed before it.
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `npm test -- pinned-process`
 Expected: PASS, 8 tests.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/PinnedProcess.jsx tests/setup.js tests/unit/pinned-process.test.jsx
