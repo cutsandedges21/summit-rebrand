@@ -5,27 +5,49 @@ import { BUILDS } from '../lib/builds.js'
 /**
  * Case study layout, adapted from routs.gr/portfolio: a numbered label, a large
  * display headline, year and discipline as meta, then Challenge / Approach /
- * Outcome in three columns, followed by screenshots of the live site.
+ * Outcome in three columns, followed by an asymmetric image mosaic.
  *
- * Screenshots are read by convention from /builds/shots/<slug>-N.png. They may
- * not exist — several of these sites are old and some are gone — so the grid
- * falls back to the build's hero image rather than rendering a broken frame.
+ * The mosaic is staggered across a 12-column grid with a small uppercase caption
+ * under each frame and no borders — the images sit directly on the paper. A
+ * uniform full-width stack reads as a dump rather than a layout.
+ *
+ * Every frame keeps the source 16:10. Routs varies aspect ratio because its
+ * images are genuinely different assets; ours are all screenshots of the same
+ * shape, so forcing a portrait crop sliced headlines mid-word and read as a bug.
+ * The asymmetry comes from column span and vertical offset instead.
+ *
+ * Captions state scroll position rather than inventing feature names, because
+ * that is all these captures honestly are.
+ *
+ * Shots are read by convention from /builds/shots/<slug>-N.jpg and may not
+ * exist — vorszk.com is gone entirely — so the first frame falls back to the
+ * build's hero image and the rest render nothing.
  */
-function shotsFor(slug) {
-  return [1, 2, 3].map((n) => `/builds/shots/${slug}-${n}.jpg`)
-}
+const SHOTS = [
+  { n: 1, caption: 'The first screen', span: 'md:col-span-8', shape: 'aspect-[16/10]' },
+  { n: 2, caption: 'Midpage', span: 'md:col-span-4 md:col-start-9 md:mt-24', shape: 'aspect-[16/10]' },
+  { n: 3, caption: 'Further down', span: 'md:col-span-7 md:col-start-2', shape: 'aspect-[16/10]' },
+]
 
-function Shot({ src, fallback, alt }) {
+function Shot({ slug, shot, fallback }) {
   const [failed, setFailed] = useState(false)
+  const src = `/builds/shots/${slug}-${shot.n}.jpg`
+
+  // No capture for this one, and no hero to stand in for it: render nothing
+  // rather than an empty frame with a caption under it.
   if (failed && !fallback) return null
+
   return (
-    <img
-      src={failed ? fallback : src}
-      alt={alt}
-      loading="lazy"
-      onError={() => setFailed(true)}
-      className="w-full border border-rule"
-    />
+    <figure className={`col-span-12 ${shot.span}`}>
+      <img
+        src={failed ? fallback : src}
+        alt={`${slug} — ${shot.caption.toLowerCase()}`}
+        loading="lazy"
+        onError={() => setFailed(true)}
+        className={`w-full object-cover object-top ${shot.shape}`}
+      />
+      <figcaption className="label mt-3">{shot.caption}</figcaption>
+    </figure>
   )
 }
 
@@ -101,13 +123,13 @@ export default function Project() {
         </section>
       </div>
 
-      <div className="mt-16 flex flex-col gap-4">
-        {shotsFor(build.slug).map((src, i) => (
+      <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-14">
+        {SHOTS.map((shot) => (
           <Shot
-            key={src}
-            src={src}
-            fallback={i === 0 ? build.image : null}
-            alt={`${build.name} — screen ${i + 1}`}
+            key={shot.n}
+            slug={build.slug}
+            shot={shot}
+            fallback={shot.n === 1 ? build.image : null}
           />
         ))}
       </div>
