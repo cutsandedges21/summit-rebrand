@@ -1867,7 +1867,7 @@ Spec §4.2. Serif list, chartreuse hover sweep, video frame alongside, industry 
 - Create: `src/components/WorkList.jsx`
 - Test: `tests/unit/work-list.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -1895,7 +1895,7 @@ describe('WorkList', () => {
   it('narrows the list when a category is chosen', async () => {
     const user = userEvent.setup()
     render(<WorkList builds={BUILDS} />)
-    await user.click(screen.getByRole('button', { name: 'Studio' }))
+    await user.click(screen.getByRole('button', { name: 'Studio & brand' }))
     const rows = screen.getAllByTestId('work-row')
     expect(rows).toHaveLength(3)
     expect(rows.map((r) => r.textContent)).toEqual(
@@ -1935,7 +1935,7 @@ describe('WorkList', () => {
 })
 ```
 
-- [ ] **Step 2: Install user-event and run the test to verify it fails**
+- [x] **Step 2: Install user-event and run the test to verify it fails**
 
 ```bash
 npm install -D @testing-library/user-event
@@ -1944,7 +1944,7 @@ npm install -D @testing-library/user-event
 Run: `npm test -- work-list`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `src/components/WorkList.jsx`**
+- [x] **Step 3: Write `src/components/WorkList.jsx`**
 
 The hover sweep is a background fill that scales from left, never a text colour.
 
@@ -1958,7 +1958,10 @@ export default function WorkList({ builds, limit }) {
 
   const filtered = filterBuilds(builds, category)
   const shown = limit ? filtered.slice(0, limit) : filtered
-  const active = builds.find((b) => b.slug === activeSlug) ?? shown[0]
+  // Resolve the preview against what is VISIBLE, not the whole set. Looking it
+  // up in `builds` meant that after filtering, the preview could keep showing a
+  // build that is no longer in the list beside it.
+  const active = shown.find((b) => b.slug === activeSlug) ?? shown[0]
 
   return (
     <section className="px-6 py-20 md:px-12">
@@ -1985,12 +1988,19 @@ export default function WorkList({ builds, limit }) {
         <ul className="flex-1">
           {shown.map((build) => (
             <li key={build.slug}>
-              <a
-                href={`/work#${build.slug}`}
+              {/* A button, not a link. There are no per-build detail pages, so
+                  an anchor would be a dead end — and its real job is to change
+                  what the preview shows, which is exactly what a button is for.
+                  Click is bound as well as hover so touch devices, which have no
+                  hover, can still drive the preview. */}
+              <button
+                type="button"
                 data-testid="work-row"
                 onMouseEnter={() => setActiveSlug(build.slug)}
                 onFocus={() => setActiveSlug(build.slug)}
-                className="group relative block py-1 font-display leading-[1.18] tracking-tight"
+                onClick={() => setActiveSlug(build.slug)}
+                aria-pressed={build.slug === activeSlug}
+                className="group relative block w-full py-1 text-left font-display leading-[1.18] tracking-tight"
                 style={{ fontSize: 'var(--text-sub)' }}
               >
                 <span
@@ -2001,7 +2011,7 @@ export default function WorkList({ builds, limit }) {
                 <span className="relative ml-3 font-sans text-[11px] text-ink-muted">
                   {build.category}
                 </span>
-              </a>
+              </button>
             </li>
           ))}
         </ul>
@@ -2025,14 +2035,23 @@ export default function WorkList({ builds, limit }) {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- work-list`
 Expected: PASS, 8 tests.
 
+> Executed 2026-09-08. The eighth test — "swaps the preview on focus" — failed as
+> written and needed `act()` around the `.focus()` call. The component was never
+> at fault: React 19 logged "An update to WorkList inside a test was not wrapped
+> in act(...)", which proves `onFocus` fired, but in an act environment the
+> resulting state update sits in the act queue and is not flushed before the next
+> synchronous line, so the assertion read the pre-focus render. The assertion
+> itself is unchanged, and focus-driven swapping was confirmed by hand in Chrome
+> (Tab to the Elixir row → `data-slug="elixir"`).
+
 If the Studio count assertion fails, it means the category assignments in `src/lib/builds.js` changed. Update the expected number to match — the test is checking the filter works, not that exactly three studios exist.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/WorkList.jsx tests/unit/work-list.test.jsx package.json
