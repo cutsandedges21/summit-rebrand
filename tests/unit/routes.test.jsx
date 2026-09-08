@@ -14,7 +14,8 @@ function renderAt(path) {
 describe('routing', () => {
   const pages = [
     ['/', 'home-page'],
-    ['/work', 'work-page'],
+    ['/portfolio', 'portfolio-page'],
+    ['/portfolio/halcyon', 'project-page'],
     ['/services', 'services-page'],
     ['/pricing', 'pricing-page'],
     ['/about', 'about-page'],
@@ -31,13 +32,13 @@ describe('routing', () => {
     })
   }
 
-  it('redirects /portfolio to /work', () => {
-    renderAt('/portfolio')
-    expect(screen.getByTestId('work-page')).toBeInTheDocument()
+  it('redirects /work to /portfolio', () => {
+    renderAt('/work')
+    expect(screen.getByTestId('portfolio-page')).toBeInTheDocument()
   })
 
   it('redirects /inspiration to /work', () => {
     renderAt('/inspiration')
-    expect(screen.getByTestId('work-page')).toBeInTheDocument()
+    expect(screen.getByTestId('portfolio-page')).toBeInTheDocument()
   })
 })

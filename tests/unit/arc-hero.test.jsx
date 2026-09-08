@@ -61,6 +61,6 @@ describe('ArcHero', () => {
 
   it('routes the call to action without a full page reload', () => {
     renderHero()
-    expect(screen.getByRole('link', { name: /see the work/i })).toHaveAttribute('href', '/work')
+    expect(screen.getByRole('link', { name: /see the work/i })).toHaveAttribute('href', '/portfolio')
   })
 })

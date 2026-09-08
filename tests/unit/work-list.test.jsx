@@ -1,28 +1,31 @@
 import { describe, it, expect } from 'vitest'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import WorkList from '../../src/components/WorkList.jsx'
 import { BUILDS } from '../../src/lib/builds.js'
 
+const renderList = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
+
 describe('WorkList', () => {
   it('lists every build by default', () => {
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     expect(screen.getAllByTestId('work-row')).toHaveLength(14)
   })
 
   it('limits the list when given a limit', () => {
-    render(<WorkList builds={BUILDS} limit={5} />)
+    renderList(<WorkList builds={BUILDS} limit={5} />)
     expect(screen.getAllByTestId('work-row')).toHaveLength(5)
   })
 
   it('hides the filter when limited', () => {
-    render(<WorkList builds={BUILDS} limit={5} />)
+    renderList(<WorkList builds={BUILDS} limit={5} />)
     expect(screen.queryByTestId('work-filter')).not.toBeInTheDocument()
   })
 
   it('narrows the list when a category is chosen', async () => {
     const user = userEvent.setup()
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     await user.click(screen.getByRole('button', { name: 'Studio & brand' }))
     const rows = screen.getAllByTestId('work-row')
     expect(rows).toHaveLength(3)
@@ -32,12 +35,12 @@ describe('WorkList', () => {
   })
 
   it('labels the work as concept builds', () => {
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     expect(screen.getByText(/concept builds/i)).toBeInTheDocument()
   })
 
   it('shows the first build in the preview frame initially', () => {
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     expect(screen.getByTestId('work-preview')).toHaveAttribute(
       'data-slug',
       BUILDS[0].slug,
@@ -46,7 +49,7 @@ describe('WorkList', () => {
 
   it('swaps the preview when a row is hovered', async () => {
     const user = userEvent.setup()
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     await user.hover(screen.getAllByTestId('work-row')[2])
     expect(screen.getByTestId('work-preview')).toHaveAttribute(
       'data-slug',
@@ -55,7 +58,7 @@ describe('WorkList', () => {
   })
 
   it('swaps the preview on focus, so keyboards work too', async () => {
-    render(<WorkList builds={BUILDS} />)
+    renderList(<WorkList builds={BUILDS} />)
     const rows = screen.getAllByTestId('work-row')
     // act() is not decoration here. A bare rows[4].focus() DOES reach the
     // component's onFocus — React 19 logs the "update was not wrapped in

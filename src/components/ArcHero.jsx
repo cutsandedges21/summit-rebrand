@@ -113,7 +113,7 @@ export default function ArcHero() {
           Design, build, local SEO and upkeep — handled start to finish, in one place.
         </p>
         <Link
-          to="/work"
+          to="/portfolio"
           className="mt-8 bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
         >
           See the work

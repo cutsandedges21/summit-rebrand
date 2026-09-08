@@ -12,7 +12,7 @@ export default function Home() {
       <WorkList builds={BUILDS} limit={5} />
 
       <div className="px-6 md:px-12">
-        <Link to="/work" className="label underline">
+        <Link to="/portfolio" className="label underline">
           All fourteen builds →
         </Link>
       </div>

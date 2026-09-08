@@ -16,7 +16,7 @@ describe('nav', () => {
 
   it('links to every primary page', () => {
     wrap(<Nav />)
-    for (const label of ['Work', 'Services', 'Pricing', 'About', 'Contact']) {
+    for (const label of ['Portfolio', 'Services', 'Pricing', 'About', 'Contact']) {
       expect(screen.getByRole('link', { name: label })).toBeInTheDocument()
     }
   })

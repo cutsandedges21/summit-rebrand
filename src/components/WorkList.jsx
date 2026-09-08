@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CATEGORIES, filterBuilds } from '../lib/builds.js'
 
 export default function WorkList({ builds, limit }) {
@@ -37,18 +38,13 @@ export default function WorkList({ builds, limit }) {
         <ul className="flex-1">
           {shown.map((build) => (
             <li key={build.slug}>
-              {/* A button, not a link. There are no per-build detail pages, so
-                  an anchor would be a dead end — and its real job is to change
-                  what the preview shows, which is exactly what a button is for.
-                  Click is bound as well as hover so touch devices, which have no
-                  hover, can still drive the preview. */}
-              <button
-                type="button"
+              {/* A link now that per-build case studies exist. Hover and focus
+                  still drive the preview beside the list; clicking navigates. */}
+              <Link
+                to={`/portfolio/${build.slug}`}
                 data-testid="work-row"
                 onMouseEnter={() => setActiveSlug(build.slug)}
                 onFocus={() => setActiveSlug(build.slug)}
-                onClick={() => setActiveSlug(build.slug)}
-                aria-pressed={build.slug === activeSlug}
                 className="group relative block w-full py-1 text-left font-display leading-[1.18] tracking-tight"
                 style={{ fontSize: 'var(--text-sub)' }}
               >
@@ -60,7 +56,7 @@ export default function WorkList({ builds, limit }) {
                 <span className="relative ml-3 font-sans text-[11px] text-ink-muted">
                   {build.category}
                 </span>
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
