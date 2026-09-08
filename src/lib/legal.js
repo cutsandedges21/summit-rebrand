@@ -4,6 +4,22 @@
 // the punctuation, not the spelling. This text commits the business to things,
 // so tidying it is a change of substance, not of style. If a clause reads
 // wrong, raise it; do not quietly rewrite it here.
+//
+// Two corrections were necessary rather than optional:
+//
+// 1. The source said "Summit Sites Agency". A literal brand swap left the
+//    orphan "mossimo Agency", naming an entity that matches nothing else on
+//    the site. Changed to "mossimo Studios" to agree with the footer.
+// 2. Only the SECTIONS arrays were ported, but the copy refers to a revision
+//    date and to contact details. EFFECTIVE_DATE and LEGAL_EMAIL below restore
+//    what those sentences point at; LegalPage.jsx renders them.
+
+// Referred to by "the date above reflects the most recent revision" in both
+// documents. Update this whenever the copy materially changes.
+export const EFFECTIVE_DATE = '8 September 2026'
+
+// Referred to by "contact us using the details below" in the Privacy Policy.
+export const LEGAL_EMAIL = 'mossimo.studios@gmail.com'
 
 export const PRIVACY_SECTIONS = [
   {
@@ -77,13 +93,13 @@ export const TERMS_SECTIONS = [
   {
     h: 'Acceptance of These Terms',
     body: [
-      'By accessing our website or engaging mossimo Agency for services, you agree to these Terms of Service. If you do not agree, please do not use our website or services.',
+      'By accessing our website or engaging mossimo Studios for services, you agree to these Terms of Service. If you do not agree, please do not use our website or services.',
     ],
   },
   {
     h: 'Our Services',
     body: [
-      'mossimo Agency designs, builds, hosts, and maintains websites for businesses. The specific scope, deliverables, and timeline for your project are agreed on a per-project basis before work begins.',
+      'mossimo Studios designs, builds, hosts, and maintains websites for businesses. The specific scope, deliverables, and timeline for your project are agreed on a per-project basis before work begins.',
     ],
   },
   {
@@ -108,7 +124,7 @@ export const TERMS_SECTIONS = [
   {
     h: 'Ownership & Intellectual Property',
     body: [
-      'Once your project is complete and paid in full, ownership of the final website — code, content, domain, and accounts — transfers to you. Until full payment is received, all work product remains the property of mossimo Agency.',
+      'Once your project is complete and paid in full, ownership of the final website — code, content, domain, and accounts — transfers to you. Until full payment is received, all work product remains the property of mossimo Studios.',
       'We may display non-confidential aspects of completed work in our portfolio and marketing unless you request otherwise in writing.',
     ],
   },
@@ -133,7 +149,7 @@ export const TERMS_SECTIONS = [
   {
     h: 'Limitation of Liability',
     body: [
-      'To the fullest extent permitted by law, mossimo Agency is not liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability for any claim will not exceed the amount you paid us for the services giving rise to the claim.',
+      'To the fullest extent permitted by law, mossimo Studios is not liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability for any claim will not exceed the amount you paid us for the services giving rise to the claim.',
     ],
   },
   {
