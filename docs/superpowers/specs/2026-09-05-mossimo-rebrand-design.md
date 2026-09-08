@@ -137,8 +137,8 @@ screenshots — i.e. content, never chrome.
 
 > **On paper, the accent is a shape. Never a letter.**
 
-Chartreuse at `#F9EA55` on `#F9F7EF` is roughly 1.4:1 — illegible as text, non-negotiable.
-As a fill with `ink` on top it is roughly 10:1, comfortably above AA.
+Chartreuse at `#F9EA55` on `#F9F7EF` is roughly **1.1:1** — illegible as text, non-negotiable.
+As a fill with `ink` on top it is roughly 11:1, comfortably above AA.
 
 This is a constraint, and it's the most distinctive thing in the system. Enforce it with no
 exceptions: fills, blocks, hover sweeps, the hero blob, the active nav marker, the featured
@@ -350,9 +350,9 @@ These are build requirements, not polish.
 
 ## 10. Known inconsistencies and open items
 
-1. **Contact email is `summitsites.agency@gmail.com`** — the retired brand name, visible on
-   a site no longer called that. Accepted for launch, to be swapped later. This is the one
-   place the rebrand is visibly incomplete.
+1. ~~**Contact email carries the retired brand name.**~~ **Resolved 2026-09-08** —
+   `mossimo.studios@gmail.com` supplied and wired in. The rebrand no longer leaks the old
+   name anywhere on the site.
 2. **Tagline** not finalised.
 3. **Screen recordings** for fourteen builds don't exist (§7).
 4. **Domain** not chosen.

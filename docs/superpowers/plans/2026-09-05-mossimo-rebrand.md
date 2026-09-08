@@ -1474,7 +1474,7 @@ describe('footer', () => {
   it('links the contact email as a mailto', () => {
     wrap(<Footer />)
     const link = screen.getByRole('link', { name: /summitsites\.agency@gmail\.com/ })
-    expect(link).toHaveAttribute('href', 'mailto:summitsites.agency@gmail.com')
+    expect(link).toHaveAttribute('href', 'mailto:mossimo.studios@gmail.com')
   })
 
   it('does not use the retired tagline', () => {
@@ -1541,7 +1541,7 @@ export default function Nav() {
 ```jsx
 import { Link } from 'react-router-dom'
 
-const EMAIL = 'summitsites.agency@gmail.com'
+const EMAIL = 'mossimo.studios@gmail.com'
 
 export default function Footer() {
   return (
@@ -2703,7 +2703,7 @@ describe('contact page', () => {
     wrap(<Contact />)
     expect(screen.getByRole('link', { name: /gmail\.com/ })).toHaveAttribute(
       'href',
-      'mailto:summitsites.agency@gmail.com',
+      'mailto:mossimo.studios@gmail.com',
     )
   })
 })
@@ -2797,7 +2797,7 @@ export default function Faq() {
 ```jsx
 import { Link } from 'react-router-dom'
 
-const EMAIL = 'summitsites.agency@gmail.com'
+const EMAIL = 'mossimo.studios@gmail.com'
 
 const LINKS = [
   { to: '/work', label: 'See the work', note: 'Fifteen concept builds' },
