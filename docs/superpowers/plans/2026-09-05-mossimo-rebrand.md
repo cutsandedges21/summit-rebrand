@@ -2200,36 +2200,18 @@ export default function PinnedProcess() {
 }
 ```
 
-- [ ] **Step 4: Stub the browser APIs jsdom lacks**
+- [x] **Step 4: Stub the browser APIs jsdom lacks — ALREADY DONE, do not repeat**
 
-jsdom implements none of `IntersectionObserver`, `matchMedia`, or `scrollIntoView`. Append
-to `tests/setup.js`:
+jsdom implements none of `IntersectionObserver`, `matchMedia`, or `scrollIntoView`. These
+stubs were originally scheduled here, but Task 8 needed `matchMedia` first — Task 11 renders
+a motion-consuming component four tasks before this one, and would have failed with
+`window.matchMedia is not a function`, which reads like a component bug rather than a missing
+test environment.
 
-```js
-import { vi } from 'vitest'
-
-global.IntersectionObserver = class {
-  constructor(callback) {
-    this.callback = callback
-  }
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-}
-
-// jsdom has no matchMedia; individual tests override this.
-if (!window.matchMedia) {
-  window.matchMedia = (query) => ({
-    matches: false,
-    media: query,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  })
-}
-
-// jsdom has no layout, so scrollIntoView is not implemented.
-Element.prototype.scrollIntoView = vi.fn()
-```
+All three stubs now live in `tests/setup.js` and were verified by rendering an unmocked
+motion consumer. **Do not append them again** — a second `Element.prototype.scrollIntoView`
+assignment is harmless, but a second `global.IntersectionObserver` would clobber any
+per-test override installed before it.
 
 - [ ] **Step 5: Run the test to verify it passes**
 
