@@ -1432,7 +1432,7 @@ Spec §3 (no containers, hairline rules), §6 (Montreal, across Canada), §10 (t
 - Create: `src/components/Nav.jsx`, `src/components/Footer.jsx`
 - Test: `tests/unit/shell.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -1473,8 +1473,13 @@ describe('footer', () => {
 
   it('links the contact email as a mailto', () => {
     wrap(<Footer />)
-    const link = screen.getByRole('link', { name: /summitsites\.agency@gmail\.com/ })
+    const link = screen.getByRole('link', { name: /mossimo\.studios@gmail\.com/ })
     expect(link).toHaveAttribute('href', 'mailto:mossimo.studios@gmail.com')
+  })
+
+  it('never shows the retired brand name', () => {
+    const { container } = wrap(<Footer />)
+    expect(container.textContent).not.toMatch(/summit/i)
   })
 
   it('does not use the retired tagline', () => {
@@ -1484,14 +1489,17 @@ describe('footer', () => {
 })
 ```
 
-The email assertion is deliberate. Spec §10 records the old-brand Gmail as an accepted launch compromise; the test pins it so that when it changes, it changes on purpose.
+The email assertion pins the address so it can only change on purpose. It was
+`summitsites.agency@gmail.com` until 2026-09-08 — the retired brand name, live on a site no
+longer called that. The owner supplied `mossimo.studios@gmail.com` and it is now the only
+address anywhere in the build.
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- shell`
 Expected: FAIL — `Nav.jsx` not found.
 
-- [ ] **Step 3: Write `src/components/Nav.jsx`**
+- [x] **Step 3: Write `src/components/Nav.jsx`**
 
 Accent marks the active route as a **fill** — never coloured text.
 
@@ -1536,7 +1544,7 @@ export default function Nav() {
 }
 ```
 
-- [ ] **Step 4: Write `src/components/Footer.jsx`**
+- [x] **Step 4: Write `src/components/Footer.jsx`**
 
 ```jsx
 import { Link } from 'react-router-dom'
@@ -1559,7 +1567,7 @@ export default function Footer() {
       </div>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-4">
         <span className="font-sans text-[11px] text-ink-faint">
-          © {new Date().getFullYear()} mossimo
+          © {new Date().getFullYear()} mossimo Studios
         </span>
         <nav className="flex gap-5 font-sans text-[11px] text-ink-muted">
           <Link to="/privacy-policy">Privacy Policy</Link>
@@ -1571,7 +1579,7 @@ export default function Footer() {
 }
 ```
 
-- [ ] **Step 5: Wire them into Layout**
+- [x] **Step 5: Wire them into Layout**
 
 `src/components/Layout.jsx`:
 
@@ -1601,12 +1609,12 @@ export default function Layout() {
 }
 ```
 
-- [ ] **Step 6: Run the tests to verify they pass**
+- [x] **Step 6: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS — shell 6 tests, everything else still green.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components tests/unit/shell.test.jsx
