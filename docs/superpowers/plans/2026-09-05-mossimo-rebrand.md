@@ -2436,7 +2436,7 @@ git commit -m "feat: home page"
 - Modify: `src/pages/Portfolio.jsx`, `src/pages/Services.jsx`, `src/pages/Pricing.jsx`
 - Test: `tests/unit/pages.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -2483,12 +2483,12 @@ describe('pricing page', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- pages`
 Expected: FAIL — stubs render empty divs.
 
-- [ ] **Step 3: Write `src/pages/Portfolio.jsx`**
+- [x] **Step 3: Write `src/pages/Portfolio.jsx`**
 
 ```jsx
 import WorkList from '../components/WorkList.jsx'
@@ -2517,7 +2517,7 @@ export default function Portfolio() {
 }
 ```
 
-- [ ] **Step 4: Write `src/pages/Services.jsx`**
+- [x] **Step 4: Write `src/pages/Services.jsx`**
 
 ```jsx
 import { Link } from 'react-router-dom'
@@ -2573,7 +2573,7 @@ export default function Services() {
 }
 ```
 
-- [ ] **Step 5: Write `src/pages/Pricing.jsx`**
+- [x] **Step 5: Write `src/pages/Pricing.jsx`**
 
 ```jsx
 import { Link } from 'react-router-dom'
@@ -2691,12 +2691,12 @@ export default function Pricing() {
 }
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
+- [x] **Step 6: Run the test to verify it passes**
 
 Run: `npm test -- pages`
 Expected: PASS, 5 tests.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/pages tests/unit/pages.test.jsx
