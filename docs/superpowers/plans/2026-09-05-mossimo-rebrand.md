@@ -1254,7 +1254,7 @@ Spec §5. `/portfolio` and `/inspiration` must redirect to `/work`.
 - Create: `src/pages/Home.jsx` and eight sibling placeholder pages
 - Test: `tests/unit/routes.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -1302,12 +1302,12 @@ describe('routing', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- routes`
 Expected: FAIL — `Routes` is not exported from `App.jsx`.
 
-- [ ] **Step 3: Create the nine page stubs**
+- [x] **Step 3: Create the nine page stubs**
 
 Each page gets its `data-testid` now and real content in a later task. Create all nine with this shape, substituting name and testid:
 
@@ -1321,7 +1321,7 @@ export default function Home() {
 
 Repeat for `Work.jsx` (`work-page`), `Services.jsx` (`services-page`), `Pricing.jsx` (`pricing-page`), `About.jsx` (`about-page`), `Faq.jsx` (`faq-page`), `Contact.jsx` (`contact-page`), `PrivacyPolicy.jsx` (`privacy-page`), `TermsOfService.jsx` (`terms-page`).
 
-- [ ] **Step 4: Write `src/App.jsx`**
+- [x] **Step 4: Write `src/App.jsx`**
 
 `Routes` is exported separately from the default so tests can mount it inside a `MemoryRouter`.
 
@@ -1367,7 +1367,7 @@ export default function App() {
 }
 ```
 
-- [ ] **Step 5: Write the minimal Layout so routes can mount**
+- [x] **Step 5: Write the minimal Layout so routes can mount**
 
 `src/components/Layout.jsx` — expanded in Task 10.
 
@@ -1379,7 +1379,7 @@ export default function Layout() {
 }
 ```
 
-- [ ] **Step 6: Point main.jsx at the app**
+- [x] **Step 6: Point main.jsx at the app**
 
 `src/main.jsx`:
 
@@ -1396,7 +1396,7 @@ createRoot(document.getElementById('root')).render(
 )
 ```
 
-- [ ] **Step 7: Delete the Vite starter boilerplate**
+- [x] **Step 7: Delete the Vite starter boilerplate**
 
 Task 1 left the scaffold's demo files in place, and this is the task that stops referencing
 them. Nothing else in the plan removes them, so they would otherwise ship.
@@ -1409,12 +1409,12 @@ grep -rn "App.css\|src/assets" src/ || echo "no references remain"
 Expected: `no references remain`. If `grep` finds anything, you have missed an import —
 `App.jsx` and `main.jsx` are the only files that referenced them.
 
-- [ ] **Step 8: Run the test to verify it passes**
+- [x] **Step 8: Run the test to verify it passes**
 
 Run: `npm test -- routes`
 Expected: PASS, 11 tests.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add -A
