@@ -1154,7 +1154,7 @@ Spec §8 and §9. Every signature interaction needs a static fallback.
 - Create: `src/lib/motion.js`
 - Test: `tests/unit/motion.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -1201,12 +1201,12 @@ describe('useIsMobile', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- motion`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `src/lib/motion.js`**
+- [x] **Step 3: Write `src/lib/motion.js`**
 
 ```js
 import { useEffect, useState } from 'react'
@@ -1231,12 +1231,12 @@ export const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: re
 export const useIsMobile = () => useMediaQuery('(max-width: 767px)')
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- motion`
 Expected: PASS, 4 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/motion.js tests/unit/motion.test.jsx
