@@ -1640,7 +1640,7 @@ Spec §4.1. Fourteen builds in a perspective corridor that flies apart on scroll
 - Create: `src/components/ArcHero.jsx`
 - Test: `tests/unit/arc-hero.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 **Note on mocking:** `vi.spyOn(module, 'export')` does not intercept ESM named imports — the
 component captured the binding at import time. Use `vi.mock` with a factory, which replaces
@@ -1716,12 +1716,12 @@ describe('ArcHero', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- arc-hero`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `src/components/ArcHero.jsx`**
+- [x] **Step 3: Write `src/components/ArcHero.jsx`**
 
 Tiles are spread symmetrically around centre. Index maps to a signed offset, which drives `rotateY`, `scale` and `translateX`. On scroll, `spread` pushes tiles outward and `fade` drops them out.
 
@@ -1826,12 +1826,12 @@ export default function ArcHero() {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- arc-hero`
 Expected: PASS, 7 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/ArcHero.jsx tests/unit/arc-hero.test.jsx
