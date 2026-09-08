@@ -34,9 +34,15 @@ describe('WorkList', () => {
     )
   })
 
-  it('labels the work as concept builds', () => {
-    renderList(<WorkList builds={BUILDS} />)
-    expect(screen.getByText(/concept builds/i)).toBeInTheDocument()
+  it('labels the section, and lets the caller override or remove that label', () => {
+    const { unmount } = renderList(<WorkList builds={BUILDS} />)
+    expect(screen.getByText(/selected work/i)).toBeInTheDocument()
+    unmount()
+
+    // The portfolio page passes null because its own header already says it;
+    // two stacked labels within 150px read as a copy bug.
+    renderList(<WorkList builds={BUILDS} label={null} />)
+    expect(screen.queryByText(/selected work/i)).not.toBeInTheDocument()
   })
 
   it('shows the first build in the preview frame initially', () => {

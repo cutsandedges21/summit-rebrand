@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CATEGORIES, filterBuilds } from '../lib/builds.js'
 
-export default function WorkList({ builds, limit }) {
+export default function WorkList({ builds, limit, label = 'Selected work' }) {
   const [category, setCategory] = useState('all')
   const [activeSlug, setActiveSlug] = useState(builds[0]?.slug)
 
@@ -15,7 +15,7 @@ export default function WorkList({ builds, limit }) {
 
   return (
     <section className="px-6 py-20 md:px-12">
-      <p className="label mb-6">Selected work · concept builds</p>
+      {label && <p className="label mb-6">{label}</p>}
 
       {!limit && (
         <div data-testid="work-filter" className="mb-8 flex flex-wrap gap-1">
@@ -61,14 +61,18 @@ export default function WorkList({ builds, limit }) {
           ))}
         </ul>
 
-        <div className="w-full md:w-[380px] md:shrink-0">
+        {/* Desktop only. The preview is driven by hover and focus, and a tap on a
+            row navigates rather than previewing — so on a phone this frame can
+            never change. Showing one build's screenshot permanently beneath a
+            list of fourteen is worse than showing nothing. */}
+        <div className="hidden w-full md:sticky md:top-24 md:block md:h-fit md:w-[380px] md:shrink-0">
           <div
             data-testid="work-preview"
             data-slug={active?.slug}
             className="aspect-[16/10] bg-cover bg-center"
             style={{ backgroundImage: active ? `url(${active.image})` : undefined }}
             role="img"
-            aria-label={active ? `${active.name} — concept build` : 'Concept build preview'}
+            aria-label={active ? `${active.name} — preview` : 'Project preview'}
           />
           <p className="mt-3 font-sans text-[12px] leading-relaxed text-ink-muted">
             {active?.blurb}

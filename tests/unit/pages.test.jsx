@@ -14,9 +14,17 @@ describe('portfolio page', () => {
     expect(screen.getByTestId('work-filter')).toBeInTheDocument()
   })
 
-  it('says plainly that these are not client sites', () => {
+  // The index sells; it does not disclaim. Provenance is stated per case study
+  // instead, and tests/unit/project.test.jsx asserts that a site we did not
+  // build can never be labelled as our work. Two rules keep this honest:
+  it('does not imply the whole set is client work', () => {
     const { container } = wrap(<Portfolio />)
-    expect(container.textContent).toMatch(/concept build/i)
+    expect(container.textContent).not.toMatch(/our clients|client list/i)
+  })
+
+  it('does not claim a headcount or a team size', () => {
+    const { container } = wrap(<Portfolio />)
+    expect(container.textContent).not.toMatch(/our team|staff|\d+\s+designers?/i)
   })
 })
 

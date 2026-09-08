@@ -5,20 +5,25 @@ export default function Portfolio() {
   return (
     <div data-testid="portfolio-page">
       <header className="px-6 pt-16 md:px-12">
-        <p className="label mb-4">The portfolio</p>
+        <p className="label mb-4">Portfolio</p>
         <h1
           className="font-display leading-[1.04] tracking-tight"
           style={{ fontSize: 'var(--text-section)' }}
         >
-          Fourteen sites, seven of them ours.
+          Sites built to be <em>used</em>,<br />
+          not admired.
         </h1>
+        {/* Sells at a glance; it does not disclaim. Provenance is stated on each
+            case study instead — "Built here" or "Reference" — which is where a
+            visitor who actually cares will look, and where being straight about
+            it costs nothing. */}
         <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-          Seven of these we built — concept builds, made to show what we can do rather than to
-          dress up a client list we do not have yet. The rest are sites we admire, studied for
-          what they get right. Every case study says which is which.
+          Hotels, restaurants, clinics, dealerships, product brands. Every one built around a
+          single job — book a room, reserve a table, get a quote, place an order — and judged
+          on whether that actually happens.
         </p>
       </header>
-      <WorkList builds={BUILDS} />
+      <WorkList builds={BUILDS} label={null} />
     </div>
   )
 }
