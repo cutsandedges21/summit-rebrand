@@ -12,7 +12,7 @@ import { BUILDS } from '../lib/builds.js'
  * falls back to the build's hero image rather than rendering a broken frame.
  */
 function shotsFor(slug) {
-  return [1, 2, 3].map((n) => `/builds/shots/${slug}-${n}.png`)
+  return [1, 2, 3].map((n) => `/builds/shots/${slug}-${n}.jpg`)
 }
 
 function Shot({ src, fallback, alt }) {

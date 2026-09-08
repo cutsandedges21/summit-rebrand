@@ -96,7 +96,10 @@ export const BUILDS = [
   },
   { slug: 'vorszk',         name: 'Vorszk',         category: 'Studio & brand',        image: '/builds/vorszk-hero.jpeg',          blurb: 'Brand statement. One line, one button — the whole page held together by atmosphere.',
     own: false,
-    url: 'https://www.vorszk.com/',
+    // vorszk.com stopped resolving (NXDOMAIN, verified 2026-09-08). Null rather
+    // than a dead link -- the page hides the "Visit the live site" button when
+    // there is no url.
+    url: null,
     year: '2025',
     discipline: 'Study',
     challenge: 'A brand statement page has no product to show and no feature list to fall back on. It either establishes a tone in seconds or it fails.',
