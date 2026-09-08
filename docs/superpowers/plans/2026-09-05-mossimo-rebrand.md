@@ -59,8 +59,8 @@ claim that the command ran and passed.
 These are invariants from the spec. Violating one is a defect even if the task's own steps
 pass.
 
-1. **Chartreuse `#EEEA54` is a fill, never a letter.** No `text-accent`, no
-   `color: #eeea54`. Enforced by `tests/unit/accent-rule.test.js`.
+1. **Chartreuse `#F9EA55` is a fill, never a letter.** No `text-accent`, no
+   `color: #f9ea55`. Enforced by `tests/unit/accent-rule.test.js`.
 2. **No dark sections.** The only dark rectangles are work screenshots and recordings —
    content, never chrome.
 3. **No containers.** No cards, borders, shadows or rounded panels. Hairline `border-rule`
@@ -225,13 +225,13 @@ const css = readFileSync(resolve(__dirname, '../../src/index.css'), 'utf8')
 
 describe('design tokens', () => {
   const tokens = {
-    '--color-paper': '#f6f3ec',
+    '--color-paper': '#f9f7ef',
     '--color-paper-clay': '#ebe5d8',
     '--color-ink': '#1b1a15',
     '--color-ink-muted': '#6a655a',
     '--color-ink-faint': '#a8a296',
     '--color-rule': '#e0dace',
-    '--color-accent': '#eeea54',
+    '--color-accent': '#f9ea55',
   }
 
   for (const [name, value] of Object.entries(tokens)) {
@@ -337,13 +337,13 @@ Add this to `index.html` in the same step (Task 18 rewrites that file later and 
    past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
 @theme {
-  --color-paper: #f6f3ec;
+  --color-paper: #f9f7ef;
   --color-paper-clay: #ebe5d8;
   --color-ink: #1b1a15;
   --color-ink-muted: #6a655a;
   --color-ink-faint: #a8a296;
   --color-rule: #e0dace;
-  --color-accent: #eeea54;
+  --color-accent: #f9ea55;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', system-ui, sans-serif;
@@ -414,7 +414,7 @@ Two subtleties here are load-bearing, both found by deliberately breaking the gu
    the hyphen and the `c` — so it blocks the one use the rule permits. The negative
    lookbehind `(?<![-w])` is what makes the guard correct rather than merely strict.
 2. Matching only `text-accent` and a literal hex leaves three easy ways past it:
-   `text-[#eeea54]`, `color: var(--color-accent)`, and inline JSX styles.
+   `text-[#f9ea55]`, `color: var(--color-accent)`, and inline JSX styles.
 
 The table-driven cases at the bottom pin both edges, so a later tweak cannot quietly
 invert either one.
@@ -438,7 +438,7 @@ const srcFiles = walk(SRC).filter((f) => /\.(jsx?|css)$/.test(f))
 /**
  * Spec §3: chartreuse is a shape, never a letter.
  *
- * `#EEEA54` on the bone paper background is ~1.4:1 contrast — illegible, and an
+ * `#F9EA55` on the bone paper background is ~1.4:1 contrast — illegible, and an
  * accessibility failure rather than a style preference. As a fill with ink on top
  * it is ~10:1.
  *
@@ -457,11 +457,11 @@ const FORBIDDEN = [
     why: 'text-accent paints letterforms in the accent',
   },
   {
-    re: /\btext-\[\s*(#eeea54|var\(\s*--color-accent\s*\))\s*\]/i,
+    re: /\btext-\[\s*(#f9ea55|var\(\s*--color-accent\s*\))\s*\]/i,
     why: 'arbitrary Tailwind text colour set to the accent',
   },
   {
-    re: /(?<![-\w])color\s*:\s*['"]?\s*(#eeea54|var\(\s*--color-accent\s*\))/i,
+    re: /(?<![-\w])color\s*:\s*['"]?\s*(#f9ea55|var\(\s*--color-accent\s*\))/i,
     why: 'CSS color property set to the accent',
   },
 ]
@@ -490,23 +490,23 @@ describe('accent rule: chartreuse is a shape, never a letter', () => {
   it.each([
     ['className="text-accent"', true],
     ['className="hover:text-accent md:text-ink"', true],
-    ['className="text-[#eeea54]"', true],
+    ['className="text-[#f9ea55]"', true],
     ['className="text-[var(--color-accent)]"', true],
-    ['  color: #eeea54;', true],
+    ['  color: #f9ea55;', true],
     ['  color: var(--color-accent);', true],
-    ['style={{ color: \'#eeea54\' }}', true],
+    ['style={{ color: \'#f9ea55\' }}', true],
   ])('rejects %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })
 
   it.each([
-    ['  background-color: #eeea54;', false],
+    ['  background-color: #f9ea55;', false],
     ['  background-color: var(--color-accent);', false],
     ['className="bg-accent"', false],
     ['className="decoration-accent"', false],
     ['  border-color: var(--color-accent);', false],
-    ['style={{ backgroundColor: \'#eeea54\' }}', false],
-    ['  --color-accent: #eeea54;', false],
+    ['style={{ backgroundColor: \'#f9ea55\' }}', false],
+    ['  --color-accent: #f9ea55;', false],
   ])('permits %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })
@@ -1444,9 +1444,11 @@ import Footer from '../../src/components/Footer.jsx'
 const wrap = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('nav', () => {
-  it('shows the lowercase wordmark', () => {
+  it('shows the wordmark logo', () => {
     wrap(<Nav />)
-    expect(screen.getByText('mossimo')).toBeInTheDocument()
+    const mark = screen.getByAltText('mossimo Studios')
+    expect(mark).toBeInTheDocument()
+    expect(mark).toHaveAttribute('src', '/brand/logo-wordmark.png')
   })
 
   it('links to every primary page', () => {
@@ -1507,8 +1509,14 @@ const LINKS = [
 export default function Nav() {
   return (
     <header className="flex items-baseline justify-between px-6 py-5 md:px-12">
-      <Link to="/" className="font-sans text-[15px] font-semibold tracking-tight">
-        mossimo
+      <Link to="/" aria-label="mossimo Studios, home">
+        <img
+          src="/brand/logo-wordmark.png"
+          alt="mossimo Studios"
+          width={2069}
+          height={760}
+          className="h-7 w-auto md:h-9"
+        />
       </Link>
       <nav className="flex gap-1 font-sans text-[11px] font-medium md:gap-2 md:text-[13px]">
         {LINKS.map(({ to, label }) => (
@@ -1539,8 +1547,8 @@ export default function Footer() {
   return (
     <footer className="mt-32 border-t border-rule px-6 py-8 md:px-12">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
-        <Link to="/" className="font-sans text-[15px] font-semibold tracking-tight">
-          mossimo
+        <Link to="/" aria-label="mossimo Studios, home">
+          <img src="/brand/logo-wordmark.png" alt="mossimo Studios" className="h-7 w-auto" />
         </Link>
         <p className="font-sans text-[11px] text-ink-muted">
           Based in Montreal. Working across Canada.
@@ -3188,7 +3196,7 @@ Create `public/favicon/favicon.svg`:
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#eeea54"/>
+  <rect width="64" height="64" fill="#f9ea55"/>
   <text x="32" y="46" font-family="Georgia, serif" font-size="42" text-anchor="middle" fill="#1d1d1b">m</text>
 </svg>
 ```

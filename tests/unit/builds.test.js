@@ -37,9 +37,9 @@ describe('concept builds', () => {
 
   it('filters by category and returns everything for "all"', () => {
     expect(filterBuilds(BUILDS, 'all')).toHaveLength(14)
-    const hospitality = filterBuilds(BUILDS, 'Hospitality')
+    const hospitality = filterBuilds(BUILDS, 'Hospitality & wellness')
     expect(hospitality.length).toBeGreaterThan(0)
-    expect(hospitality.every((b) => b.category === 'Hospitality')).toBe(true)
+    expect(hospitality.every((b) => b.category === 'Hospitality & wellness')).toBe(true)
   })
 
   it('returns an empty array for an unknown category', () => {

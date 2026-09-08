@@ -12,10 +12,17 @@ Summit Sites becomes **mossimo Studios** — the owner's first name, lowercase, 
 Same business, same plans, same prices. What changes is the name, the voice, and the entire
 visual language.
 
-The full lockup is `mossimo` in a hand-drawn marker script over a yellow blob, with `STUDIOS`
-in a Didone serif beneath and `WEB DESIGN` as a spaced-out rule line under that
-(`public/mossimo Studios.PNG`, supplied 2026-09-06). **`mossimo` alone is the wordmark**
-used in the nav and footer; the full lockup appears where there is room to breathe.
+Two supplied assets, and they are used in different places:
+
+| File | What it is | Where it goes |
+|---|---|---|
+| `public/brand/logo-wordmark.png` | `mossimo` in a hand-drawn marker script over a yellow blob. Clean artwork, 2069×760. | **Nav and footer.** This is the wordmark. |
+| `public/brand/logo-lockup.png` | The same wordmark plus `STUDIOS` in a Didone serif and `WEB DESIGN` as a spaced rule line, photographed on textured stock. | Anywhere with room to breathe — the About page, an OG image, print. |
+
+**Colour values come from the wordmark, not the lockup.** The lockup is photographed on
+textured paper, which mutes it by roughly three points of lightness and desaturates the
+yellow. The wordmark is flat artwork, so its values are the true brand colours — and the
+site's own CSS grain does to them exactly what that paper stock did to the lockup.
 
 Worth noting the logo independently confirmed two decisions made before it existed: it sits
 on warm paper rather than white, and it uses the accent as a **shape** — a blob behind the
@@ -115,13 +122,13 @@ live CSS, not estimated.
 
 | Token | Value | Use |
 |---|---|---|
-| `paper` | `#F6F3EC` | Page background. Warm bone, never white. |
+| `paper` | `#F9F7EF` | Page background. Warm bone, never white. |
 | `paper-clay` | `#EBE5D8` | Tonal shift for one or two sections. Not a dark mode. |
 | `ink` | `#1B1A15` | All body and display type. |
 | `ink-muted` | `#6A655A` | Secondary copy, labels. |
 | `ink-faint` | `#A8A296` | Inactive list items, disabled states. |
 | `rule` | `#E0DACE` | Hairlines. 1px, never heavier. |
-| `accent` | `#EEEA54` | Chartreuse. **Fill only.** |
+| `accent` | `#F9EA55` | Chartreuse. **Fill only.** |
 
 **No dark sections anywhere.** The only dark rectangles on the site are work recordings and
 screenshots — i.e. content, never chrome.
@@ -130,7 +137,7 @@ screenshots — i.e. content, never chrome.
 
 > **On paper, the accent is a shape. Never a letter.**
 
-Chartreuse at `#EEEA54` on `#F6F3EC` is roughly 1.4:1 — illegible as text, non-negotiable.
+Chartreuse at `#F9EA55` on `#F9F7EF` is roughly 1.4:1 — illegible as text, non-negotiable.
 As a fill with `ink` on top it is roughly 10:1, comfortably above AA.
 
 This is a constraint, and it's the most distinctive thing in the system. Enforce it with no
@@ -138,7 +145,7 @@ exceptions: fills, blocks, hover sweeps, the hero blob, the active nav marker, t
 plan label. Never coloured text.
 
 **Superseded 2026-09-06 — the logo settled this.** The palette above is now sampled directly
-from `public/mossimo Studios.PNG` rather than chosen: paper, ink and accent are measured
+from `public/brand/logo-wordmark.png` rather than chosen: paper, ink and accent are measured
 values, and the remaining tokens are tints derived to sit in the same warmth. A brand whose
 site does not match its own logo is a broken brand, so the logo wins.
 
@@ -148,7 +155,7 @@ very close to `#F0EB65`, which this spec had previously rejected for being Mémo
 literal brand colour. That rejection no longer applies: arriving at a neighbouring yellow
 independently, via your own logo, is not the same as copying a publisher's brand colour.
 
-**One consequence to watch.** At `#EEEA54` on `#F6F3EC` the accent is only ~1.1:1 against the
+**One consequence to watch.** At `#F9EA55` on `#F9F7EF` the accent is only ~1.1:1 against the
 paper, so a filled button reads as a shape almost entirely because of the ink sitting on it,
 not because of its own edge. That is fine at the scale the logo uses it — a large blob — but
 small CTAs need either ink type on top (≈11:1, which they have) or a hairline `rule` border.

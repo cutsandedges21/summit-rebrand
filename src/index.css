@@ -5,16 +5,16 @@
    past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
 /* Paper, ink and accent are sampled directly from the logo
-   (public/mossimo Studios.PNG), not chosen independently. The remaining
+   (public/brand/logo-wordmark.png), not chosen independently. The remaining
    tokens are tints derived to sit in the same warmth. */
 @theme {
-  --color-paper: #f6f3ec;
+  --color-paper: #f9f7ef;
   --color-paper-clay: #ebe5d8;
   --color-ink: #1b1a15;
   --color-ink-muted: #6a655a;
   --color-ink-faint: #a8a296;
   --color-rule: #e0dace;
-  --color-accent: #eeea54;
+  --color-accent: #f9ea55;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', system-ui, sans-serif;
