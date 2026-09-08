@@ -1948,6 +1948,13 @@ Expected: FAIL — module not found.
 
 The hover sweep is a background fill that scales from left, never a text colour.
 
+> **Verified in a browser.** The sweep spans the full width of the row rather than
+> hugging the words, because the button is `w-full`. That was flagged as a possible
+> defect and then kept deliberately: at row scale it reads as a selection bar that
+> says *this row drives the preview*, which is exactly what the interaction does.
+> A stroke tight to the text would look like emphasis instead, and emphasis is the
+> one thing the accent must never mean here.
+
 ```jsx
 import { useState } from 'react'
 import { CATEGORIES, filterBuilds } from '../lib/builds.js'
