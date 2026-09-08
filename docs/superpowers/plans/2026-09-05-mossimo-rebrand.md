@@ -399,25 +399,6 @@ Add this to `index.html` in the same step (Task 18 rewrites that file later and 
 Run: `npm test`
 Expected: PASS, 12 tests.
 
-
-> **Revised after looking at it.** The first build of this component rendered as a
-> flat horizontal fan with the headline printed straight over near-black
-> screenshots — genuinely unreadable, and nothing in the test suite could see it.
-> Three changes fixed it, all verified by screenshot:
->
-> 1. **Type above, arc below.** The headline sits on bare paper in the upper
->    portion; the tiles form a band underneath. This is what melius.com actually
->    does, and it is why its headline is legible over a busy image corridor.
-> 2. **A clear centre channel** ([H[2J[3J + ), so the subhead and CTA land on
->    paper rather than on a screenshot.
-> 3. **Depth** —  and a slight  curve — so the tiles read as a corridor
->    receding from the viewer rather than a fanned deck of cards.
->
-> Mobile gets a separate, shallower six-tile arc pushed below the CTA. The
-> desktop spacing put every tile off-screen at 375px, leaving slivers at the
-> edges that looked like a rendering fault. Both tile counts are even on purpose:
-> an odd count places a tile at dead centre, behind the headline.
-
 - [x] **Step 5: Commit**
 
 ```bash
@@ -1849,6 +1830,25 @@ export default function ArcHero() {
 
 Run: `npm test -- arc-hero`
 Expected: PASS, 7 tests.
+
+> **Revised after looking at it — the code above is the pre-revision version.**
+> As first written, this rendered a flat horizontal fan with the headline printed
+> straight over near-black screenshots. Genuinely unreadable, and invisible to
+> every test in the suite. See `src/components/ArcHero.jsx` for what actually
+> shipped. Three changes, each verified by screenshot at 1280×800 and 375×760:
+>
+> 1. **Type above, arc below.** The headline sits on bare paper in the upper
+>    portion; the tiles form a band underneath. This is what melius.com actually
+>    does, and it is why their headline survives a busy image corridor.
+> 2. **A clear centre channel** — the `clear` and `step` constants — so the
+>    subhead and CTA land on paper rather than on a screenshot.
+> 3. **Real depth** via `z` translation and a slight `y` curve, so the tiles read
+>    as a corridor receding from the viewer rather than a fanned deck of cards.
+>
+> Mobile gets its own shallower six-tile arc pushed below the CTA. Desktop
+> spacing put every tile off-screen at 375px and left slivers at the edges that
+> read as a rendering fault. Both tile counts are even deliberately: an odd count
+> places a tile at dead centre, behind the headline.
 
 - [x] **Step 5: Commit**
 
