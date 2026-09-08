@@ -1006,7 +1006,7 @@ git commit -m "feat: fourteen concept builds with category filter"
 - Create: `src/lib/services.js`, `src/lib/faq.js`
 - Modify: `tests/unit/voice.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Append to `tests/unit/voice.test.js`:
 
@@ -1041,12 +1041,12 @@ describe('faq copy', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- voice`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/lib/services.js`**
+- [x] **Step 3: Write `src/lib/services.js`**
 
 From `../SummitSites/src/components/Services.jsx:4-29`, converted to the plural voice. Icons are dropped — the reference language has no iconography.
 
@@ -1095,7 +1095,7 @@ export const SERVICES = [
 ]
 ```
 
-- [ ] **Step 4: Write `src/lib/faq.js`**
+- [x] **Step 4: Write `src/lib/faq.js`**
 
 Read `../SummitSites/src/components/FAQ.jsx` for the current entries. If an entry references the old brand, rewrite it.
 
@@ -1107,7 +1107,7 @@ are brand voice, which is why the test above checks `f.a` and not `f.q`.
 export const FAQS = [
   {
     q: 'Who actually builds the site?',
-    a: 'The same people you email. Design, copy, development, launch and everything after it. You will never be handed to an account manager, because there is not one.',
+    a: 'Whoever answers your email. Design, copy, development, launch and everything after it. You will never be handed to an account manager, because there is not one.',
   },
   {
     q: 'How long does it take?',
@@ -1132,12 +1132,12 @@ export const FAQS = [
 ]
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `npm test -- voice`
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/services.js src/lib/faq.js tests/unit/voice.test.js

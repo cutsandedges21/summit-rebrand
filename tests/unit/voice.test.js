@@ -54,3 +54,32 @@ describe('pricing copy', () => {
     expect(blob).not.toMatch(SINGULAR)
   })
 })
+
+import { SERVICES } from '../../src/lib/services.js'
+import { FAQS } from '../../src/lib/faq.js'
+
+describe('services copy', () => {
+  it('has four services', () => {
+    expect(SERVICES).toHaveLength(4)
+  })
+
+  it('speaks as "we", never as "I"', () => {
+    expect(JSON.stringify(SERVICES)).not.toMatch(SINGULAR)
+  })
+})
+
+describe('faq copy', () => {
+  it('gives every entry a question and an answer', () => {
+    expect(FAQS.length).toBeGreaterThan(0)
+    for (const f of FAQS) {
+      expect(f.q.endsWith('?')).toBe(true)
+      expect(f.a.length).toBeGreaterThan(0)
+    }
+  })
+
+  // Only the ANSWERS are brand voice. The questions are the customer speaking,
+  // so "Do I own the site?" is correct and must not be flagged.
+  it('answers as "we", never as "I"', () => {
+    expect(FAQS.map((f) => f.a).join(' ')).not.toMatch(SINGULAR)
+  })
+})
