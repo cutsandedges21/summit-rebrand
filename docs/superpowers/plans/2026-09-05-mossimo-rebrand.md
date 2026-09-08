@@ -2295,7 +2295,7 @@ git commit -m "feat: pinned process section with scroll-driven index"
 - Modify: `src/pages/Home.jsx`
 - Test: `tests/unit/home.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -2339,12 +2339,12 @@ describe('home page', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- home`
 Expected: FAIL — the stub renders an empty div.
 
-- [ ] **Step 3: Write `src/pages/Home.jsx`**
+- [x] **Step 3: Write `src/pages/Home.jsx`**
 
 ```jsx
 import { Link } from 'react-router-dom'
@@ -2408,20 +2408,20 @@ export default function Home() {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- home`
 Expected: PASS, 5 tests.
 
-- [ ] **Step 5: Look at it**
+- [x] **Step 5: Look at it**
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173`. Check by eye: bone paper with visible grain, arc of build images behind the headline, chartreuse only ever as a filled block. Scroll and confirm the arc spreads and fades, and that the Process left column pins while the right scrolls.
+Open `http://localhost:5174`. Check by eye: bone paper with visible grain, arc of build images behind the headline, chartreuse only ever as a filled block. Scroll and confirm the arc spreads and fades, and that the Process left column pins while the right scrolls.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/pages/Home.jsx tests/unit/home.test.jsx
