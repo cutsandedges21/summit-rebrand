@@ -1634,7 +1634,7 @@ git commit -m "feat: nav and footer shell"
 
 ## Task 11: ArcHero
 
-Spec §4.1. Sixteen builds in a perspective corridor that flies apart on scroll.
+Spec §4.1. Fourteen builds in a perspective corridor that flies apart on scroll.
 
 **Files:**
 - Create: `src/components/ArcHero.jsx`
@@ -1743,7 +1743,7 @@ function offsetFor(index) {
   return index - CENTRE
 }
 
-function Tile({ build, index, spread }) {
+function Tile({ build, index }) {
   const offset = offsetFor(index)
   const distance = Math.abs(offset)
   const direction = Math.sign(offset)
@@ -1759,7 +1759,7 @@ function Tile({ build, index, spread }) {
         backgroundPosition: 'center',
         rotateY: -direction * (14 + distance * 3),
         scale: 0.55 + distance * 0.085,
-        x: spread ? undefined : direction * distance * 78,
+        x: direction * distance * 78,
         zIndex: 10 - distance,
       }}
     />
@@ -1794,7 +1794,7 @@ export default function ArcHero() {
         }}
       >
         {BUILDS.map((build, i) => (
-          <Tile key={build.slug} build={build} index={i} spread={isStatic} />
+          <Tile key={build.slug} build={build} index={i} />
         ))}
       </fm.div>
 
@@ -1804,7 +1804,7 @@ export default function ArcHero() {
           className="font-display leading-[1.02] tracking-tight"
           style={{
             fontSize: 'var(--text-hero)',
-            textShadow: '0 2px 28px rgba(240,235,232,0.92)',
+            textShadow: '0 2px 28px rgba(249, 247, 239, 0.92)',
           }}
         >
           We build <em>websites</em> for businesses
@@ -1812,7 +1812,7 @@ export default function ArcHero() {
           that <em>answer</em> the phone.
         </h1>
         <p className="mt-7 max-w-lg font-sans text-ink-muted">
-          Design, build, local SEO and upkeep — start to finish, by one person.
+          Design, build, local SEO and upkeep — handled start to finish, in one place.
         </p>
         <Link
           to="/work"
@@ -1829,7 +1829,7 @@ export default function ArcHero() {
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- arc-hero`
-Expected: PASS, 6 tests.
+Expected: PASS, 7 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -2233,7 +2233,7 @@ per-test override installed before it.
 - [ ] **Step 5: Run the test to verify it passes**
 
 Run: `npm test -- pinned-process`
-Expected: PASS, 6 tests.
+Expected: PASS, 8 tests.
 
 - [ ] **Step 6: Commit**
 
