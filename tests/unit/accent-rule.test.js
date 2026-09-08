@@ -16,7 +16,7 @@ const srcFiles = walk(SRC).filter((f) => /\.(jsx?|css)$/.test(f))
 /**
  * Spec §3: chartreuse is a shape, never a letter.
  *
- * `#C6D42B` on the bone paper background is ~1.4:1 contrast — illegible, and an
+ * `#EEEA54` on the bone paper background is ~1.4:1 contrast — illegible, and an
  * accessibility failure rather than a style preference. As a fill with ink on top
  * it is ~10:1.
  *
@@ -35,11 +35,11 @@ const FORBIDDEN = [
     why: 'text-accent paints letterforms in the accent',
   },
   {
-    re: /\btext-\[\s*(#c6d42b|var\(\s*--color-accent\s*\))\s*\]/i,
+    re: /\btext-\[\s*(#eeea54|var\(\s*--color-accent\s*\))\s*\]/i,
     why: 'arbitrary Tailwind text colour set to the accent',
   },
   {
-    re: /(?<![-\w])color\s*:\s*['"]?\s*(#c6d42b|var\(\s*--color-accent\s*\))/i,
+    re: /(?<![-\w])color\s*:\s*['"]?\s*(#eeea54|var\(\s*--color-accent\s*\))/i,
     why: 'CSS color property set to the accent',
   },
 ]
@@ -68,23 +68,23 @@ describe('accent rule: chartreuse is a shape, never a letter', () => {
   it.each([
     ['className="text-accent"', true],
     ['className="hover:text-accent md:text-ink"', true],
-    ['className="text-[#c6d42b]"', true],
+    ['className="text-[#eeea54]"', true],
     ['className="text-[var(--color-accent)]"', true],
-    ['  color: #c6d42b;', true],
+    ['  color: #eeea54;', true],
     ['  color: var(--color-accent);', true],
-    ['style={{ color: \'#c6d42b\' }}', true],
+    ['style={{ color: \'#eeea54\' }}', true],
   ])('rejects %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })
 
   it.each([
-    ['  background-color: #c6d42b;', false],
+    ['  background-color: #eeea54;', false],
     ['  background-color: var(--color-accent);', false],
     ['className="bg-accent"', false],
     ['className="decoration-accent"', false],
     ['  border-color: var(--color-accent);', false],
-    ['style={{ backgroundColor: \'#c6d42b\' }}', false],
-    ['  --color-accent: #c6d42b;', false],
+    ['style={{ backgroundColor: \'#eeea54\' }}', false],
+    ['  --color-accent: #eeea54;', false],
   ])('permits %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })

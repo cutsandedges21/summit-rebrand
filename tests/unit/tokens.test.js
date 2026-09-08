@@ -5,14 +5,16 @@ import { resolve } from 'node:path'
 const css = readFileSync(resolve(__dirname, '../../src/index.css'), 'utf8')
 
 describe('design tokens', () => {
+  // paper, ink and accent are sampled from public/mossimo Studios.PNG.
+  // If the logo is ever redrawn, re-sample and update both here and index.css.
   const tokens = {
-    '--color-paper': '#f0ebe8',
-    '--color-paper-clay': '#e1d7d1',
-    '--color-ink': '#1d1d1b',
-    '--color-ink-muted': '#6b6560',
-    '--color-ink-faint': '#a79f98',
-    '--color-rule': '#ddd5cf',
-    '--color-accent': '#c6d42b',
+    '--color-paper': '#f6f3ec',
+    '--color-paper-clay': '#ebe5d8',
+    '--color-ink': '#1b1a15',
+    '--color-ink-muted': '#6a655a',
+    '--color-ink-faint': '#a8a296',
+    '--color-rule': '#e0dace',
+    '--color-accent': '#eeea54',
   }
 
   for (const [name, value] of Object.entries(tokens)) {

@@ -8,8 +8,19 @@
 
 ## 1. What this is
 
-Summit Sites becomes **mossimo** — lowercase, the owner's first name. Same business, same
-plans, same prices. What changes is the name, the voice, and the entire visual language.
+Summit Sites becomes **mossimo Studios** — the owner's first name, lowercase, plus "Studios".
+Same business, same plans, same prices. What changes is the name, the voice, and the entire
+visual language.
+
+The full lockup is `mossimo` in a hand-drawn marker script over a yellow blob, with `STUDIOS`
+in a Didone serif beneath and `WEB DESIGN` as a spaced-out rule line under that
+(`public/mossimo Studios.PNG`, supplied 2026-09-06). **`mossimo` alone is the wordmark**
+used in the nav and footer; the full lockup appears where there is room to breathe.
+
+Worth noting the logo independently confirmed two decisions made before it existed: it sits
+on warm paper rather than white, and it uses the accent as a **shape** — a blob behind the
+type — never as a letter colour. The plural voice also reads better against "Studios" than a
+bare first name would.
 
 The business is unchanged: subscription web design for local businesses. Three monthly
 plans with a one-time build fee, plus add-ons.
@@ -95,13 +106,13 @@ live CSS, not estimated.
 
 | Token | Value | Use |
 |---|---|---|
-| `paper` | `#F0EBE8` | Page background. Warm bone, never white. |
-| `paper-clay` | `#E1D7D1` | Tonal shift for one or two sections. Not a dark mode. |
-| `ink` | `#1D1D1B` | All body and display type. |
-| `ink-muted` | `#6B6560` | Secondary copy, labels. |
-| `ink-faint` | `#A79F98` | Inactive list items, disabled states. |
-| `rule` | `#DDD5CF` | Hairlines. 1px, never heavier. |
-| `accent` | `#C6D42B` | Chartreuse. **Fill only.** |
+| `paper` | `#F6F3EC` | Page background. Warm bone, never white. |
+| `paper-clay` | `#EBE5D8` | Tonal shift for one or two sections. Not a dark mode. |
+| `ink` | `#1B1A15` | All body and display type. |
+| `ink-muted` | `#6A655A` | Secondary copy, labels. |
+| `ink-faint` | `#A8A296` | Inactive list items, disabled states. |
+| `rule` | `#E0DACE` | Hairlines. 1px, never heavier. |
+| `accent` | `#EEEA54` | Chartreuse. **Fill only.** |
 
 **No dark sections anywhere.** The only dark rectangles on the site are work recordings and
 screenshots — i.e. content, never chrome.
@@ -110,16 +121,29 @@ screenshots — i.e. content, never chrome.
 
 > **On paper, the accent is a shape. Never a letter.**
 
-Chartreuse at `#C6D42B` on `#F0EBE8` is roughly 1.4:1 — illegible as text, non-negotiable.
+Chartreuse at `#EEEA54` on `#F6F3EC` is roughly 1.4:1 — illegible as text, non-negotiable.
 As a fill with `ink` on top it is roughly 10:1, comfortably above AA.
 
 This is a constraint, and it's the most distinctive thing in the system. Enforce it with no
 exceptions: fills, blocks, hover sweeps, the hero blob, the active nav marker, the featured
 plan label. Never coloured text.
 
-Rejected: `#DDEA3B` (dates faster, edges toward startup), `#F0EB65` (Mémoire's literal brand
-colour, and it nearly vanishes into the paper), `#A3B41C` (dark enough to almost work as
-text, which quietly breaks the rule that makes the system interesting).
+**Superseded 2026-09-06 — the logo settled this.** The palette above is now sampled directly
+from `public/mossimo Studios.PNG` rather than chosen: paper, ink and accent are measured
+values, and the remaining tokens are tints derived to sit in the same warmth. A brand whose
+site does not match its own logo is a broken brand, so the logo wins.
+
+This overrode an earlier accent choice of `#C6D42B`, an olive chartreuse, picked before the
+logo existed. The logo's yellow is a full lemon — lighter and more saturated. Notably it sits
+very close to `#F0EB65`, which this spec had previously rejected for being Mémoire d'encrier's
+literal brand colour. That rejection no longer applies: arriving at a neighbouring yellow
+independently, via your own logo, is not the same as copying a publisher's brand colour.
+
+**One consequence to watch.** At `#EEEA54` on `#F6F3EC` the accent is only ~1.1:1 against the
+paper, so a filled button reads as a shape almost entirely because of the ink sitting on it,
+not because of its own edge. That is fine at the scale the logo uses it — a large blob — but
+small CTAs need either ink type on top (≈11:1, which they have) or a hairline `rule` border.
+Never rely on the fill alone to define a small interactive target.
 
 ### Typography
 

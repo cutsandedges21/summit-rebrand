@@ -4,14 +4,17 @@
    Tailwind inlines its own @import in place, which pushes any later @import
    past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
+/* Paper, ink and accent are sampled directly from the logo
+   (public/mossimo Studios.PNG), not chosen independently. The remaining
+   tokens are tints derived to sit in the same warmth. */
 @theme {
-  --color-paper: #f0ebe8;
-  --color-paper-clay: #e1d7d1;
-  --color-ink: #1d1d1b;
-  --color-ink-muted: #6b6560;
-  --color-ink-faint: #a79f98;
-  --color-rule: #ddd5cf;
-  --color-accent: #c6d42b;
+  --color-paper: #f6f3ec;
+  --color-paper-clay: #ebe5d8;
+  --color-ink: #1b1a15;
+  --color-ink-muted: #6a655a;
+  --color-ink-faint: #a8a296;
+  --color-rule: #e0dace;
+  --color-accent: #eeea54;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', system-ui, sans-serif;

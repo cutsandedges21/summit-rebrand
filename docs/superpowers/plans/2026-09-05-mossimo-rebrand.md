@@ -59,8 +59,8 @@ claim that the command ran and passed.
 These are invariants from the spec. Violating one is a defect even if the task's own steps
 pass.
 
-1. **Chartreuse `#C6D42B` is a fill, never a letter.** No `text-accent`, no
-   `color: #c6d42b`. Enforced by `tests/unit/accent-rule.test.js`.
+1. **Chartreuse `#EEEA54` is a fill, never a letter.** No `text-accent`, no
+   `color: #eeea54`. Enforced by `tests/unit/accent-rule.test.js`.
 2. **No dark sections.** The only dark rectangles are work screenshots and recordings —
    content, never chrome.
 3. **No containers.** No cards, borders, shadows or rounded panels. Hairline `border-rule`
@@ -225,13 +225,13 @@ const css = readFileSync(resolve(__dirname, '../../src/index.css'), 'utf8')
 
 describe('design tokens', () => {
   const tokens = {
-    '--color-paper': '#f0ebe8',
-    '--color-paper-clay': '#e1d7d1',
-    '--color-ink': '#1d1d1b',
-    '--color-ink-muted': '#6b6560',
-    '--color-ink-faint': '#a79f98',
-    '--color-rule': '#ddd5cf',
-    '--color-accent': '#c6d42b',
+    '--color-paper': '#f6f3ec',
+    '--color-paper-clay': '#ebe5d8',
+    '--color-ink': '#1b1a15',
+    '--color-ink-muted': '#6a655a',
+    '--color-ink-faint': '#a8a296',
+    '--color-rule': '#e0dace',
+    '--color-accent': '#eeea54',
   }
 
   for (const [name, value] of Object.entries(tokens)) {
@@ -337,13 +337,13 @@ Add this to `index.html` in the same step (Task 18 rewrites that file later and 
    past ~19kB of rules into an illegal position, and Lightning CSS drops it. */
 
 @theme {
-  --color-paper: #f0ebe8;
-  --color-paper-clay: #e1d7d1;
-  --color-ink: #1d1d1b;
-  --color-ink-muted: #6b6560;
-  --color-ink-faint: #a79f98;
-  --color-rule: #ddd5cf;
-  --color-accent: #c6d42b;
+  --color-paper: #f6f3ec;
+  --color-paper-clay: #ebe5d8;
+  --color-ink: #1b1a15;
+  --color-ink-muted: #6a655a;
+  --color-ink-faint: #a8a296;
+  --color-rule: #e0dace;
+  --color-accent: #eeea54;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', system-ui, sans-serif;
@@ -414,7 +414,7 @@ Two subtleties here are load-bearing, both found by deliberately breaking the gu
    the hyphen and the `c` — so it blocks the one use the rule permits. The negative
    lookbehind `(?<![-w])` is what makes the guard correct rather than merely strict.
 2. Matching only `text-accent` and a literal hex leaves three easy ways past it:
-   `text-[#c6d42b]`, `color: var(--color-accent)`, and inline JSX styles.
+   `text-[#eeea54]`, `color: var(--color-accent)`, and inline JSX styles.
 
 The table-driven cases at the bottom pin both edges, so a later tweak cannot quietly
 invert either one.
@@ -438,7 +438,7 @@ const srcFiles = walk(SRC).filter((f) => /\.(jsx?|css)$/.test(f))
 /**
  * Spec §3: chartreuse is a shape, never a letter.
  *
- * `#C6D42B` on the bone paper background is ~1.4:1 contrast — illegible, and an
+ * `#EEEA54` on the bone paper background is ~1.4:1 contrast — illegible, and an
  * accessibility failure rather than a style preference. As a fill with ink on top
  * it is ~10:1.
  *
@@ -457,11 +457,11 @@ const FORBIDDEN = [
     why: 'text-accent paints letterforms in the accent',
   },
   {
-    re: /\btext-\[\s*(#c6d42b|var\(\s*--color-accent\s*\))\s*\]/i,
+    re: /\btext-\[\s*(#eeea54|var\(\s*--color-accent\s*\))\s*\]/i,
     why: 'arbitrary Tailwind text colour set to the accent',
   },
   {
-    re: /(?<![-\w])color\s*:\s*['"]?\s*(#c6d42b|var\(\s*--color-accent\s*\))/i,
+    re: /(?<![-\w])color\s*:\s*['"]?\s*(#eeea54|var\(\s*--color-accent\s*\))/i,
     why: 'CSS color property set to the accent',
   },
 ]
@@ -490,23 +490,23 @@ describe('accent rule: chartreuse is a shape, never a letter', () => {
   it.each([
     ['className="text-accent"', true],
     ['className="hover:text-accent md:text-ink"', true],
-    ['className="text-[#c6d42b]"', true],
+    ['className="text-[#eeea54]"', true],
     ['className="text-[var(--color-accent)]"', true],
-    ['  color: #c6d42b;', true],
+    ['  color: #eeea54;', true],
     ['  color: var(--color-accent);', true],
-    ['style={{ color: \'#c6d42b\' }}', true],
+    ['style={{ color: \'#eeea54\' }}', true],
   ])('rejects %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })
 
   it.each([
-    ['  background-color: #c6d42b;', false],
+    ['  background-color: #eeea54;', false],
     ['  background-color: var(--color-accent);', false],
     ['className="bg-accent"', false],
     ['className="decoration-accent"', false],
     ['  border-color: var(--color-accent);', false],
-    ['style={{ backgroundColor: \'#c6d42b\' }}', false],
-    ['  --color-accent: #c6d42b;', false],
+    ['style={{ backgroundColor: \'#eeea54\' }}', false],
+    ['  --color-accent: #eeea54;', false],
   ])('permits %s', (line, shouldMatch) => {
     expect(FORBIDDEN.some(({ re }) => re.test(line))).toBe(shouldMatch)
   })
@@ -3163,7 +3163,7 @@ Create `public/favicon/favicon.svg`:
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#c6d42b"/>
+  <rect width="64" height="64" fill="#eeea54"/>
   <text x="32" y="46" font-family="Georgia, serif" font-size="42" text-anchor="middle" fill="#1d1d1b">m</text>
 </svg>
 ```
