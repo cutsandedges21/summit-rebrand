@@ -17,7 +17,7 @@ export default function Nav() {
           alt="mossimo Studios"
           width={2069}
           height={760}
-          className="h-7 w-auto md:h-9"
+          className="h-7 w-auto mix-blend-multiply md:h-9"
         />
       </Link>
       <nav className="flex gap-1 font-sans text-[11px] font-medium md:gap-2 md:text-[13px]">

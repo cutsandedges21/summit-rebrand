@@ -25,7 +25,16 @@
   --text-body: clamp(14px, 1.05vw, 17px);
 }
 
-/* Fine grain — spec §3. Fixed so it does not scroll against content. */
+/* Fine grain — spec §3. Fixed so it does not scroll against content.
+
+   The grain sits ABOVE #root (z-index 2 vs 1), which is deliberate and load-
+   bearing. With it below, the paper around an opaque image got grain and the
+   image's own matte did not, so the logo rendered as a clean pale rectangle
+   floating on textured paper. Putting the grain on top means everything is
+   grained uniformly — paper, images, and the logo's matte alike.
+
+   pointer-events: none keeps it from eating clicks. Do not move it back below
+   #root without re-checking the wordmark in a browser; no test can see this. */
 @layer base {
   body {
     background-color: var(--color-paper);
@@ -38,7 +47,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 2;
     pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='4'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='180'%20height='180'%20filter='url(%23n)'%20opacity='0.30'/%3E%3C/svg%3E");
     background-size: 180px 180px;

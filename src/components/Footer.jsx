@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="mt-32 border-t border-rule px-6 py-8 md:px-12">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <Link to="/" aria-label="mossimo Studios, home">
-          <img src="/brand/logo-wordmark.png" alt="mossimo Studios" className="h-7 w-auto" />
+          <img src="/brand/logo-wordmark.png" alt="mossimo Studios" className="h-7 w-auto mix-blend-multiply" />
         </Link>
         <p className="font-sans text-[11px] text-ink-muted">
           Based in Montreal. Working across Canada.

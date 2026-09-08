@@ -354,7 +354,16 @@ Add this to `index.html` in the same step (Task 18 rewrites that file later and 
   --text-body: clamp(14px, 1.05vw, 17px);
 }
 
-/* Fine grain — spec §3. Fixed so it does not scroll against content. */
+/* Fine grain — spec §3. Fixed so it does not scroll against content.
+
+   The grain sits ABOVE #root (z-index 2 vs 1), which is deliberate and load-
+   bearing. With it below, the paper around an opaque image got grain and the
+   image's own matte did not, so the logo rendered as a clean pale rectangle
+   floating on textured paper. Putting the grain on top means everything is
+   grained uniformly — paper, images, and the logo's matte alike.
+
+   pointer-events: none keeps it from eating clicks. Do not move it back below
+   #root without re-checking the wordmark in a browser; no test can see this. */
 @layer base {
   body {
     background-color: var(--color-paper);
@@ -367,7 +376,7 @@ Add this to `index.html` in the same step (Task 18 rewrites that file later and 
     content: '';
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 2;
     pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='4'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='180'%20height='180'%20filter='url(%23n)'%20opacity='0.30'/%3E%3C/svg%3E");
     background-size: 180px 180px;
@@ -1523,7 +1532,7 @@ export default function Nav() {
           alt="mossimo Studios"
           width={2069}
           height={760}
-          className="h-7 w-auto md:h-9"
+          className="h-7 w-auto mix-blend-multiply md:h-9"
         />
       </Link>
       <nav className="flex gap-1 font-sans text-[11px] font-medium md:gap-2 md:text-[13px]">
@@ -1556,7 +1565,7 @@ export default function Footer() {
     <footer className="mt-32 border-t border-rule px-6 py-8 md:px-12">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <Link to="/" aria-label="mossimo Studios, home">
-          <img src="/brand/logo-wordmark.png" alt="mossimo Studios" className="h-7 w-auto" />
+          <img src="/brand/logo-wordmark.png" alt="mossimo Studios" className="h-7 w-auto mix-blend-multiply" />
         </Link>
         <p className="font-sans text-[11px] text-ink-muted">
           Based in Montreal. Working across Canada.
