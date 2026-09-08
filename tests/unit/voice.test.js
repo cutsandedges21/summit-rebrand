@@ -83,3 +83,27 @@ describe('faq copy', () => {
     expect(FAQS.map((f) => f.a).join(' ')).not.toMatch(SINGULAR)
   })
 })
+
+import { PRIVACY_SECTIONS, TERMS_SECTIONS } from '../../src/lib/legal.js'
+
+describe('legal copy', () => {
+  it('has sections with headings', () => {
+    for (const set of [PRIVACY_SECTIONS, TERMS_SECTIONS]) {
+      expect(set.length).toBeGreaterThan(0)
+      for (const section of set) {
+        expect(section.h.length).toBeGreaterThan(0)
+        expect(section.body || section.list).toBeTruthy()
+      }
+    }
+  })
+
+  it('speaks as "we", never as "I"', () => {
+    const blob = JSON.stringify({ PRIVACY_SECTIONS, TERMS_SECTIONS })
+    expect(blob).not.toMatch(SINGULAR)
+  })
+
+  it('never names the retired brand', () => {
+    const blob = JSON.stringify({ PRIVACY_SECTIONS, TERMS_SECTIONS })
+    expect(blob).not.toMatch(/summit sites/i)
+  })
+})

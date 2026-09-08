@@ -1,3 +1,6 @@
+import { PRIVACY_SECTIONS } from '../lib/legal.js'
+import LegalPage from '../components/LegalPage.jsx'
+
 export default function PrivacyPolicy() {
-  return <div data-testid="privacy-page" />
+  return <LegalPage testId="privacy-page" title="Privacy Policy" sections={PRIVACY_SECTIONS} />
 }

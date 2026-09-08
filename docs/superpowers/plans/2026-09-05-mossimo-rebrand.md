@@ -2711,7 +2711,7 @@ git commit -m "feat: portfolio, services and pricing pages"
 - Modify: `src/pages/About.jsx`, `src/pages/Faq.jsx`, `src/pages/Contact.jsx`, `src/pages/PrivacyPolicy.jsx`, `src/pages/TermsOfService.jsx`
 - Test: `tests/unit/pages-secondary.test.jsx`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```jsx
 import { describe, it, expect } from 'vitest'
@@ -2727,14 +2727,27 @@ import { FAQS } from '../../src/lib/faq.js'
 const wrap = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('about page', () => {
-  it('introduces the person by name', () => {
+  // The heading stopped naming the owner when the site moved to the plural
+  // voice: "Hi - I'm Mossimo" became "Small studio. Montreal." The page still
+  // has to establish who and where at a glance, so that is what is asserted.
+  it('leads with what the studio is and where it is', () => {
     wrap(<About />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/mossimo/i)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/studio/i)
   })
 
   it('states the location', () => {
     const { container } = wrap(<About />)
     expect(container.textContent).toMatch(/montreal/i)
+  })
+
+  it('makes the no-handoff promise, which is the whole pitch', () => {
+    const { container } = wrap(<About />)
+    expect(container.textContent).toMatch(/no account manager/i)
+  })
+
+  it('claims no headcount', () => {
+    const { container } = wrap(<About />)
+    expect(container.textContent).not.toMatch(/our team|\d+\s+(people|designers|developers)/i)
   })
 })
 
@@ -2768,12 +2781,12 @@ describe('legal pages', () => {
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- pages-secondary`
 Expected: FAIL — stubs render empty divs.
 
-- [ ] **Step 3: Write `src/pages/About.jsx`**
+- [x] **Step 3: Write `src/pages/About.jsx`**
 
 ```jsx
 export default function About() {
@@ -2808,7 +2821,7 @@ export default function About() {
 }
 ```
 
-- [ ] **Step 4: Write `src/pages/Faq.jsx`**
+- [x] **Step 4: Write `src/pages/Faq.jsx`**
 
 ```jsx
 import { FAQS } from '../lib/faq.js'
@@ -2841,7 +2854,7 @@ export default function Faq() {
 }
 ```
 
-- [ ] **Step 5: Write `src/pages/Contact.jsx`**
+- [x] **Step 5: Write `src/pages/Contact.jsx`**
 
 ```jsx
 import { Link } from 'react-router-dom'
@@ -2849,7 +2862,7 @@ import { Link } from 'react-router-dom'
 const EMAIL = 'mossimo.studios@gmail.com'
 
 const LINKS = [
-  { to: '/work', label: 'See the work', note: 'Fifteen concept builds' },
+  { to: '/portfolio', label: 'See the work', note: 'Case studies for every project' },
   { to: '/pricing', label: 'View pricing', note: 'Plans and what is included' },
   { to: '/faq', label: 'Common questions', note: 'Answers before you ask' },
 ]
@@ -2903,7 +2916,7 @@ export default function Contact() {
 
 The underline uses `decoration-accent`, which sets `text-decoration-color`, not `color`. The rule in spec §3 governs the letterforms; a rule under them is a shape. The accent-rule test in Task 3 matches `text-accent` and `color:` only, so this passes correctly rather than by accident.
 
-- [ ] **Step 6: Port the legal copy into a data module**
+- [x] **Step 6: Port the legal copy into a data module**
 
 Both source files already hold their copy in a `SECTIONS` array of
 `{ h, body?: string[], list?: string[] }` — `PrivacyPolicy.jsx:8` and
@@ -2918,7 +2931,7 @@ string:
 Do not reword anything else. This is legal copy; paraphrasing it changes what it commits you
 to.
 
-- [ ] **Step 7: Extend the voice test to cover legal copy**
+- [x] **Step 7: Extend the voice test to cover legal copy**
 
 Append to `tests/unit/voice.test.js`:
 
@@ -2948,7 +2961,7 @@ describe('legal copy', () => {
 })
 ```
 
-- [ ] **Step 8: Write the two legal pages**
+- [x] **Step 8: Write the two legal pages**
 
 Both render the same shape, so write the section renderer once.
 
@@ -3021,12 +3034,12 @@ export default function LegalPage({ testId, title, sections }) {
 }
 ```
 
-- [ ] **Step 9: Run the tests to verify they pass**
+- [x] **Step 9: Run the tests to verify they pass**
 
 Run: `npm test`
-Expected: PASS — pages-secondary 6 tests, voice now 7 tests, everything else still green.
+Expected: PASS — pages-secondary 8 tests, voice gains 3, everything else still green.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/pages src/lib/legal.js src/components/LegalPage.jsx tests/unit
