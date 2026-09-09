@@ -4,7 +4,7 @@ import WorkList from '../components/WorkList.jsx'
 import PinnedProcess from '../components/PinnedProcess.jsx'
 import Reveal, { RevealItem } from '../components/Reveal.jsx'
 import Magnetic from '../components/Magnetic.jsx'
-import Marquee from '../components/Marquee.jsx'
+import AccentButton, { ArrowLink } from '../components/AccentButton.jsx'
 import { useBackdrop } from '../components/Backdrop.jsx'
 import Textify from '../lib/textify.jsx'
 import { BUILDS } from '../lib/builds.js'
@@ -16,6 +16,7 @@ export default function Home() {
   // section edge — the entire page washes to pink as this section takes the
   // viewport, then washes back. Modelled on memoiredencrier.com.
   const pricing = useBackdrop('pink')
+  const closing = useBackdrop('pink')
 
   return (
     <div data-testid="home-page">
@@ -32,20 +33,6 @@ export default function Home() {
           </Link>
         </Reveal>
       </div>
-
-      <Marquee
-        className="mt-20"
-        items={[
-          'Design',
-          'Build',
-          'Local SEO',
-          'Copywriting',
-          'Hosting',
-          'Performance',
-          'Upkeep',
-          'Accessibility',
-        ]}
-      />
 
       <PinnedProcess />
 
@@ -100,6 +87,41 @@ export default function Home() {
               </span>
             </Link>
           </Magnetic>
+        </Reveal>
+      </section>
+
+      {/* Closing CTA. Themed pink like the pricing section above it rather than
+          resolving back to paper, so the colour carries through to the footer
+          and gets real dwell instead of reading as a flash on the way past.
+          Both sections registering the same theme means no swap between them. */}
+      <section ref={closing} className="border-t border-ink px-6 py-28 md:px-12">
+        <Reveal as="p" variant="up" duration={0.7} className="label mb-4">
+          Next step
+        </Reveal>
+        <Textify
+          as="h2"
+          preset="riseLines"
+          className="max-w-4xl font-display leading-[1.04] tracking-tight"
+          style={{ fontSize: 'var(--text-section)' }}
+        >
+          Tell us what the site <br />
+          has to <em>do</em>.
+        </Textify>
+        <Reveal
+          as="p"
+          variant="up"
+          delay={0.2}
+          className="mt-6 max-w-xl font-sans leading-relaxed text-ink-muted"
+        >
+          A short form, then a real reply from whoever will build it — usually within 24
+          hours. No discovery call you have to dress up for.
+        </Reveal>
+
+        <Reveal variant="up" delay={0.3} className="mt-10 flex flex-wrap items-center gap-6">
+          <AccentButton to="/contact">Start a project</AccentButton>
+          <ArrowLink to="/faq" className="label underline">
+            Questions first
+          </ArrowLink>
         </Reveal>
       </section>
     </div>

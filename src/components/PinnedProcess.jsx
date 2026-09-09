@@ -92,9 +92,6 @@ export default function PinnedProcess() {
             ))}
           </ol>
 
-          <Reveal as="p" variant="up" duration={0.7} className="mt-8 font-sans text-[12px] text-ink-muted">
-            Whoever answers your email handles all four. No handoffs.
-          </Reveal>
         </div>
 
         <div className="flex-1">
