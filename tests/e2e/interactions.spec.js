@@ -185,6 +185,15 @@ test.describe('page titles', () => {
       '/contact',
     ]) {
       await page.goto(path)
+
+      // The title is set by an effect after React mounts, so index.html's
+      // static title is briefly correct-but-generic. Reading it immediately is
+      // a race that desktop happens to win and mobile Safari does not — poll
+      // instead of sampling once.
+      await expect
+        .poll(() => page.title(), { message: `${path} never got its own title` })
+        .not.toBe('mossimo Studios — websites for businesses that answer the phone')
+
       const title = await page.title()
       expect(title, `${path} has no brand in its title`).toMatch(/mossimo Studios/)
       expect(title, `${path} still has the scaffold title`).not.toMatch(/vite/i)
