@@ -15,7 +15,7 @@ export default function Footer() {
           <img
             src="/brand/logo-wordmark.png"
             alt="mossimo Studios"
-            className="h-7 w-auto mix-blend-multiply transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:-rotate-2 group-hover:scale-105 motion-reduce:transition-none"
+            className="h-7 w-auto transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:-rotate-2 group-hover:scale-105 motion-reduce:transition-none"
           />
         </Link>
         <p className="font-sans text-[11px] text-ink-muted">

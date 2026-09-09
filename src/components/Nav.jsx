@@ -47,7 +47,12 @@ export default function Nav() {
           alt="mossimo Studios"
           width={2069}
           height={760}
-          className="h-7 w-auto mix-blend-multiply transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:-rotate-2 group-hover:scale-105 motion-reduce:transition-none md:h-9"
+          /* The wordmark has a real alpha channel, so it needs no blend mode.
+             It used to be a flat cream rectangle held together by
+             mix-blend-multiply, which only ever worked while the backdrop was
+             that same cream — over the pink section it multiplied into a
+             visible darker box. */
+          className="h-7 w-auto transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:-rotate-2 group-hover:scale-105 motion-reduce:transition-none md:h-9"
         />
       </Link>
       <nav className="flex gap-1 font-sans text-[11px] font-medium md:gap-2 md:text-[13px]">

@@ -166,6 +166,45 @@ test.describe('routing and assets', () => {
   })
 })
 
+test.describe('client-side navigation', () => {
+  // Every other test in this file reaches its page with page.goto, which is a
+  // full document load that re-mounts the app. That is precisely why a broken
+  // route transition shipped: clicking a link left the incoming page mounted at
+  // opacity 0, so the site looked blank and only a reload fixed it, and nothing
+  // here had ever actually clicked a link.
+  //
+  // toBeVisible() would not catch it either — Playwright's visibility check
+  // ignores opacity. The assertion has to read the computed value.
+  test('clicking a nav link renders the page, not a blank one', async ({ page }) => {
+    await page.goto('/')
+
+    for (const [label, path] of [
+      ['Services', '/services'],
+      ['Pricing', '/pricing'],
+      ['About', '/about'],
+      ['Portfolio', '/portfolio'],
+      ['Contact', '/contact'],
+    ]) {
+      await page.locator('header').getByRole('link', { name: label, exact: true }).click()
+      await expect(page).toHaveURL(new RegExp(`${path}$`))
+
+      const heading = page.getByRole('heading', { level: 1 })
+      await expect(heading).toHaveText(/\S/)
+
+      await expect
+        .poll(
+          () =>
+            page.evaluate(() => {
+              const page = document.querySelector('main').firstElementChild
+              return Number(getComputedStyle(page).opacity)
+            }),
+          { message: `${path} arrived transparent after a link click` },
+        )
+        .toBeGreaterThan(0.99)
+    }
+  })
+})
+
 test.describe('page titles', () => {
   // A single-page app keeps index.html's title unless something changes it, so
   // every route sharing one title is the default failure mode, not an unlikely

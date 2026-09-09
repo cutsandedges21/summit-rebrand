@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 import Nav from './Nav.jsx'
 import Footer from './Footer.jsx'
@@ -62,27 +62,32 @@ export default function Layout() {
       <Cursor />
       <Nav />
       <main>
-        {/* Routes cross-fade rather than snapping. Two constraints shape this:
-            `mode="wait"` because with both pages mounted the outgoing one still
-            occupies layout and the incoming page lands at the wrong offset; and
-            opacity ONLY, no transform. A transformed ancestor becomes the
+        {/* Routes fade in on arrival. Changing the key remounts the wrapper, so
+            `initial` applies again and the enter animation replays on every
+            navigation.
+
+            Deliberately NOT <AnimatePresence mode="wait">. Outlet is not a
+            snapshot of a route — it reads the live router context — so the
+            moment the location changes, the *exiting* element re-renders as the
+            incoming page. Its exit then never resolves, AnimatePresence goes on
+            waiting, and the new child is left at opacity 0: every link click
+            produced a blank page that only a reload fixed.
+
+            Opacity only, no transform: a transformed ancestor becomes the
             containing block for its descendants, and the pinned process column
-            and the portfolio preview are both position:sticky. Fading costs us
-            nothing here — the sections animate themselves in on arrival. */}
-        <AnimatePresence mode="wait" initial={false}>
-          {reduced ? (
-            <Outlet key={pathname} />
-          ) : (
-            <motion.div
-              key={pathname}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.45, ease: EASE.expoInOut } }}
-              exit={{ opacity: 0, transition: { duration: 0.25, ease: EASE.expoInOut } }}
-            >
-              <Outlet />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            and the portfolio preview are both position:sticky. */}
+        {reduced ? (
+          <Outlet key={pathname} />
+        ) : (
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.45, ease: EASE.expoInOut }}
+          >
+            <Outlet />
+          </motion.div>
+        )}
       </main>
       <Footer />
     </Backdrop>
