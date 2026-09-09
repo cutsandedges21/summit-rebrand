@@ -3055,7 +3055,7 @@ Sticky positioning, real scrolling and reduced-motion rendering need a browser. 
 **Files:**
 - Create: `playwright.config.js`, `tests/e2e/interactions.spec.js`
 
-- [ ] **Step 1: Configure Playwright**
+- [x] **Step 1: Configure Playwright**
 
 `playwright.config.js`:
 
@@ -3082,7 +3082,7 @@ export default defineConfig({
 npx playwright install chromium
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 `tests/e2e/interactions.spec.js`:
 
@@ -3156,12 +3156,12 @@ test.describe('reduced motion', () => {
 })
 ```
 
-- [ ] **Step 3: Run the tests**
+- [x] **Step 3: Run the tests**
 
 Run: `npm run test:e2e`
 Expected: PASS. If the sticky test fails, confirm nothing in `Layout.jsx` calls `preventDefault` on wheel events and that no ancestor of `process-pin` has `overflow: hidden` — either one silently disables `position: sticky`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add playwright.config.js tests/e2e package.json
