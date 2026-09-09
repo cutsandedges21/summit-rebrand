@@ -165,3 +165,33 @@ test.describe('routing and assets', () => {
     expect(ok).toBe(true)
   })
 })
+
+test.describe('page titles', () => {
+  // A single-page app keeps index.html's title unless something changes it, so
+  // every route sharing one title is the default failure mode, not an unlikely
+  // one. Awkward on any site; worse on one that sells local SEO.
+  test('every route sets its own title', async ({ page }) => {
+    const seen = new Map()
+
+    for (const path of [
+      '/',
+      '/portfolio',
+      '/portfolio/halcyon',
+      '/portfolio/sterling',
+      '/services',
+      '/pricing',
+      '/about',
+      '/faq',
+      '/contact',
+    ]) {
+      await page.goto(path)
+      const title = await page.title()
+      expect(title, `${path} has no brand in its title`).toMatch(/mossimo Studios/)
+      expect(title, `${path} still has the scaffold title`).not.toMatch(/vite/i)
+      seen.set(path, title)
+    }
+
+    // Distinct, not just present.
+    expect(new Set(seen.values()).size).toBe(seen.size)
+  })
+})

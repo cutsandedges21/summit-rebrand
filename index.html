@@ -2,15 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vite-tmp</title>
+
+    <title>mossimo Studios — websites for businesses that answer the phone</title>
+    <meta
+      name="description"
+      content="We design, build and look after websites for local businesses. Based in Montreal, working across Canada."
+    />
+    <!-- Tracks --color-paper in src/index.css. tests/unit/head.test.js reads the
+         token out of the stylesheet and fails if these two drift apart. -->
+    <meta name="theme-color" content="#f9f7ef" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+
+    <!-- Fonts MUST stay here. Tailwind v4 inlines its own @import in place, which
+         pushes any later @import in index.css past ~19kB of rules into an illegal
+         position, and Lightning CSS drops it silently — the build still passes and
+         the whole site renders in Georgia. tests/unit/tokens.test.js fails if
+         these links go missing. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="mossimo Studios" />
+    <meta
+      property="og:description"
+      content="Websites for businesses that answer the phone. Design, build, local SEO and upkeep — Montreal."
+    />
+    <meta property="og:image" content="/brand/logo-lockup.png" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>

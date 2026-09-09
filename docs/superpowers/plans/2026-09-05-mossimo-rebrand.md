@@ -3177,7 +3177,7 @@ git commit -m "test: e2e coverage for sticky, mobile collapse and reduced motion
 - Create: `vercel.json`
 - Test: `tests/unit/head.test.js`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 import { describe, it, expect } from 'vitest'
@@ -3200,17 +3200,17 @@ describe('document head', () => {
   })
 
   it('sets the theme colour to the paper token', () => {
-    expect(html).toMatch(/<meta\s+name="theme-color"\s+content="#f0ebe8"/i)
+    expect(html).toMatch(/<meta\s+name="theme-color"\s+content="#f9f7ef"/i)
   })
 })
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- head`
 Expected: FAIL — the scaffold title is "Vite + React".
 
-- [ ] **Step 3: Write `index.html`**
+- [x] **Step 3: Write `index.html`**
 
 ```html
 <!doctype html>
@@ -3218,12 +3218,12 @@ Expected: FAIL — the scaffold title is "Vite + React".
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mossimo — websites for businesses that answer the phone</title>
+    <title>mossimo Studios — websites for businesses that answer the phone</title>
     <meta
       name="description"
       content="We design, build and look after websites for local businesses. Based in Montreal, working across Canada."
     />
-    <meta name="theme-color" content="#f0ebe8" />
+    <meta name="theme-color" content="#f9f7ef" />
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
     <!-- Fonts MUST stay here. They cannot live in index.css — see Task 2 Step 3.
@@ -3242,7 +3242,7 @@ Expected: FAIL — the scaffold title is "Vite + React".
 </html>
 ```
 
-- [ ] **Step 4: Add an interim favicon**
+- [x] **Step 4: Add an interim favicon**
 
 Spec §10 records that no mark is designed yet. Ship an interim one rather than a 404: a chartreuse square, which is on-brand precisely because the accent is a shape.
 
@@ -3271,7 +3271,7 @@ Add to `index.html` head, above the `.ico` link:
 
 Generate the `.ico` and `apple-touch-icon.png` from the SVG with any converter, or copy placeholders and replace them when the real mark exists. **Record this as outstanding** — it is spec §10 item 6.
 
-- [ ] **Step 5: Write `vercel.json`**
+- [x] **Step 5: Write `vercel.json`**
 
 SPA routing — every path must serve `index.html` or `/work` 404s on a hard refresh.
 
@@ -3281,7 +3281,7 @@ SPA routing — every path must serve `index.html` or `/work` 404s on a hard ref
 }
 ```
 
-- [ ] **Step 6: Run the test and a production build**
+- [x] **Step 6: Run the test and a production build**
 
 Run: `npm test -- head`
 Expected: PASS, 4 tests.
@@ -3289,7 +3289,7 @@ Expected: PASS, 4 tests.
 Run: `npm run build`
 Expected: build succeeds, `dist/` is written with no errors.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add index.html vercel.json public/favicon tests/unit/head.test.js
