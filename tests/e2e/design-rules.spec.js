@@ -78,15 +78,18 @@ test.describe('design rules', () => {
         //   isOverlay  — the custom cursor is a rounded-full 34px dot. It is a
         //                pointer, not a panel; the rule governs the page.
         //   isImagery  — the rule bans rounded CHROME. An element showing a
-        //                photograph is content, whether it is an <img> or a div
-        //                with a background-image, and a softened corner on a
-        //                photo is not a card.
+        //                photograph is content, whether it is an <img>, a div
+        //                with a background-image, or a frame that declares
+        //                role="img" and clips one. A softened corner on a photo
+        //                is not a card.
         const isOverlay = (e) => {
           const s = getComputedStyle(e)
           return s.position === 'fixed' && s.pointerEvents === 'none'
         }
         const isImagery = (e) =>
-          e.tagName === 'IMG' || getComputedStyle(e).backgroundImage.startsWith('url(')
+          e.tagName === 'IMG' ||
+          e.getAttribute('role') === 'img' ||
+          getComputedStyle(e).backgroundImage.startsWith('url(')
 
         return {
           // Spec §3: no dark sections. Content images are the only dark

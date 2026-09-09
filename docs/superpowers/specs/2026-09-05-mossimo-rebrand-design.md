@@ -113,6 +113,13 @@ live CSS, not estimated.
    the design.
 2. **Zero containers.** No cards, no borders, no shadows, no rounded panels. Type sits
    directly on the field.
+
+   **Amended 2026-09-09:** the rule governs *chrome*, not imagery. Picture frames may be
+   rounded — the work preview carries a 10px radius, and the arc tiles the same. An element
+   that is showing a photograph is content whether it is an `<img>`, a div with a
+   background-image, or a frame declaring `role="img"` that clips one. What stays banned is a
+   rounded *panel*: a box drawn around text or UI. `tests/e2e/design-rules.spec.js` encodes
+   exactly this distinction and checks it on every route.
 3. **Half-empty screens are correct.** Mémoire leaves the bottom 40% of a viewport blank.
 4. **One accent, used about five times per page.** Mémoire's orange touches one word in a
    list of five and one badge.

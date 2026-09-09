@@ -100,7 +100,7 @@ export default function WorkList({ builds, limit, label = 'Selected work' }) {
           <div
             data-testid="work-preview"
             data-slug={active?.slug}
-            className="relative aspect-[16/10] overflow-hidden bg-paper-clay"
+            className="relative aspect-[16/10] overflow-hidden rounded-[10px] bg-paper-clay"
             role="img"
             aria-label={active ? `${active.name} — preview` : 'Project preview'}
           >
