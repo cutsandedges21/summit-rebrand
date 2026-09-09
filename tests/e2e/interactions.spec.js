@@ -115,6 +115,65 @@ test.describe('mobile', () => {
       expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(1)
     }
   })
+
+  // Five inline links and a wordmark do not fit across a phone. Before the menu
+  // the gap between them was 0px at 390 and negative at 360 — they overlapped —
+  // and each link was a 25px-tall target. Both halves of that are asserted here
+  // because either one regressing puts the header back to unusable.
+  test('the header does not collide and its controls are thumb-sized', async ({ page }) => {
+    await page.goto('/')
+    const box = await page.evaluate(() => {
+      const logo = document.querySelector('header.sticky a').getBoundingClientRect()
+      const toggle = document.querySelector('header.sticky button').getBoundingClientRect()
+      return { gap: toggle.left - logo.right, logoH: logo.height, toggleH: toggle.height }
+    })
+    expect(box.gap).toBeGreaterThan(16)
+    expect(box.logoH).toBeGreaterThanOrEqual(44)
+    expect(box.toggleH).toBeGreaterThanOrEqual(44)
+  })
+
+  test('the menu opens, navigates, and closes itself', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByTestId('mobile-menu')).toHaveCount(0)
+
+    await page.locator('header.sticky button').click()
+    const menu = page.getByTestId('mobile-menu')
+    await expect(menu).toBeVisible()
+    // The page behind must not scroll while a full-screen panel is over it.
+    await expect
+      .poll(() => page.evaluate(() => document.body.style.overflow))
+      .toBe('hidden')
+
+    await menu.getByRole('link', { name: 'Pricing', exact: true }).click()
+    await expect(page).toHaveURL(/\/pricing$/)
+    // Closing is driven by the route change, not by the click.
+    await expect(page.getByTestId('mobile-menu')).toHaveCount(0)
+    await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('')
+  })
+
+  // The preview beside the list is desktop-only, so without these the portfolio
+  // has no photography on it at all on the device most visitors arrive on.
+  test('every work row carries a thumbnail', async ({ page }) => {
+    await page.goto('/portfolio')
+    const withImage = await page.evaluate(
+      () =>
+        [...document.querySelectorAll('[data-testid="work-row"]')].filter((row) =>
+          [...row.querySelectorAll('span')].some((s) =>
+            getComputedStyle(s).backgroundImage.startsWith('url('),
+          ),
+        ).length,
+    )
+    expect(withImage).toBe(14)
+  })
+
+  // The index tracks scroll through an observer that is deliberately not
+  // registered on mobile, so rendering it there was four buttons stuck on 01
+  // sitting above the same four titles at full size.
+  test('the process index is not shown as a dead stepper', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByTestId('process-index-item')).toHaveCount(0)
+    await expect(page.getByTestId('process-step')).toHaveCount(4)
+  })
 })
 
 test.describe('reduced motion', () => {
@@ -175,7 +234,7 @@ test.describe('client-side navigation', () => {
   //
   // toBeVisible() would not catch it either — Playwright's visibility check
   // ignores opacity. The assertion has to read the computed value.
-  test('clicking a nav link renders the page, not a blank one', async ({ page }) => {
+  test('clicking a nav link renders the page, not a blank one', async ({ page, isMobile }) => {
     await page.goto('/')
 
     for (const [label, path] of [
@@ -185,6 +244,12 @@ test.describe('client-side navigation', () => {
       ['Portfolio', '/portfolio'],
       ['Contact', '/contact'],
     ]) {
+      // Below md the five links live in a panel rather than across the bar —
+      // at 390px the wordmark and the first link were touching, and every link
+      // was a 25px target. The route transition this test guards is the same
+      // either way; only the path to the link differs.
+      if (isMobile) await page.locator('header.sticky button').click()
+
       await page.locator('header').getByRole('link', { name: label, exact: true }).click()
       await expect(page).toHaveURL(new RegExp(`${path}$`))
 

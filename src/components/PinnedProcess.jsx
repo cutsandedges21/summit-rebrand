@@ -57,40 +57,50 @@ export default function PinnedProcess() {
             start to live.
           </Textify>
 
-          <ol className="mt-8 flex flex-col items-start gap-1">
-            {STEPS.map((step, i) => (
-              <li key={step.num}>
-                <button
-                  type="button"
-                  data-testid="process-index-item"
-                  data-active={String(i === activeIndex)}
-                  aria-current={i === activeIndex ? 'step' : undefined}
-                  onClick={() => {
-                    setActiveIndex(i)
-                    // Through Lenis, or its smoothing and the browser's native
-                    // smooth scroll fight each other and the page stutters.
-                    scrollToElement(stepRefs.current[i])
-                  }}
-                  className={`relative px-2 py-1 text-left font-sans text-[12px] font-medium transition-colors duration-300 ${
-                    i === activeIndex ? 'font-semibold' : 'text-ink-faint hover:text-ink'
-                  }`}
-                >
-                  {/* The accent slides down the index as you scroll rather than
-                      blinking from one step to the next. */}
-                  {i === activeIndex && (
-                    <motion.span
-                      layoutId="process-marker"
-                      className="absolute inset-0 bg-accent"
-                      transition={{ duration: 0.5, ease: EASE.expoInOut }}
-                    />
-                  )}
-                  <span className="relative">
-                    {step.num}&nbsp;&nbsp;{step.title.replace(/\.$/, '')}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ol>
+          {/* Desktop only, and not for layout reasons. The index tracks the
+              active step through an IntersectionObserver that is deliberately
+              not registered on mobile (see the effect above), so on a phone this
+              was four buttons permanently stuck on 01 — sitting directly above
+              the same four titles rendered full size in the column below. A
+              stepper that cannot step is worse than no stepper: it restates the
+              headings and then lies about where you are. The numbers it carried
+              move onto the steps themselves. */}
+          {!mobile && (
+            <ol className="mt-8 flex flex-col items-start gap-1">
+              {STEPS.map((step, i) => (
+                <li key={step.num}>
+                  <button
+                    type="button"
+                    data-testid="process-index-item"
+                    data-active={String(i === activeIndex)}
+                    aria-current={i === activeIndex ? 'step' : undefined}
+                    onClick={() => {
+                      setActiveIndex(i)
+                      // Through Lenis, or its smoothing and the browser's native
+                      // smooth scroll fight each other and the page stutters.
+                      scrollToElement(stepRefs.current[i])
+                    }}
+                    className={`relative px-2 py-1 text-left font-sans text-[12px] font-medium transition-colors duration-300 ${
+                      i === activeIndex ? 'font-semibold' : 'text-ink-faint hover:text-ink'
+                    }`}
+                  >
+                    {/* The accent slides down the index as you scroll rather than
+                        blinking from one step to the next. */}
+                    {i === activeIndex && (
+                      <motion.span
+                        layoutId="process-marker"
+                        className="absolute inset-0 bg-accent"
+                        transition={{ duration: 0.5, ease: EASE.expoInOut }}
+                      />
+                    )}
+                    <span className="relative">
+                      {step.num}&nbsp;&nbsp;{step.title.replace(/\.$/, '')}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          )}
 
         </div>
 
@@ -104,6 +114,10 @@ export default function PinnedProcess() {
               }}
               className="border-t border-rule py-10 first:border-t-0 first:pt-0 md:min-h-[62vh]"
             >
+              {/* Carries the number the index used to own on mobile. Kept as its
+                  own node so the title stays one text node for getByText and a
+                  screen reader. */}
+              {mobile && <p className="label mb-2">{step.num}</p>}
               {/* Reveal, not a split: these four titles are the section's
                   actual content rather than display type, and splitting them
                   would scatter each one across a span per character — which is

@@ -86,6 +86,20 @@
   }
 }
 
+/* Theme-corrected text ramp.
+   ink-muted and ink-faint are tints of the ink, chosen to sit quietly on cream.
+   Pink (#ff98e2) is a far darker plate, so on it the same two tones measure
+   2.99:1 and 1.31:1 — the second is not "quiet", it is gone, which is what the
+   footer copyright and every pink-section paragraph were doing. These re-derive
+   the same tonal ROLE against pink instead of reusing the cream values, and are
+   scoped to the active backdrop theme, which Backdrop.jsx publishes onto <html>.
+   Verified in-browser: 6.9:1 and 5.2:1. Do not revert these to the cream tints. */
+[data-backdrop='pink'] {
+  --color-ink-muted: #4a2140;
+  --color-ink-faint: #5e3453;
+  --color-rule: #d96fbb;
+}
+
 @utility label {
   font-family: var(--font-sans);
   font-size: 11px;

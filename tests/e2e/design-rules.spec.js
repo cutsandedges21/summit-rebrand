@@ -136,6 +136,24 @@ test.describe('design rules', () => {
             })
             .map((e) => (e.textContent || '').trim().slice(0, 40)),
 
+          // The same failure, by the other mechanism. Every case study shipped
+          // with all three of its screenshots clipped to nothing: a clip-path
+          // hidden state makes intersectionRatio 0, so a whileInView threshold
+          // above 0 can never be met and the reveal never fires. The opacity
+          // check above cannot see it — those elements are fully opaque, just
+          // clipped to zero area — so this ran green while the portfolio had no
+          // photography on it at all. Anything still fully clipped once it has
+          // been scrolled past is stuck, not waiting.
+          stuckClipped: els
+            .filter((e) => {
+              const r = e.getBoundingClientRect()
+              if (r.bottom > window.innerHeight || r.width < 40 || r.height < 20) return false
+              // inset(100%...) and inset(0% 100% ...) both collapse the element.
+              const clip = getComputedStyle(e).clipPath
+              return /inset\(/.test(clip) && /(^|[\s(])100%/.test(clip)
+            })
+            .map((e) => `${e.tagName}.${(e.className || '').toString().slice(0, 30)}`),
+
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           title: document.title,
         }
@@ -146,6 +164,7 @@ test.describe('design rules', () => {
       expect(report.rounded, `rounded containers on ${path}`).toEqual([])
       expect(report.thickBorders, `borders over 2px on ${path}`).toBe(0)
       expect(report.stuckInvisible, `content stuck invisible on ${path}`).toEqual([])
+      expect(report.stuckClipped, `content stuck clipped on ${path}`).toEqual([])
       expect(report.overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(1)
       expect(report.title).toMatch(/mossimo Studios/)
     })

@@ -9,10 +9,21 @@ import Magnetic from './Magnetic.jsx'
 // Spec section 8: the full fourteen-tile corridor is a desktop-only object. At
 // 375px the same spacing pushes every tile off-screen and leaves slivers at the
 // edges, which reads as a rendering bug rather than a design. Phones get a
-// shallower six-tile arc instead. Both counts are even on purpose -- an odd
-// count puts a tile at dead centre, behind the headline and the CTA.
-const DESKTOP = { tiles: BUILDS, clear: 150, step: 88 }
-const MOBILE = { tiles: BUILDS.slice(4, 10), clear: 48, step: 58 }
+// shallower arc instead. Both counts are even on purpose -- an odd count puts a
+// tile at dead centre, behind the headline and the CTA.
+//
+// The mobile arc used to be six tiles carrying the DESKTOP scale ramp
+// (0.42 + distance * 0.1). At 390px that resolved to cards roughly 40px wide
+// and 150px tall, clipped by the viewport at both ends -- the exact "reads as a
+// rendering bug" failure the split above exists to prevent, just at a different
+// size. Four tiles, near full scale, and a step tight enough that the outermost
+// pair stays inside the viewport.
+//
+// `base`/`growth` drive the scale ramp. They are config rather than constants
+// because the desktop corridor wants tiles that grow steeply toward the viewer
+// and a phone wants four cards of roughly one size.
+const DESKTOP = { tiles: BUILDS, clear: 150, step: 88, base: 0.42, growth: 0.1, size: 'h-[38vh] w-[13vw] min-w-[74px]' }
+const MOBILE = { tiles: BUILDS.slice(4, 8), clear: 44, step: 50, base: 0.86, growth: 0.05, size: 'h-[21vh] w-[25vw]' }
 
 /**
  * Signed distance from the middle of the arc. Works for any build count:
@@ -23,7 +34,7 @@ function offsetFor(index, count) {
   return index - (count - 1) / 2
 }
 
-function Tile({ build, index, count, clear, step, isStatic }) {
+function Tile({ build, index, count, clear, step, base, growth, size, isStatic }) {
   const offset = offsetFor(index, count)
   const distance = Math.abs(offset)
   const direction = Math.sign(offset)
@@ -36,7 +47,7 @@ function Tile({ build, index, count, clear, step, isStatic }) {
   const resting = {
     x: direction * (clear + distance * step),
     rotateY: -direction * (16 + distance * 3),
-    scale: 0.42 + distance * 0.1,
+    scale: base + distance * growth,
     zIndex: 10 - distance,
   }
 
@@ -44,7 +55,7 @@ function Tile({ build, index, count, clear, step, isStatic }) {
     <fm.div
       data-testid="arc-tile"
       aria-hidden="true"
-      className="absolute h-[38vh] w-[13vw] min-w-[74px] overflow-hidden rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.18)]"
+      className={`absolute overflow-hidden rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.18)] ${size}`}
       style={{
         backgroundImage: `url(${build.image})`,
         backgroundSize: 'cover',
@@ -113,7 +124,7 @@ export default function ArcHero() {
       <fm.div
         data-testid="arc-stage"
         data-static={String(isStatic)}
-        className="pointer-events-none absolute inset-0 flex items-center justify-center pt-[62vh] md:pt-[30vh]"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center pt-[48vh] md:pt-[30vh]"
         style={{
           perspective: 1100,
           scale: isStatic ? 1 : spreadScale,
@@ -131,6 +142,9 @@ export default function ArcHero() {
             count={arc.tiles.length}
             clear={arc.clear}
             step={arc.step}
+            base={arc.base}
+            growth={arc.growth}
+            size={arc.size}
             isStatic={isStatic}
           />
         ))}

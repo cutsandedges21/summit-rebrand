@@ -32,6 +32,9 @@ const VARIANTS = {
   },
 }
 
+/** Variants whose hidden state is a clip, and so cannot be measured by ratio. */
+const CLIPPED = new Set(['curtain', 'wipe'])
+
 /**
  * Anything rendered through <Reveal as="..."> must appear here. An unmapped tag
  * falls back to motion.div, which silently turns a <dl> into a <div> and takes
@@ -87,6 +90,15 @@ export default function Reveal({
 
   const preset = VARIANTS[variant] ?? VARIANTS.up
 
+  // A clip-path hidden state clips the element to zero area, and
+  // IntersectionObserver measures the intersection AFTER clipping — so
+  // intersectionRatio for these is pinned at 0 no matter where they sit on
+  // screen. Any `amount` above 0 is therefore a threshold they can never cross:
+  // the element stays hidden, forever, which is what happened to every
+  // case-study image. `amount: 0` fires on `isIntersecting` alone, which those
+  // elements do still report.
+  const inView = CLIPPED.has(variant) ? 0 : amount
+
   return (
     <Tag
       className={className}
@@ -100,7 +112,7 @@ export default function Reveal({
       }}
       initial="hidden"
       whileInView="shown"
-      viewport={{ once, amount }}
+      viewport={{ once, amount: inView }}
       {...rest}
     >
       {children}

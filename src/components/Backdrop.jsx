@@ -87,9 +87,16 @@ export function Backdrop({ children }) {
 
   // The browser chrome should follow the page, or the pink section ends under a
   // cream status bar on a phone.
+  //
+  // The same effect publishes the active theme onto <html>. The muted ink ramp
+  // was sampled against cream, and pink is a much darker plate, so those same
+  // greys collapse on it — ink-muted lands at 2.99:1 and ink-faint at 1.31:1,
+  // which is invisible rather than quiet. index.css re-derives both under
+  // [data-backdrop='pink']; this is what lets it.
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]')
     if (meta) meta.setAttribute('content', THEMES[theme])
+    document.documentElement.dataset.backdrop = theme
   }, [theme])
 
   const value = useMemo(() => ({ register, theme }), [register, theme])

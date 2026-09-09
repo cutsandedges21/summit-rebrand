@@ -67,25 +67,43 @@ export default function WorkList({ builds, limit, label = 'Selected work' }) {
                 data-testid="work-row"
                 onMouseEnter={() => setActiveSlug(build.slug)}
                 onFocus={() => setActiveSlug(build.slug)}
-                className="group relative block w-full py-1 text-left font-display leading-[1.18] tracking-tight"
+                className="group relative flex w-full items-center gap-4 py-1 text-left font-display leading-[1.18] tracking-tight md:block"
                 style={{ fontSize: 'var(--text-sub)' }}
               >
                 <span
                   aria-hidden="true"
                   className="absolute inset-y-0 left-[-9px] right-[-9px] origin-left scale-x-0 bg-accent transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none"
                 />
-                <span className="relative inline-block transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:translate-x-2 group-focus-visible:translate-x-2 motion-reduce:transition-none">
-                  {build.name}
-                </span>
-                <span className="relative ml-3 font-sans text-[11px] text-ink-muted">
-                  {build.category}
-                </span>
-                {/* Reads as the row pointing at the preview it just changed. */}
+                {/* The preview frame beside this list is driven by hover and
+                    focus, so it can never change on a phone and is hidden there.
+                    Without this thumbnail that leaves a portfolio with no
+                    photography on it at all on the device most visitors arrive
+                    on. One small still per row, on the row it belongs to. */}
                 <span
                   aria-hidden="true"
-                  className="relative ml-2 inline-block translate-x-[-8px] font-sans text-[13px] opacity-0 transition-all duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none"
-                >
-                  →
+                  className="relative h-12 w-16 shrink-0 overflow-hidden rounded-[6px] bg-paper-clay bg-cover bg-center md:hidden"
+                  style={{ backgroundImage: `url(${build.image})` }}
+                />
+                {/* Column on a phone, inline run on desktop. Left inline at
+                    both sizes, the name and the category compete for one narrow
+                    line: "Hospitality & wellness" wrapped onto two lines and
+                    dragged "Laser and Me" onto two with it. md:contents removes
+                    this wrapper from the desktop layout entirely, so the row
+                    there is exactly the inline sequence it was before. */}
+                <span className="relative flex min-w-0 flex-1 flex-col items-start md:contents">
+                  <span className="relative inline-block transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:translate-x-2 group-focus-visible:translate-x-2 motion-reduce:transition-none">
+                    {build.name}
+                  </span>
+                  <span className="relative font-sans text-[11px] text-ink-muted md:ml-3">
+                    {build.category}
+                  </span>
+                  {/* Reads as the row pointing at the preview it just changed. */}
+                  <span
+                    aria-hidden="true"
+                    className="relative ml-2 hidden translate-x-[-8px] font-sans text-[13px] opacity-0 transition-all duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none md:inline-block"
+                  >
+                    →
+                  </span>
                 </span>
               </Link>
             </RevealItem>
