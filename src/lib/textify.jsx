@@ -22,6 +22,10 @@ export const EASE = {
   // memoiredencrier.com's background cross-fade curve, kept here so the type and
   // the backdrop share one sense of timing.
   sine: [0.445, 0.05, 0.55, 0.95],
+  // The two curves off their mobile menu: expo.out on the burger and the menu
+  // items (a fast departure with a very long settle), quart.out on colour.
+  expoOut: [0.19, 1, 0.22, 1],
+  quartOut: [0.25, 1, 0.5, 1],
 }
 
 /**
