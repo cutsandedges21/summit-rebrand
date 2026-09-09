@@ -1,23 +1,31 @@
 import { Link } from 'react-router-dom'
 import { PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE } from '../lib/plans.js'
+import PageHeader from '../components/PageHeader.jsx'
+import Reveal, { RevealItem } from '../components/Reveal.jsx'
+import Textify from '../lib/textify.jsx'
+import { useBackdrop } from '../components/Backdrop.jsx'
 
 export default function Pricing() {
+  // The plans are what the page is for, so they get the colour.
+  const plans = useBackdrop('pink')
+
   return (
     <div data-testid="pricing-page" className="px-6 py-16 md:px-12">
-      <p className="label mb-4">What it costs</p>
-      <h1
-        className="font-display leading-[1.04] tracking-tight"
-        style={{ fontSize: 'var(--text-section)' }}
-      >
-        Simple, honest pricing.
-      </h1>
-      <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-        Three plans, one flat monthly rate each, plus a one-time build fee. No hidden fees.
-      </p>
+      <PageHeader
+        label="What it costs"
+        heading="Simple, honest pricing."
+        intro="Three plans, one flat monthly rate each, plus a one-time build fee. No hidden fees."
+      />
 
-      <div className="mt-16 grid gap-10 md:grid-cols-3">
+      <div ref={plans}>
+      <Reveal
+        variant="fade"
+        stagger={0.12}
+        amount={0.2}
+        className="mt-16 grid gap-10 md:grid-cols-3"
+      >
         {PLANS.map((plan) => (
-          <div key={plan.name} data-testid="plan-block" className="border-t border-ink pt-4">
+          <RevealItem key={plan.name} data-testid="plan-block" className="border-t border-ink pt-4">
             {/* Both branches carry identical box metrics so the three prices sit
                 on one line; only the background differs. A padded chip against a
                 plain paragraph dropped the featured column's price by ~6px on the
@@ -46,25 +54,36 @@ export default function Pricing() {
             </ul>
             <Link
               to="/contact"
-              className="mt-6 inline-block border border-ink px-4 py-2 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
+              className="group relative mt-6 inline-block overflow-hidden border border-ink px-4 py-2 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
             >
-              Get in touch
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100 motion-reduce:transition-none"
+              />
+              <span className="relative transition-colors duration-500 group-hover:text-paper group-focus-visible:text-paper">
+                Get in touch
+              </span>
             </Link>
-          </div>
+          </RevealItem>
         ))}
+      </Reveal>
       </div>
 
       <section className="mt-24 border-t border-rule pt-14">
-        <p className="label mb-4">Optional extras</p>
-        <h2
+        <Reveal as="p" variant="up" duration={0.7} className="label mb-4">
+          Optional extras
+        </Reveal>
+        <Textify
+          as="h2"
+          preset="riseLines"
           className="font-display leading-tight tracking-tight"
           style={{ fontSize: 'var(--text-section)' }}
         >
           Add-ons.
-        </h2>
+        </Textify>
         <div className="mt-10 grid gap-10 md:grid-cols-2">
           {ADDON_GROUPS.map((group) => (
-            <div key={group.label}>
+            <Reveal key={group.label} variant="up">
               <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.11em]">
                 {group.label}
               </p>
@@ -87,11 +106,11 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Reveal>
           ))}
         </div>
 
-        <div className="mt-10 border-t border-ink pt-4">
+        <Reveal variant="up" className="mt-10 border-t border-ink pt-4">
           <span className="mb-3 inline-block bg-accent px-2 py-0.5 font-sans text-[11px] font-semibold">
             {CARE_PLUS.name}
           </span>
@@ -102,11 +121,15 @@ export default function Pricing() {
           <p className="mt-3 max-w-lg font-sans leading-relaxed text-ink-muted">
             {CARE_PLUS.body}
           </p>
-        </div>
+        </Reveal>
 
-        <p className="mt-16 max-w-2xl font-sans text-[13px] leading-relaxed text-ink-muted">
+        <Reveal
+          as="p"
+          variant="up"
+          className="mt-16 max-w-2xl font-sans text-[13px] leading-relaxed text-ink-muted"
+        >
           {PRICING_NOTE}
-        </p>
+        </Reveal>
       </section>
     </div>
   )

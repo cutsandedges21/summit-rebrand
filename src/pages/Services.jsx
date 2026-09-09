@@ -1,51 +1,60 @@
-import { Link } from 'react-router-dom'
 import { SERVICES } from '../lib/services.js'
+import PageHeader from '../components/PageHeader.jsx'
+import Reveal, { RevealItem } from '../components/Reveal.jsx'
+import AccentButton from '../components/AccentButton.jsx'
+import { useBackdrop } from '../components/Backdrop.jsx'
 
 export default function Services() {
+  // Only the grid is themed. The backdrop resolves on whichever themed section
+  // owns the middle of the viewport, so a short block — a lone button, say —
+  // would flash its colour for a few hundred pixels and read as a glitch.
+  // Themed regions have to be tall enough to hold the line.
+  const grid = useBackdrop('clay')
+
   return (
     <div data-testid="services-page" className="px-6 py-16 md:px-12">
-      <p className="label mb-4">What we do</p>
-      <h1
-        className="font-display leading-[1.04] tracking-tight"
-        style={{ fontSize: 'var(--text-section)' }}
-      >
-        Everything your site needs.
-      </h1>
-      <p className="mt-5 max-w-xl font-sans leading-relaxed text-ink-muted">
-        Design, development, SEO and ongoing care — bundled into every plan for one flat
-        monthly rate.
-      </p>
+      <PageHeader
+        label="What we do"
+        heading="Everything your site needs."
+        intro="Design, development, SEO and ongoing care — bundled into every plan for one flat monthly rate."
+      />
 
-      <div className="mt-16 grid gap-12 md:grid-cols-2">
-        {SERVICES.map((service) => (
-          <div key={service.title} data-testid="service-block" className="border-t border-ink pt-4">
-            <h2
-              className="font-display leading-tight tracking-tight"
-              style={{ fontSize: 'var(--text-sub)' }}
+      <div ref={grid}>
+        <Reveal variant="fade" stagger={0.12} amount={0.2} className="mt-16 grid gap-12 md:grid-cols-2">
+          {SERVICES.map((service) => (
+            <RevealItem
+              key={service.title}
+              data-testid="service-block"
+              className="border-t border-ink pt-4"
             >
-              {service.title}
-            </h2>
-            <p className="mt-2 font-sans leading-relaxed text-ink-muted">{service.blurb}</p>
-            <ul className="mt-5">
-              {service.includes.map((item) => (
-                <li
-                  key={item}
-                  className="border-t border-rule py-2 font-sans text-[13px] text-ink-muted"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+              {/* Unsplit on purpose: these titles are content, and splitting one
+                  into a span per word costs it the single text node that both a
+                  screen reader and getByText rely on. */}
+              <h2
+                className="font-display leading-tight tracking-tight"
+                style={{ fontSize: 'var(--text-sub)' }}
+              >
+                {service.title}
+              </h2>
+              <p className="mt-2 font-sans leading-relaxed text-ink-muted">{service.blurb}</p>
+              <ul className="mt-5">
+                {service.includes.map((item) => (
+                  <li
+                    key={item}
+                    className="border-t border-rule py-2 font-sans text-[13px] text-ink-muted transition-colors duration-300 hover:text-ink"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </RevealItem>
+          ))}
+        </Reveal>
       </div>
 
-      <Link
-        to="/pricing"
-        className="mt-14 inline-block bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
-      >
-        See pricing
-      </Link>
+      <Reveal variant="up" className="mt-14">
+        <AccentButton to="/pricing">See pricing</AccentButton>
+      </Reveal>
     </div>
   )
 }

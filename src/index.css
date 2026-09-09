@@ -15,6 +15,11 @@
   --color-ink-faint: #a8a296;
   --color-rule: #e0dace;
   --color-accent: #f9ea55;
+  /* The one colour not derived from the logo. Sampled from
+     memoiredencrier.com's scroll-driven page background
+     (.articles-lobby__bg.article-type--2), which is the effect the studio
+     sections are modelled on. See components/Backdrop.jsx. */
+  --color-blush: #ff98e2;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', system-ui, sans-serif;
@@ -54,6 +59,31 @@
   }
 
   #root { position: relative; z-index: 1; }
+}
+
+/* Lenis (lib/smooth-scroll.js) runs in window mode, so all it needs is for the
+   document to stop trying to smooth-scroll itself underneath it. Without the
+   scroll-behavior reset, an in-page anchor triggers the native animation and
+   Lenis's at the same time and the page stutters between the two. */
+@layer base {
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Split type is laid out as inline-block runs; without this a heading that
+     wraps mid-word can shear a character onto its own line. */
+  [data-word] {
+    white-space: nowrap;
+  }
 }
 
 @utility label {

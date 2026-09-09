@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { STEPS } from '../lib/process.js'
 import { useIsMobile } from '../lib/motion.js'
+import { scrollToElement } from '../lib/smooth-scroll.js'
+import Textify, { EASE } from '../lib/textify.jsx'
+import Reveal from './Reveal.jsx'
+import { useBackdrop } from './Backdrop.jsx'
 
 export default function PinnedProcess() {
   const [activeIndex, setActiveIndex] = useState(0)
   const stepRefs = useRef([])
   const mobile = useIsMobile()
+  // A half-step warmer than the paper, so the page has somewhere to travel
+  // between the hero and the pink pricing section rather than jumping.
+  const section = useBackdrop('clay')
 
   useEffect(() => {
     if (mobile) return
@@ -29,22 +37,25 @@ export default function PinnedProcess() {
   }, [mobile])
 
   return (
-    <section className="px-6 py-20 md:px-12">
+    <section ref={section} className="px-6 py-20 md:px-12">
       <div className="flex flex-col gap-10 md:flex-row md:gap-16">
         <div
           data-testid="process-pin"
           data-pinned={String(!mobile)}
           className={`md:w-[44%] md:shrink-0 ${mobile ? '' : 'md:sticky md:top-16 md:self-start'}`}
         >
-          <p className="label">How this works</p>
-          <h2
+          <Reveal as="p" variant="up" duration={0.7} className="label">
+            How this works
+          </Reveal>
+          <Textify
+            as="h2"
+            preset="riseLines"
             className="mt-2 font-display leading-[1.05] tracking-tight"
             style={{ fontSize: 'var(--text-section)' }}
           >
-            Four steps,
-            <br />
+            Four steps, <br />
             start to live.
-          </h2>
+          </Textify>
 
           <ol className="mt-8 flex flex-col items-start gap-1">
             {STEPS.map((step, i) => (
@@ -56,24 +67,34 @@ export default function PinnedProcess() {
                   aria-current={i === activeIndex ? 'step' : undefined}
                   onClick={() => {
                     setActiveIndex(i)
-                    stepRefs.current[i]?.scrollIntoView({
-                      behavior: 'smooth',
-                      block: 'center',
-                    })
+                    // Through Lenis, or its smoothing and the browser's native
+                    // smooth scroll fight each other and the page stutters.
+                    scrollToElement(stepRefs.current[i])
                   }}
-                  className={`px-2 py-1 text-left font-sans text-[12px] font-medium transition-colors ${
-                    i === activeIndex ? 'bg-accent font-semibold' : 'text-ink-faint hover:text-ink'
+                  className={`relative px-2 py-1 text-left font-sans text-[12px] font-medium transition-colors duration-300 ${
+                    i === activeIndex ? 'font-semibold' : 'text-ink-faint hover:text-ink'
                   }`}
                 >
-                  {step.num}&nbsp;&nbsp;{step.title.replace(/\.$/, '')}
+                  {/* The accent slides down the index as you scroll rather than
+                      blinking from one step to the next. */}
+                  {i === activeIndex && (
+                    <motion.span
+                      layoutId="process-marker"
+                      className="absolute inset-0 bg-accent"
+                      transition={{ duration: 0.5, ease: EASE.expoInOut }}
+                    />
+                  )}
+                  <span className="relative">
+                    {step.num}&nbsp;&nbsp;{step.title.replace(/\.$/, '')}
+                  </span>
                 </button>
               </li>
             ))}
           </ol>
 
-          <p className="mt-8 font-sans text-[12px] text-ink-muted">
+          <Reveal as="p" variant="up" duration={0.7} className="mt-8 font-sans text-[12px] text-ink-muted">
             Whoever answers your email handles all four. No handoffs.
-          </p>
+          </Reveal>
         </div>
 
         <div className="flex-1">
@@ -86,15 +107,27 @@ export default function PinnedProcess() {
               }}
               className="border-t border-rule py-10 first:border-t-0 first:pt-0 md:min-h-[62vh]"
             >
-              <h3
+              {/* Reveal, not a split: these four titles are the section's
+                  actual content rather than display type, and splitting them
+                  would scatter each one across a span per character — which is
+                  how both getByText and a screen reader lose the sentence. */}
+              <Reveal
+                as="h3"
+                variant="up"
+                amount={0.4}
                 className="font-display leading-[1.1] tracking-tight"
                 style={{ fontSize: 'var(--text-sub)' }}
               >
                 {step.title}
-              </h3>
-              <p className="mt-3 max-w-md font-sans leading-relaxed text-ink-muted">
+              </Reveal>
+              <Reveal
+                as="p"
+                variant="up"
+                delay={0.12}
+                className="mt-3 max-w-md font-sans leading-relaxed text-ink-muted"
+              >
                 {step.body}
-              </p>
+              </Reveal>
             </div>
           ))}
         </div>

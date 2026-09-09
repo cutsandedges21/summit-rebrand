@@ -1,8 +1,10 @@
-import { useScroll, useTransform, motion as fm } from 'framer-motion'
+import { useScroll, useSpring, useTransform, motion as fm, useMotionValue } from 'framer-motion'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { BUILDS } from '../lib/builds.js'
 import { useReducedMotion, useIsMobile } from '../lib/motion.js'
+import Textify, { EASE } from '../lib/textify.jsx'
+import Magnetic from './Magnetic.jsx'
 
 // Spec section 8: the full fourteen-tile corridor is a desktop-only object. At
 // 375px the same spacing pushes every tile off-screen and leaves slivers at the
@@ -21,34 +23,44 @@ function offsetFor(index, count) {
   return index - (count - 1) / 2
 }
 
-function Tile({ build, index, count, clear, step }) {
+function Tile({ build, index, count, clear, step, isStatic }) {
   const offset = offsetFor(index, count)
   const distance = Math.abs(offset)
   const direction = Math.sign(offset)
+
+  // Tiles start well clear of the middle. The centre channel is where the
+  // headline sits, and it has to be bare paper — dark serif over a near-black
+  // screenshot is unreadable, which is exactly how the first version of this
+  // looked. Both reference sites do the same thing: the type occupies the gap
+  // the images converge toward, never overlaps them.
+  const resting = {
+    x: direction * (clear + distance * step),
+    rotateY: -direction * (16 + distance * 3),
+    scale: 0.42 + distance * 0.1,
+    zIndex: 10 - distance,
+  }
 
   return (
     <fm.div
       data-testid="arc-tile"
       aria-hidden="true"
-      className="absolute h-[38vh] w-[13vw] min-w-[74px] shadow-[0_10px_30px_rgba(0,0,0,0.18)]"
+      className="absolute h-[38vh] w-[13vw] min-w-[74px] overflow-hidden rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.18)]"
       style={{
         backgroundImage: `url(${build.image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        // Tiles start well clear of the middle. The centre channel is where the
-        // headline sits, and it has to be bare paper — dark serif over a
-        // near-black screenshot is unreadable, which is exactly how the first
-        // version of this looked. Both reference sites do the same thing: the
-        // type occupies the gap the images converge toward, never overlaps them.
-        x: direction * (clear + distance * step),
+        ...resting,
         // Outward tiles come toward the viewer and turn to face the centre,
         // which is what reads as a corridor rather than a flat fan of cards.
-        z: distance * 26,
-        rotateY: -direction * (16 + distance * 3),
-        scale: 0.42 + distance * 0.1,
-        y: -distance * 5,
-        zIndex: 10 - distance,
+        ...(isStatic ? { z: distance * 26, y: -distance * 5 } : null),
       }}
+      // The corridor assembles itself: tiles drop in from below the fold and
+      // settle outward from the centre, so the shape arrives rather than simply
+      // being there. Only y/z/opacity animate — x, rotateY and scale stay on
+      // `style`, so the arc geometry has exactly one definition.
+      initial={isStatic ? false : { y: 150, z: 0, opacity: 0 }}
+      animate={isStatic ? false : { y: -distance * 5, z: distance * 26, opacity: 1 }}
+      transition={{ duration: 1.25, delay: 0.15 + distance * 0.045, ease: EASE.expoInOut }}
     />
   )
 }
@@ -68,9 +80,36 @@ export default function ArcHero() {
   // Tiles fly apart and fade as the hero leaves the viewport.
   const spreadScale = useTransform(scrollYProgress, [0, 1], [1, 3.4])
   const spreadFade = useTransform(scrollYProgress, [0, 0.75], [1, 0])
+  // A slow counter-rotation as it opens. Small on purpose: the arc is already
+  // moving in three axes, and any more than this reads as a wobble.
+  const spreadTilt = useTransform(scrollYProgress, [0, 1], [0, -7])
+
+  // Pointer parallax. Springs, not raw values — following the mouse exactly is
+  // what makes these effects feel cheap.
+  const px = useMotionValue(0)
+  const py = useMotionValue(0)
+  const glide = { stiffness: 90, damping: 22, mass: 0.8 }
+  const driftX = useSpring(px, glide)
+  const driftY = useSpring(py, glide)
+
+  const onPointerMove = (event) => {
+    if (isStatic) return
+    const box = ref.current?.getBoundingClientRect()
+    if (!box) return
+    px.set(((event.clientX - (box.left + box.width / 2)) / box.width) * 46)
+    py.set(((event.clientY - (box.top + box.height / 2)) / box.height) * 26)
+  }
 
   return (
-    <section ref={ref} className="relative min-h-[92vh] overflow-hidden px-6 md:px-12">
+    <section
+      ref={ref}
+      onPointerMove={onPointerMove}
+      onPointerLeave={() => {
+        px.set(0)
+        py.set(0)
+      }}
+      className="relative min-h-[92vh] overflow-hidden px-6 md:px-12"
+    >
       <fm.div
         data-testid="arc-stage"
         data-static={String(isStatic)}
@@ -79,6 +118,9 @@ export default function ArcHero() {
           perspective: 1100,
           scale: isStatic ? 1 : spreadScale,
           opacity: isStatic ? 1 : spreadFade,
+          rotate: isStatic ? 0 : spreadTilt,
+          x: isStatic ? 0 : driftX,
+          y: isStatic ? 0 : driftY,
         }}
       >
         {arc.tiles.map((build, i) => (
@@ -89,35 +131,63 @@ export default function ArcHero() {
             count={arc.tiles.length}
             clear={arc.clear}
             step={arc.step}
+            isStatic={isStatic}
           />
         ))}
       </fm.div>
 
       <div className="relative flex min-h-[92vh] flex-col items-center justify-start pt-[14vh] text-center">
-        <p className="label mb-5">Web design, build and upkeep — Montreal</p>
-        <h1
+        <Textify as="p" preset="riseWords" className="label mb-5" amount={0.2}>
+          Web design, build and upkeep — Montreal
+        </Textify>
+
+        {/* Textify's own banner configuration: per-character masked rise,
+            stagger 0.025, duration 0.7, expo.inOut. The explicit space before
+            <br /> is load-bearing — without it the heading's textContent runs
+            together as "businessesthat", which is what a screen reader
+            announces. */}
+        <Textify
+          as="h1"
+          preset="rise"
+          delay={0.1}
+          amount={0.2}
           className="font-display leading-[1.02] tracking-tight"
-          style={{
-            fontSize: 'var(--text-hero)',
-          }}
+          style={{ fontSize: 'var(--text-hero)' }}
         >
-          {/* The explicit space before <br /> is load-bearing: without it the
-              heading's textContent runs together as "businessesthat", which is
-              what a screen reader announces. The space collapses at the line
-              break, so the rendered layout is unchanged. */}
-          We build <em>websites</em> for businesses{' '}
-          <br />
+          We build <em>websites</em> for businesses <br />
           that <em>answer</em> the phone.
-        </h1>
-        <p className="mt-7 max-w-lg font-sans text-ink-muted">
-          Design, build, local SEO and upkeep — handled start to finish, in one place.
-        </p>
-        <Link
-          to="/portfolio"
-          className="mt-8 bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
+        </Textify>
+
+        <Textify
+          as="p"
+          preset="riseLines"
+          delay={0.35}
+          amount={0.2}
+          className="mt-7 max-w-lg font-sans text-ink-muted"
         >
-          See the work
-        </Link>
+          Design, build, local SEO and upkeep — handled start to finish, in one place.
+        </Textify>
+
+        <fm.div
+          initial={reduced ? false : { opacity: 0, y: 16 }}
+          animate={reduced ? false : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.75, ease: EASE.expoInOut }}
+          className="mt-8"
+        >
+          <Magnetic>
+            <Link
+              to="/portfolio"
+              className="group relative inline-block overflow-hidden bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
+            >
+              {/* Ink sweeps up behind the label on hover and the label inverts
+                  with it, which is why both layers share one duration. */}
+              <span className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:scale-y-100 motion-reduce:transition-none" />
+              <span className="relative transition-colors duration-500 group-hover:text-paper">
+                See the work
+              </span>
+            </Link>
+          </Magnetic>
+        </fm.div>
       </div>
     </section>
   )

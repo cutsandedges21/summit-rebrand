@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { BUILDS } from '../lib/builds.js'
+import Reveal, { RevealItem } from '../components/Reveal.jsx'
+import Textify from '../lib/textify.jsx'
+import { ArrowLink } from '../components/AccentButton.jsx'
 
 /**
  * Case study layout, adapted from routs.gr/portfolio: a numbered label, a large
@@ -39,14 +42,22 @@ function Shot({ slug, shot, fallback }) {
 
   return (
     <figure className={`col-span-12 ${shot.span}`}>
-      <img
-        src={failed ? fallback : src}
-        alt={`${slug} — ${shot.caption.toLowerCase()}`}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className={`w-full object-cover object-top ${shot.shape}`}
-      />
-      <figcaption className="label mt-3">{shot.caption}</figcaption>
+      {/* The frame uncovers from the bottom while the capture inside settles
+          back from a slight overscale, so the two move at different rates and
+          the image arrives rather than appearing. overflow-hidden is what makes
+          the clip read as a frame instead of a crop. */}
+      <Reveal variant="curtain" duration={1.05} amount={0.25} className="overflow-hidden">
+        <img
+          src={failed ? fallback : src}
+          alt={`${slug} — ${shot.caption.toLowerCase()}`}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className={`w-full object-cover object-top ${shot.shape}`}
+        />
+      </Reveal>
+      <Reveal as="figcaption" variant="up" delay={0.15} className="label mt-3">
+        {shot.caption}
+      </Reveal>
     </figure>
   )
 }
@@ -64,22 +75,29 @@ export default function Project() {
 
   return (
     <div data-testid="project-page" className="px-6 py-16 md:px-12">
-      <Link to="/portfolio" className="label underline">
-        ← All work
+      <Link to="/portfolio" className="label group inline-flex items-center gap-2 underline">
+        <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:-translate-x-1.5 motion-reduce:transition-none">
+          ←
+        </span>
+        All work
       </Link>
 
       <header className="mt-10 border-b border-rule pb-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-3xl">
-            <p className="label">
+            <Reveal as="p" variant="up" duration={0.7} className="label">
               Case study n. {number} · {build.category}
-            </p>
-            <h1
+            </Reveal>
+            <Textify
+              as="h1"
+              preset="riseLines"
+              delay={0.08}
+              amount={0.25}
               className="mt-3 font-display leading-[1.04] tracking-tight"
               style={{ fontSize: 'var(--text-section)' }}
             >
               {build.name} — {build.blurb.split('. ')[0].toLowerCase()}.
-            </h1>
+            </Textify>
           </div>
           <div className="text-right font-sans text-[11px] leading-relaxed text-ink-muted">
             <p>{build.year}</p>
@@ -108,20 +126,20 @@ export default function Project() {
         </p>
       </header>
 
-      <div className="mt-12 grid gap-10 md:grid-cols-3">
-        <section>
+      <Reveal variant="fade" stagger={0.12} className="mt-12 grid gap-10 md:grid-cols-3">
+        <RevealItem as="section">
           <p className="label mb-3">The challenge</p>
           <p className="font-sans leading-relaxed text-ink-muted">{build.challenge}</p>
-        </section>
-        <section>
+        </RevealItem>
+        <RevealItem as="section">
           <p className="label mb-3">{build.own ? 'Our approach' : 'What it does'}</p>
           <p className="font-sans leading-relaxed text-ink-muted">{build.approach}</p>
-        </section>
-        <section>
+        </RevealItem>
+        <RevealItem as="section">
           <p className="label mb-3">The outcome</p>
           <p className="font-sans leading-relaxed text-ink-muted">{build.outcome}</p>
-        </section>
-      </div>
+        </RevealItem>
+      </Reveal>
 
       <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-14">
         {SHOTS.map((shot) => (
@@ -135,26 +153,33 @@ export default function Project() {
       </div>
 
       {build.url && (
-        <a
-          href={build.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-10 inline-block bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
-        >
-          Visit the live site ↗
-        </a>
+        <Reveal variant="up" className="mt-10">
+          <a
+            href={build.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-block overflow-hidden bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100 motion-reduce:transition-none"
+            />
+            <span className="relative transition-colors duration-500 group-hover:text-paper group-focus-visible:text-paper">
+              Visit the live site ↗
+            </span>
+          </a>
+        </Reveal>
       )}
 
-      <nav className="mt-20 border-t border-rule pt-6">
+      <Reveal as="nav" variant="up" className="mt-20 border-t border-rule pt-6">
         <p className="label mb-2">Next</p>
-        <Link
+        <ArrowLink
           to={`/portfolio/${next.slug}`}
           className="font-display leading-tight tracking-tight"
-          style={{ fontSize: 'var(--text-sub)' }}
         >
-          {next.name} →
-        </Link>
-      </nav>
+          <span style={{ fontSize: 'var(--text-sub)' }}>{next.name}</span>
+        </ArrowLink>
+      </Reveal>
     </div>
   )
 }

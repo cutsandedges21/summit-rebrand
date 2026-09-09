@@ -37,5 +37,17 @@ if (!global.IntersectionObserver) {
   }
 }
 
+// Element resize — Lenis measures the document with one (src/lib/smooth-scroll.js),
+// and the line splitter re-measures wrapped copy with another (src/lib/textify.jsx).
+// jsdom has no layout, so a stub that never fires is the accurate behaviour: the
+// initial measurement stands and is never invalidated.
+if (!global.ResizeObserver) {
+  global.ResizeObserver = class {
+    observe = vi.fn()
+    unobserve = vi.fn()
+    disconnect = vi.fn()
+  }
+}
+
 // jsdom has no layout, so this is unimplemented rather than merely absent.
 Element.prototype.scrollIntoView = vi.fn()

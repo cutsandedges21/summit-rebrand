@@ -1,4 +1,6 @@
 import { EFFECTIVE_DATE, LEGAL_EMAIL } from '../lib/legal.js'
+import PageHeader from './PageHeader.jsx'
+import Reveal, { RevealItem } from './Reveal.jsx'
 
 /**
  * Shared shell for the Privacy Policy and Terms of Service.
@@ -12,20 +14,20 @@ import { EFFECTIVE_DATE, LEGAL_EMAIL } from '../lib/legal.js'
 export default function LegalPage({ testId, title, sections }) {
   return (
     <div data-testid={testId} className="px-6 py-16 md:px-12">
-      <p className="label mb-4">Legal</p>
-      <h1
-        className="font-display leading-[1.04] tracking-tight"
-        style={{ fontSize: 'var(--text-section)' }}
+      <PageHeader label="Legal" heading={title} />
+      <Reveal
+        as="p"
+        variant="up"
+        delay={0.16}
+        data-testid="legal-effective-date"
+        className="mt-5 font-sans text-[13px] text-ink-muted"
       >
-        {title}
-      </h1>
-      <p data-testid="legal-effective-date" className="mt-5 font-sans text-[13px] text-ink-muted">
         Effective {EFFECTIVE_DATE}
-      </p>
+      </Reveal>
 
-      <div className="mt-14 max-w-2xl">
+      <Reveal variant="fade" stagger={0.06} amount={0.1} className="mt-14 max-w-2xl">
         {sections.map((section) => (
-          <section key={section.h} className="border-t border-rule py-7">
+          <RevealItem as="section" key={section.h} className="border-t border-rule py-7">
             <h2
               className="font-display leading-tight tracking-tight"
               style={{ fontSize: 'var(--text-sub)' }}
@@ -49,10 +51,10 @@ export default function LegalPage({ testId, title, sections }) {
                 ))}
               </ul>
             )}
-          </section>
+          </RevealItem>
         ))}
 
-        <section data-testid="legal-contact" className="border-t border-rule py-7">
+        <RevealItem as="section" data-testid="legal-contact" className="border-t border-rule py-7">
           <h2
             className="font-display leading-tight tracking-tight"
             style={{ fontSize: 'var(--text-sub)' }}
@@ -66,8 +68,8 @@ export default function LegalPage({ testId, title, sections }) {
             </a>
             .
           </p>
-        </section>
-      </div>
+        </RevealItem>
+      </Reveal>
     </div>
   )
 }
