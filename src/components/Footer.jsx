@@ -21,6 +21,11 @@ export default function Footer() {
           © {new Date().getFullYear()} mossimo Studios
         </span>
         <nav className="flex gap-5 font-sans text-[11px] text-ink-muted">
+          {/* FAQ is not in the main nav — five items is already tight at 375px —
+              so without this it is reachable from exactly one link on the
+              Contact page. It answers the questions that decide the sale: who
+              actually builds it, do I own it, what if I want to leave. */}
+          <Link to="/faq">Questions</Link>
           <Link to="/privacy-policy">Privacy Policy</Link>
           <Link to="/terms-of-service">Terms of Service</Link>
         </nav>

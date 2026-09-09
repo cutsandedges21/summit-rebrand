@@ -3300,7 +3300,7 @@ git commit -m "feat: document head, interim favicon and spa rewrites"
 
 ## Task 19: Full verification pass
 
-- [ ] **Step 1: Run every test**
+- [x] **Step 1: Run every test**
 
 ```bash
 npm test
@@ -3309,7 +3309,7 @@ npm run test:e2e
 
 Expected: all unit tests pass, all e2e tests pass across both projects. **Paste the actual output.** If anything fails, fix it before continuing — do not record this task as done with a failing suite.
 
-- [ ] **Step 2: Check the accent rule held**
+- [x] **Step 2: Check the accent rule held**
 
 ```bash
 npm test -- accent-rule
@@ -3317,7 +3317,7 @@ npm test -- accent-rule
 
 Expected: PASS. This is the rule most likely to have been broken during page assembly.
 
-- [ ] **Step 3: Look at every page**
+- [x] **Step 3: Look at every page**
 
 ```bash
 npm run build && npm run preview
@@ -3331,15 +3331,15 @@ For each, confirm by eye:
 - Display type is Instrument Serif, UI type is Instrument Sans
 - No cards, borders, shadows or rounded panels beyond hairline rules
 
-- [ ] **Step 4: Check it at 375px**
+- [x] **Step 4: Check it at 375px**
 
 In devtools, set the viewport to 375×812 and walk every page. Confirm no horizontal scroll, the arc is static, and Process is a plain stacked list.
 
-- [ ] **Step 5: Update the spec's open items**
+- [x] **Step 5: Update the spec's open items**
 
 Edit `docs/superpowers/specs/2026-09-05-mossimo-rebrand-design.md` §10, marking resolved items and leaving genuinely outstanding ones. As of this plan, still open: tagline, screen recordings, domain, owner photo, real favicon/wordmark.
 
-- [ ] **Step 6: Commit and push**
+- [x] **Step 6: Commit and push**
 
 ```bash
 git add -A

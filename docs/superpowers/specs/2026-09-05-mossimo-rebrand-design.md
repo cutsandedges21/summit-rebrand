@@ -350,16 +350,38 @@ These are build requirements, not polish.
 
 ## 10. Known inconsistencies and open items
 
-1. ~~**Contact email carries the retired brand name.**~~ **Resolved 2026-09-08** —
-   `mossimo.studios@gmail.com` supplied and wired in. The rebrand no longer leaks the old
-   name anywhere on the site.
-2. **Tagline** not finalised.
-3. **Screen recordings** for fourteen builds don't exist (§7).
-4. **Domain** not chosen.
-5. **Photo of the owner** needed for `/about`. Not required for launch if `/about` ships
-   text-only, but the personal-brand positioning is weaker without it.
-6. **Favicon / wordmark** — no mark designed yet. Lowercase `mossimo` set in Instrument Sans
-   600 is the interim wordmark.
+**Status at the end of the build, 2026-09-09.** All nineteen implementation tasks are
+complete: 144 unit tests, 19 end-to-end tests across Chromium and mobile Safari.
+
+### Resolved
+
+1. ~~**Contact email carries the retired brand name.**~~ `mossimo.studios@gmail.com`
+   supplied and wired in. The old brand appears nowhere on the site.
+2. ~~**Favicon / wordmark — no mark designed.**~~ Both supplied. `logo-wordmark.png` is the
+   nav and footer mark; the palette is sampled from it. The favicon echoes the lockup —
+   paper ground, accent as a shape behind the letterform.
+3. ~~**Screen recordings don't exist.**~~ Superseded rather than done: 33 real screenshots
+   were captured from the live sites instead, three per project, laid out as a mosaic on
+   each case study. Recordings are no longer needed for launch.
+
+### Still open
+
+4. **Tagline** not finalised. The working line — *"Websites for businesses that answer the
+   phone"* — is in the hero and the document title, and has held up well enough that
+   finalising it may just mean keeping it.
+5. **Domain** not chosen. The email is a Gmail address; a domain would let it match.
+6. **Photo of the owner** for `/about`. The page no longer needs one to feel finished, but
+   the positioning is warmer with a face.
+7. **`vorszk.com` is dead** — NXDOMAIN on both apex and www. Its case study has no live
+   link and falls back to its hero image. Either drop the project or replace the capture.
+8. **Legal copy has a live tension.** The Terms say *"unlimited revisions during the design
+   phase"* while the FAQ says *"two hours of edits a month"*. Different phases, so not
+   strictly contradictory, but a customer could reasonably read them as conflicting.
+9. **The portfolio needs culling.** Seven of the fourteen were not built here and carry
+   invented case-study copy, written on the owner's instruction as scaffolding. Every build
+   carries `own: true/false`, so the cull is `BUILDS.filter(b => b.own)` — one line, not an
+   investigation. **Do this before launch.** The case studies label provenance honestly, but
+   invented process and outcomes for someone else's website should not go out.
 
 ---
 
