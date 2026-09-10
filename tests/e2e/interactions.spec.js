@@ -1,5 +1,24 @@
 import { test, expect } from '@playwright/test'
 
+/**
+ * Scroll, then wait for the page to actually stop. Lenis eases every wheel
+ * event, so a fixed timeout samples an animation in progress — which reads as
+ * "sticky is broken" when the element is merely still travelling to its offset.
+ */
+async function scrollAndSettle(page, distance) {
+  await page.mouse.wheel(0, distance)
+  await page.waitForFunction(
+    () => {
+      const y = window.scrollY
+      return new Promise((resolve) =>
+        setTimeout(() => resolve(Math.abs(window.scrollY - y) < 1), 200),
+      )
+    },
+    null,
+    { timeout: 10_000 },
+  )
+}
+
 test.describe('desktop', () => {
   test.skip(({ isMobile }) => isMobile)
 
@@ -11,12 +30,10 @@ test.describe('desktop', () => {
     // Engage the sticky offset FIRST. scrollIntoViewIfNeeded leaves the element
     // above its sticky top, so it still has travel left; measuring from there
     // captures the transition into stickiness rather than stickiness itself.
-    await page.mouse.wheel(0, 400)
-    await page.waitForTimeout(400)
+    await scrollAndSettle(page, 900)
 
     const before = await pin.boundingBox()
-    await page.mouse.wheel(0, 900)
-    await page.waitForTimeout(500)
+    await scrollAndSettle(page, 900)
     const after = await pin.boundingBox()
 
     // Sticky: the pinned column holds position while content moves past it.
@@ -50,9 +67,16 @@ test.describe('desktop', () => {
     await expect(items.nth(0)).toHaveAttribute('data-active', 'false')
   })
 
-  test('the arc animates', async ({ page }) => {
+  test('the corridor is actually moving', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByTestId('arc-stage')).toHaveAttribute('data-static', 'false')
+    await expect(page.getByTestId('hero-stage')).toHaveAttribute('data-static', 'false')
+
+    // data-static is a declaration of intent; this is the corridor's own
+    // transform, which is what the visitor sees.
+    const card = page.getByTestId('stream-card').first()
+    const before = await card.evaluate((el) => getComputedStyle(el).transform)
+    await page.waitForTimeout(600)
+    expect(await card.evaluate((el) => getComputedStyle(el).transform)).not.toBe(before)
   })
 
   // The preview column was static once, which left a ~380x373 hole beside the
@@ -62,16 +86,38 @@ test.describe('desktop', () => {
     const preview = page.getByTestId('work-preview')
     await preview.scrollIntoViewIfNeeded()
 
-    // Same reason as the process pin: let it reach its sticky offset first.
-    await page.mouse.wheel(0, 400)
-    await page.waitForTimeout(400)
+    // Do not scroll a fixed distance and compare two samples. That assumes a
+    // page length: the earlier version engaged with 1200px, which now overshoots
+    // the sticky region entirely — the column had already released and the test
+    // read that as "sticky is broken".
+    //
+    // Assert the contract instead. Walk the page and confirm the column parks at
+    // its sticky offset and HOLDS there across several consecutive readings,
+    // which is true regardless of how tall the list happens to be.
+    const held = await page.evaluate(async () => {
+      const col = document.querySelector('[data-testid="work-preview"]').parentElement
+      const offset = parseFloat(getComputedStyle(col).top) // md:top-24 -> 96px
+      window.scrollTo(0, 0)
+      await new Promise((r) => setTimeout(r, 500))
 
-    const before = await preview.boundingBox()
-    await page.mouse.wheel(0, 700)
-    await page.waitForTimeout(500)
-    const after = await preview.boundingBox()
+      let first = null
+      let last = null
+      for (let y = 0; y < document.body.scrollHeight; y += 50) {
+        window.scrollTo(0, y)
+        await new Promise((r) => setTimeout(r, 45))
+        if (Math.abs(col.getBoundingClientRect().top - offset) < 2) {
+          if (first === null) first = y
+          last = y
+        }
+      }
+      return first === null ? 0 : last - first
+    })
 
-    expect(Math.abs(after.y - before.y)).toBeLessThan(120)
+    // A sticky element can only hold for (container height - its own height),
+    // which here is 662 - 299 ≈ 360px. Measured at 300px. Asserting a distance
+    // rather than counting samples means the test does not silently depend on
+    // the step size, and does not break when the list gains or loses a row.
+    expect(held, 'the preview column did not hold at its sticky offset').toBeGreaterThan(200)
   })
 
   test('hovering a row swaps the preview', async ({ page }) => {
@@ -93,9 +139,27 @@ test.describe('mobile', () => {
     await expect(page.getByTestId('process-pin')).toHaveAttribute('data-pinned', 'false')
   })
 
-  test('the arc collapses to static', async ({ page }) => {
+  // The arc this replaced needed a separate six-tile mobile geometry, because
+  // the desktop spacing pushed every tile off a 375px screen. The corridor is
+  // sized entirely in cqw — shares of its own container's width — so it holds
+  // its proportions at any size and has no mobile branch to collapse to. What
+  // matters on a phone is that it is fully present and fully inside the frame.
+  test('the corridor renders in full and stays inside the frame', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByTestId('arc-stage')).toHaveAttribute('data-static', 'true')
+    await expect(page.getByTestId('stream-card')).toHaveCount(18)
+
+    const fits = await page.evaluate(() => {
+      const stage = document.querySelector('[data-testid="hero-stage"]').getBoundingClientRect()
+      return {
+        overflow: document.documentElement.scrollWidth - window.innerWidth,
+        onScreen: [...document.querySelectorAll('[data-testid="stream-card"]')].filter((c) => {
+          const r = c.getBoundingClientRect()
+          return r.top < stage.bottom && r.bottom > stage.top
+        }).length,
+      }
+    })
+    expect(fits.overflow).toBeLessThanOrEqual(1)
+    expect(fits.onScreen).toBeGreaterThan(8)
   })
 
   // The preview can never change on a touch device — rows navigate on tap and
@@ -179,9 +243,35 @@ test.describe('mobile', () => {
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce' })
 
-  test('the arc renders static', async ({ page }) => {
+  test('the corridor freezes as a finished still', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByTestId('arc-stage')).toHaveAttribute('data-static', 'true')
+    await expect(page.getByTestId('hero-stage')).toHaveAttribute('data-static', 'true')
+
+    // The pause is a stylesheet rule against an inline `animation` shorthand,
+    // which resets animation-play-state to running and outranks any selector.
+    // It needs !important to land, and without it this rule matched, parsed,
+    // and did nothing while the cards kept moving — so assert the computed
+    // value, not the declaration.
+    const card = page.getByTestId('stream-card').first()
+    await expect
+      .poll(() => card.evaluate((el) => getComputedStyle(el).animationPlayState))
+      .toBe('paused')
+
+    const before = await card.evaluate((el) => getComputedStyle(el).transform)
+    await page.waitForTimeout(600)
+    expect(await card.evaluate((el) => getComputedStyle(el).transform)).toBe(before)
+
+    // Paused, not disabled: each card is dropped mid-flight by a negative delay,
+    // so a still corridor is still a whole one rather than a pile on the axis.
+    const spread = await page.evaluate(
+      () =>
+        new Set(
+          [...document.querySelectorAll('[data-testid="stream-card"]')].map((c) =>
+            Math.round(c.getBoundingClientRect().width),
+          ),
+        ).size,
+    )
+    expect(spread).toBeGreaterThan(4)
   })
 })
 

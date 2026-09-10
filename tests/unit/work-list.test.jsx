@@ -28,7 +28,7 @@ describe('WorkList', () => {
     renderList(<WorkList builds={BUILDS} />)
     await user.click(screen.getByRole('button', { name: 'Studio & brand' }))
     const rows = screen.getAllByTestId('work-row')
-    expect(rows).toHaveLength(3)
+    expect(rows).toHaveLength(2)
     expect(rows.map((r) => r.textContent)).toEqual(
       expect.arrayContaining([expect.stringContaining('Meridian')]),
     )

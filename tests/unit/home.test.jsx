@@ -13,7 +13,7 @@ const renderHome = () =>
 describe('home page', () => {
   it('leads with the arc hero', () => {
     renderHome()
-    expect(screen.getByTestId('arc-stage')).toBeInTheDocument()
+    expect(screen.getByTestId('hero-stage')).toBeInTheDocument()
   })
 
   it('previews five builds, not all fourteen', () => {

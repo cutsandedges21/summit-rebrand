@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import ArcHero from '../components/ArcHero.jsx'
+import Hero from '../components/Hero.jsx'
 import WorkList from '../components/WorkList.jsx'
 import PinnedProcess from '../components/PinnedProcess.jsx'
 import Reveal, { RevealItem } from '../components/Reveal.jsx'
@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      <ArcHero />
+      <Hero />
       <WorkList builds={BUILDS} limit={5} />
 
       <div className="px-6 md:px-12">
