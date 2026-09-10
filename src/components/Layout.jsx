@@ -37,7 +37,11 @@ function titleFor(pathname) {
   const build = BUILDS.find((b) => pathname === `/portfolio/${b.slug}`)
   if (build) return `${build.name} — ${SUFFIX}`
 
-  return SUFFIX
+  // Nothing else falls through here: every real route is in TITLES, and an
+  // unknown /portfolio/<slug> redirects rather than rendering. So the fallback
+  // IS the 404, and naming it that beats leaving the bare brand on the one page
+  // where the tab is the fastest way to see what happened.
+  return `Page not found — ${SUFFIX}`
 }
 
 export default function Layout() {

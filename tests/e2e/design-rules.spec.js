@@ -11,6 +11,9 @@ const PATHS = [
   '/contact',
   '/privacy-policy',
   '/terms-of-service',
+  // The 404 is a real page of this site, not a fallback screen, and it is the
+  // one most likely to be built once and never looked at again.
+  '/no-such-page',
 ]
 
 /**

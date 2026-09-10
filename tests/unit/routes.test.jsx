@@ -41,4 +41,26 @@ describe('routing', () => {
     renderAt('/inspiration')
     expect(screen.getByTestId('portfolio-page')).toBeInTheDocument()
   })
+
+  // vercel.json sends every path to index.html so deep links survive a refresh,
+  // which means an unknown URL lands in the router rather than on the host's
+  // 404. Before the catch-all it matched nothing and rendered an empty <main>
+  // under a working nav — indistinguishable from the site being broken.
+  it('renders the 404 page for an unknown url', () => {
+    renderAt('/no-such-page')
+    expect(screen.getByTestId('not-found-page')).toBeInTheDocument()
+  })
+
+  it('renders the 404 page for an unknown nested url', () => {
+    renderAt('/services/something/deeper')
+    expect(screen.getByTestId('not-found-page')).toBeInTheDocument()
+  })
+
+  // An unknown BUILD is a stale link to real work, not a wrong address, so it
+  // goes to the portfolio rather than the 404.
+  it('sends an unknown build back to the portfolio, not to the 404', () => {
+    renderAt('/portfolio/not-a-build')
+    expect(screen.getByTestId('portfolio-page')).toBeInTheDocument()
+    expect(screen.queryByTestId('not-found-page')).not.toBeInTheDocument()
+  })
 })

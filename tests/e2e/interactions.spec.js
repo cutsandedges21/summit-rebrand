@@ -186,6 +186,20 @@ test.describe('mobile', () => {
   // because either one regressing puts the header back to unusable.
   test('the header does not collide and its controls are thumb-sized', async ({ page }) => {
     await page.goto('/')
+    // Wait for the controls rather than measuring whatever exists on the frame
+    // goto happens to resolve on. The wordmark also sets the logo link's height,
+    // so measuring before it decodes reads a short box and fails on a true
+    // layout that is fine.
+    await expect(page.locator('header.sticky button')).toBeVisible()
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const img = document.querySelector('header.sticky img')
+          return Boolean(img && img.complete && img.naturalWidth > 0)
+        }),
+      )
+      .toBe(true)
+
     const box = await page.evaluate(() => {
       const logo = document.querySelector('header.sticky a').getBoundingClientRect()
       const toggle = document.querySelector('header.sticky button').getBoundingClientRect()
@@ -219,15 +233,21 @@ test.describe('mobile', () => {
   // has no photography on it at all on the device most visitors arrive on.
   test('every work row carries a thumbnail', async ({ page }) => {
     await page.goto('/portfolio')
-    const withImage = await page.evaluate(
-      () =>
-        [...document.querySelectorAll('[data-testid="work-row"]')].filter((row) =>
-          [...row.querySelectorAll('span')].some((s) =>
-            getComputedStyle(s).backgroundImage.startsWith('url('),
-          ),
-        ).length,
-    )
-    expect(withImage).toBe(14)
+    // Poll. goto resolves on `load`, which says nothing about React having
+    // rendered the list — sampling once counted the rows that happened to exist
+    // in that frame, which under parallel workers was sometimes none of them.
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            [...document.querySelectorAll('[data-testid="work-row"]')].filter((row) =>
+              [...row.querySelectorAll('span')].some((s) =>
+                getComputedStyle(s).backgroundImage.startsWith('url('),
+              ),
+            ).length,
+        ),
+      )
+      .toBe(14)
   })
 
   // The index tracks scroll through an observer that is deliberately not
@@ -299,19 +319,30 @@ test.describe('routing and assets', () => {
     })
     await page.waitForLoadState('networkidle')
 
-    const broken = await page.evaluate(() =>
-      [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.src),
-    )
-    expect(broken).toEqual([])
+    // networkidle is about the network, not about decoding — an image can be
+    // fetched and still report naturalWidth 0 for a frame or two. Poll so a
+    // busy machine reads as slow rather than as a broken path.
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.src),
+        ),
+      )
+      .toEqual([])
   })
 
   test('the wordmark loads in the nav', async ({ page }) => {
     await page.goto('/')
-    const ok = await page.evaluate(() => {
-      const img = document.querySelector('header img')
-      return Boolean(img && img.complete && img.naturalWidth > 0)
-    })
-    expect(ok).toBe(true)
+    // Same reason as above, and this page now also pulls the hero corridor's
+    // nine cards, so the wordmark shares a connection pool on first paint.
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const img = document.querySelector('header img')
+          return Boolean(img && img.complete && img.naturalWidth > 0)
+        }),
+      )
+      .toBe(true)
   })
 })
 
@@ -396,5 +427,42 @@ test.describe('page titles', () => {
 
     // Distinct, not just present.
     expect(new Set(seen.values()).size).toBe(seen.size)
+  })
+})
+
+test.describe('the 404 page', () => {
+  test('an unknown url renders the 404 rather than a blank page', async ({ page }) => {
+    await page.goto('/no-such-page')
+    await expect(page.getByTestId('not-found-page')).toBeVisible()
+    await expect
+      .poll(() => page.title())
+      .toMatch(/Page not found — mossimo Studios/)
+  })
+
+  // The number is sized in vw, so this is the page most able to push a
+  // horizontal scrollbar — and it is widest in the fallback font, before
+  // Instrument Serif swaps in. Name the offenders rather than asserting a bare
+  // number: "overflow was 24" says nothing about which element did it.
+  test('the 404 fits the viewport it is drawn on', async ({ page }) => {
+    await page.goto('/no-such-page')
+
+    const report = await page.evaluate(() => {
+      const de = document.documentElement
+      const vw = de.clientWidth
+      return {
+        overflow: de.scrollWidth - vw,
+        offenders: [...document.querySelectorAll('body *')]
+          .map((el) => ({ el, r: el.getBoundingClientRect() }))
+          .filter(({ r }) => r.right > vw + 1 && r.width > 0 && r.height > 0)
+          .slice(0, 6)
+          .map(
+            ({ el, r }) =>
+              `${el.tagName}.${String(el.className).slice(0, 40)} right=${Math.round(r.right)} vw=${vw}`,
+          ),
+      }
+    })
+
+    expect(report.offenders, 'elements past the right edge').toEqual([])
+    expect(report.overflow).toBeLessThanOrEqual(1)
   })
 })

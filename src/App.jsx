@@ -10,6 +10,7 @@ import Faq from './pages/Faq.jsx'
 import Contact from './pages/Contact.jsx'
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx'
 import TermsOfService from './pages/TermsOfService.jsx'
+import NotFound from './pages/NotFound.jsx'
 
 export function Routes() {
   return (
@@ -27,6 +28,12 @@ export function Routes() {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/work" element={<Navigate to="/portfolio" replace />} />
         <Route path="/inspiration" element={<Navigate to="/portfolio" replace />} />
+        {/* vercel.json rewrites every path to index.html so deep links survive a
+            hard refresh, which means an unknown URL reaches the router rather
+            than the host's 404. Without this it matched no route at all and
+            rendered an empty <main> under a working nav — a blank page, not a
+            missing one. */}
+        <Route path="*" element={<NotFound />} />
       </Route>
     </RouterRoutes>
   )
