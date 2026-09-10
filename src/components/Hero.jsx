@@ -94,7 +94,7 @@ export default function Hero() {
           amount={0.2}
           className="mt-7 max-w-lg font-sans text-ink-muted"
         >
-          mossimo Studios
+          Design, build, local SEO and upkeep — handled start to finish, in one place.
         </Textify>
 
         <fm.div
