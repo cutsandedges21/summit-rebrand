@@ -31,7 +31,7 @@ export const CATEGORIES = [
   'Local trade',
 ]
 
-export const BUILDS = [
+const CATALOGUE = [
   { slug: 'halcyon',        name: 'Halcyon',        category: 'Hospitality & wellness', image: '/builds/halcyon-hero.jpeg',         blurb: 'Day spa and retreat. Atmosphere doing the selling, with Book the only thing to click.',
     own: true,
     url: 'https://halcyon-spa-demo.vercel.app/',
@@ -161,6 +161,35 @@ export const BUILDS = [
     outcome: 'The effect sells itself in the first second. The rest of the page only has to make booking easy.',
   },
 ]
+
+/**
+ * The running order, strongest first. CATALOGUE above stays grouped the way it
+ * reads as data; this is the order a visitor meets the work in, and it is the
+ * one thing about the list that is a judgement call rather than a fact, so it
+ * lives on its own where it can be changed without touching a build's record.
+ *
+ * Anything not named here keeps its catalogue position and falls in behind —
+ * sort is stable, so the tail stays put. A slug that no longer exists is
+ * ignored rather than leaving a hole.
+ */
+const ORDER = [
+  'cuts-and-edges',
+  'air-center',
+  'piment',
+  'drinksom',
+  'khufus',
+  'lamborghini',
+  'brand-cosmetics',
+  'gloryn',
+  'elixir',
+]
+
+const rank = (build) => {
+  const i = ORDER.indexOf(build.slug)
+  return i === -1 ? ORDER.length : i
+}
+
+export const BUILDS = [...CATALOGUE].sort((a, b) => rank(a) - rank(b))
 
 /**
  * @param {typeof BUILDS} builds

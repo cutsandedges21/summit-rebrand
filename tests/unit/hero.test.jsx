@@ -11,6 +11,10 @@ import Hero from '../../src/components/Hero.jsx'
 import { BUILDS } from '../../src/lib/builds.js'
 import { useReducedMotion, useIsMobile } from '../../src/lib/motion.js'
 
+// ImageStreamHero's default density. Deliberately NOT derived from the number
+// of builds or from Hero's image list: `cards` is how many slots ride each rail
+// at once, and the rails cycle a shorter pool with `images[i % images.length]`.
+// The hero shows a curated five, which repeat rather than leaving gaps.
 const CARDS_PER_RAIL = 9
 const RAILS = 2
 

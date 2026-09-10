@@ -27,11 +27,26 @@ const AXIS = 84
 // object-cover, and the heroes are 16:10 landscape at 1440px, so pointing the
 // corridor at them downloads 1.4 MB above the fold and then throws most of
 // each file away at the crop. The derivatives are the same pixels, cropped
-// once at build time: 1394 KB -> 253 KB for the nine the corridor uses.
-const STREAM = BUILDS.map((build) => ({
-  src: `/builds/stream/${build.slug}.jpg`,
-  alt: build.name,
-}))
+// once at build time: 1954 KB -> 399 KB across all fourteen. The script builds
+// a card for every build; the corridor draws on the subset below, so changing
+// that list needs no regeneration.
+// A curated five rather than the whole catalogue. `cards` below is the
+// corridor's DENSITY — how many slots ride each rail at once — and it is
+// independent of this pool, which the rails cycle through with
+// `images[i % images.length]`. So a short list makes the corridor repeat, not
+// thin out, and these five come round roughly twice per rail.
+const STREAM_SLUGS = ['cuts-and-edges', 'brand-cosmetics', 'drinksom', 'air-center', 'halcyon']
+
+const STREAM = STREAM_SLUGS
+  // Resolved against BUILDS rather than hand-written, so a slug that is renamed
+  // or retired drops out here instead of pointing the corridor at a 404 — which
+  // is exactly how cuts-and-edges and gloryn were silently missing before.
+  .map((slug) => BUILDS.find((build) => build.slug === slug))
+  .filter(Boolean)
+  .map((build) => ({
+    src: `/builds/stream/${build.slug}.jpg`,
+    alt: build.name,
+  }))
 
 export default function Hero() {
   const reduced = useReducedMotion()
@@ -79,7 +94,7 @@ export default function Hero() {
           amount={0.2}
           className="mt-7 max-w-lg font-sans text-ink-muted"
         >
-          Design, build, local SEO and upkeep — handled start to finish, in one place.
+          mossimo Studios
         </Textify>
 
         <fm.div
