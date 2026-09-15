@@ -26,6 +26,15 @@ describe('home page', () => {
     expect(screen.getByTestId('process-pin')).toBeInTheDocument()
   })
 
+  // Both figures are owner-supplied and quoted on two pages, so they are pinned
+  // here rather than left to whichever one someone edits last.
+  it('shows the track record: years and clients', () => {
+    const { container } = renderHome()
+    expect(screen.getByTestId('track-record')).toBeInTheDocument()
+    expect(container.textContent).toMatch(/6\+/)
+    expect(container.textContent).toMatch(/70\+/)
+  })
+
   it('previews pricing without discount language', () => {
     const { container } = renderHome()
     expect(container.textContent).toMatch(/\$108/)

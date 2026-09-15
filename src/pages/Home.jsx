@@ -9,6 +9,7 @@ import { useBackdrop } from '../components/Backdrop.jsx'
 import Textify from '../lib/textify.jsx'
 import { BUILDS } from '../lib/builds.js'
 import { PLANS } from '../lib/plans.js'
+import { STUDIO_STATS } from '../lib/stats.js'
 
 export default function Home() {
   // The page's one colour event. The backdrop is a fixed plate behind the
@@ -33,6 +34,27 @@ export default function Home() {
           </Link>
         </Reveal>
       </div>
+
+      {/* The proof beat: work, then the receipts, then how the work happens.
+          Borrows the pricing grid's exact anatomy — hairline over each column,
+          display numeral, 12px caption — so it reads as the same instrument
+          rather than a widget bolted on. No outer border and no backdrop theme:
+          PinnedProcess below washes to clay and owns the next colour event. */}
+      <section className="px-6 py-20 md:px-12" data-testid="track-record">
+        <Reveal as="p" variant="up" duration={0.7} className="label mb-10">
+          Track record
+        </Reveal>
+        <Reveal variant="fade" stagger={0.12} amount={0.3} className="grid gap-8 sm:grid-cols-2">
+          {STUDIO_STATS.map((stat) => (
+            <RevealItem key={stat.k} className="border-t border-ink pt-3">
+              <p className="font-display leading-none" style={{ fontSize: 'var(--text-section)' }}>
+                {stat.v}
+              </p>
+              <p className="mt-3 max-w-xs font-sans text-[12px] text-ink-muted">{stat.k}</p>
+            </RevealItem>
+          ))}
+        </Reveal>
+      </section>
 
       <PinnedProcess />
 

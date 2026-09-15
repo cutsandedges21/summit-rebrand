@@ -1,16 +1,21 @@
 import { PLANS } from '../lib/plans.js'
+import { STUDIO_STATS } from '../lib/stats.js'
 import PageHeader from '../components/PageHeader.jsx'
 import Reveal, { RevealItem } from '../components/Reveal.jsx'
 import AccentButton, { ArrowLink } from '../components/AccentButton.jsx'
 import { useBackdrop } from '../components/Backdrop.jsx'
 
-// Every value here is either known or derived. An earlier draft carried
-// "Building since 2024", which was invented — the old repo's first commit is
-// May 2026 and the real founding date is not something this codebase knows.
-// The cheapest way to keep a facts table honest is to let it read from data.
+// Every value here is either known, derived, or owner-supplied. An earlier
+// draft carried "Building since 2024", which was invented — the old repo's
+// first commit is May 2026 and the real founding date is not something this
+// codebase knows. The cheapest way to keep a facts table honest is to let it
+// read from data: prices from PLANS, track record from STUDIO_STATS, which the
+// home page quotes from the same source.
 const FACTS = [
   { k: 'Based in', v: 'Montreal' },
   { k: 'Working', v: 'Across Canada' },
+  { k: 'Experience', v: `${STUDIO_STATS[0].v} years` },
+  { k: 'Clients', v: `${STUDIO_STATS[1].v} businesses` },
   { k: 'Plans from', v: `${PLANS[0].price} a month` },
   { k: 'Reply time', v: 'Within 24 hours' },
 ]

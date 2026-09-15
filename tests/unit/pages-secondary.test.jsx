@@ -29,6 +29,14 @@ describe('about page', () => {
     expect(container.textContent).toMatch(/no account manager/i)
   })
 
+  // Track record belongs on the facts table, not in the prose — the numbers are
+  // the same ones the home page quotes, from src/lib/stats.js.
+  it('states years of experience and clients served', () => {
+    const { container } = wrap(<About />)
+    expect(container.textContent).toMatch(/6\+\s*years/i)
+    expect(container.textContent).toMatch(/70\+\s*businesses/i)
+  })
+
   it('claims no headcount', () => {
     const { container } = wrap(<About />)
     expect(container.textContent).not.toMatch(/\bour team\b|\d+\s+(people|designers|developers)\b/i)
