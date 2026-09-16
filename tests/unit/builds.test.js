@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { BUILDS, CATEGORIES, filterBuilds } from '../../src/lib/builds.js'
 
 describe('concept builds', () => {
-  it('has fourteen builds', () => {
-    expect(BUILDS).toHaveLength(14)
+  it('has fifteen builds', () => {
+    expect(BUILDS).toHaveLength(15)
   })
 
   it('gives every build a slug, name, category and image', () => {
@@ -16,7 +16,7 @@ describe('concept builds', () => {
   })
 
   it('uses unique slugs', () => {
-    expect(new Set(BUILDS.map((b) => b.slug)).size).toBe(14)
+    expect(new Set(BUILDS.map((b) => b.slug)).size).toBe(BUILDS.length)
   })
 
   it('never claims a build is client work', () => {
@@ -48,14 +48,22 @@ describe('concept builds', () => {
     }
   })
 
-  it('gives every build a live url to stand behind', () => {
+  // A build with no url must say why in `provenance`, which is what the case
+  // study renders in place of the Visit link. Aurora is the first: unsigned-off
+  // copy and open photography rights make a public deployment a liability, so
+  // there is nothing to link to yet. Silence would read as an oversight.
+  it('gives every build either a live url or a stated reason there is none', () => {
     for (const b of BUILDS) {
-      expect(b.url, `${b.slug} has no url`).toMatch(/^https:\/\//)
+      if (b.url === undefined) {
+        expect(b.provenance, `${b.slug} has no url and no provenance note`).toBeTruthy()
+      } else {
+        expect(b.url, `${b.slug} has a malformed url`).toMatch(/^https:\/\//)
+      }
     }
   })
 
   it('filters by category and returns everything for "all"', () => {
-    expect(filterBuilds(BUILDS, 'all')).toHaveLength(14)
+    expect(filterBuilds(BUILDS, 'all')).toHaveLength(BUILDS.length)
     const hospitality = filterBuilds(BUILDS, 'Hospitality & wellness')
     expect(hospitality.length).toBeGreaterThan(0)
     expect(hospitality.every((b) => b.category === 'Hospitality & wellness')).toBe(true)

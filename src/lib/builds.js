@@ -3,12 +3,13 @@
 // covered by the voice test — these are proper nouns, not brand voice. Do not
 // add BUILDS to that check, and do not rename the build to satisfy it.
 //
-// NOTE: `cutsandedges-hero.jpeg` was removed on 2026-09-08 and must not come
-// back. It is a live lawn-care business, not a speculative build: the screenshot
-// carries a working phone number, (514) 561-9746, and cutsandedges21@gmail.com,
-// which is the owner's own address. Listing a real business in a set labelled
-// "concept builds" is the same false claim about real work that keeps
-// `glorync-hero.jpeg` out — see spec §2. Fourteen builds, not fifteen.
+// NOTE: several entries — Piment, Meridian, Cuts and Edges, Gloryn Custom —
+// are commissioned work for live businesses, not speculative builds. They were
+// once barred for that reason, because every entry was labelled "concept build"
+// and calling real work speculative was the false claim being avoided. Provenance
+// is now declared per build (`own`, and `provenance` where the default sentence
+// does not fit), so real work can be shown as real work. What must never happen
+// is the reverse: a build described as ours that is not. See spec §2.
 //
 // Every blurb below was written with the screenshot open. Nothing here may
 // assert a fact the image does not show — no phone numbers, no stockists, no
@@ -52,6 +53,7 @@ const CATALOGUE = [
   },
   { slug: 'piment',         name: 'Piment',         category: 'Food & drink', image: '/builds/piment-hero.jpeg',          blurb: 'Restaurant. Menu, hours and a reservation link above the fold, because that is all anyone came for.',
     own: true,
+    provenance: 'A commissioned build for a working restaurant — real work, not a concept piece.',
     url: 'https://piment-demo.vercel.app/',
     year: '2025',
     discipline: 'Design & build',
@@ -79,6 +81,7 @@ const CATALOGUE = [
   },
   { slug: 'meridian',       name: 'Meridian',       category: 'Studio & brand',        image: '/builds/meridian-hero.png',         blurb: 'Design studio. A portfolio that gets out of the way of the work.',
     own: true,
+    provenance: 'A commissioned build for a working design studio — real work, not a concept piece.',
     url: 'https://summitsites-agency.github.io/meridian-studio/',
     year: '2025',
     discipline: 'Design & build',
@@ -144,6 +147,7 @@ const CATALOGUE = [
   },
   { slug: 'cuts-and-edges',  name: 'Cuts and Edges', category: 'Local trade',  image: '/builds/cutsandedges-hero.jpeg',    blurb: 'Lawn care, presented as editorial rather than trades. Drone footage, a serif masthead, and the services as a numbered list.',
     own: true,
+    provenance: 'A commissioned build for a working lawn care company — real work, not a concept piece.',
     url: 'https://cutsandedges.vercel.app/',
     year: '2025',
     discipline: 'Design & build',
@@ -153,12 +157,25 @@ const CATALOGUE = [
   },
   { slug: 'gloryn',          name: 'Gloryn Custom',  category: 'Local trade',  image: '/builds/glorync-hero.jpeg',         blurb: 'Car aesthetics. Ambient lighting and starlight headliners, sold the only way they can be - by showing them.',
     own: true,
+    provenance: 'A commissioned build for a working car aesthetics shop — real work, not a concept piece.',
     url: 'https://gloryncustom.com/',
     year: '2025',
     discipline: 'Design & build',
     challenge: 'Interior lighting is almost impossible to describe and immediate to recognise. Every word spent explaining it is a word that loses the reader.',
     approach: 'Lead with the work at full bleed, in the dark, where the lighting actually reads. Copy is kept to the few things a photograph cannot say.',
     outcome: 'The effect sells itself in the first second. The rest of the page only has to make booking easy.',
+  },
+  // `provenance` overrides the default "concept build, not commissioned" line,
+  // which would be untrue here.
+  { slug: 'aurora',          name: 'Aurora',         category: 'Retail',       image: '/builds/aurora-hero.jpg',           blurb: 'Handmade swimwear. One silhouette, seven colourways, and a page that takes on the colour of whichever one you are looking at.',
+    own: true,
+    provenance: 'A commissioned build, in progress — shown here before launch.',
+    url: 'https://aurora-swimwear.vercel.app/',
+    year: '2026',
+    discipline: 'Design & build',
+    challenge: 'A swim label with one silhouette and seven colourways has nothing to separate the products except colour, and colour is the first thing a grid of small thumbnails flattens.',
+    approach: 'The page wears the colour. Hovering a shade, or opening it, tweens the whole ground to that tone and floats the garment straight onto the tint instead of parking it in a white box.',
+    outcome: 'Seven near-identical products read as seven distinct things, because the page commits to one of them completely for as long as it is being looked at.',
   },
 ]
 
@@ -173,6 +190,7 @@ const CATALOGUE = [
  * ignored rather than leaving a hole.
  */
 const ORDER = [
+  'aurora',
   'cuts-and-edges',
   'air-center',
   'piment',

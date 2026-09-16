@@ -21,6 +21,6 @@ export const FAQS = [
   },
   {
     q: 'Is the work on the site real client work?',
-    a: 'No, and we would rather say so plainly. The builds shown are concept builds — made to show what we can do rather than to dress up a client list we do not have yet.',
+    a: 'Some of it. Several of the builds shown were commissioned by working businesses and are running them now. The rest are concept builds — made to show what we can do rather than to pad out a list. Every case study says which it is, in a line at the top, so you never have to guess.',
   },
 ]

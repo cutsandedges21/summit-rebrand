@@ -116,6 +116,9 @@ function keyframes(dir, name, p) {
  *   a low `axis` the cards are still at full size when the container clips them — a dead-straight
  *   horizontal cut across the whole frame, which reads as a crop rather than a bleed. Omit for the
  *   unmasked original.
+ * @param {boolean} [props.stream] Render the corridor at all. False keeps this component as a plain
+ *   stage for its children — the geometry above is untouched and switching it back on is a one-word
+ *   change at the call site. Nothing else about the hero depends on it.
  * @param {import('react').ReactNode} [props.children] Content rendered above the corridor.
  * @param {string} [props.className]
  */
@@ -126,6 +129,7 @@ export default function ImageStreamHero({
   axis = 55,
   path,
   fadeBelow,
+  stream = true,
   children,
   className = '',
   style,
@@ -156,6 +160,11 @@ export default function ImageStreamHero({
       {...rest}
       style={{ containerType: 'inline-size', ...style }}
     >
+      {/* Emitting fifty keyframe stops and eighteen lazy <img>s for a corridor
+          nobody renders is pure cost, so the whole stage is skipped rather than
+          hidden with a class. */}
+      {stream && (
+        <>
       <style>{css}</style>
 
       <div
@@ -218,6 +227,8 @@ export default function ImageStreamHero({
           )}
         </div>
       </div>
+        </>
+      )}
 
       {children}
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { useReducedMotion } from '../lib/motion.js'
+import { useIsMobile, useReducedMotion } from '../lib/motion.js'
 
 /**
  * Gradient footer glow, adapted from Ruixen UI's gradient footer.
@@ -77,13 +77,15 @@ export default function GradientFooter({
   const uid = useId().replace(/:/g, '')
   const bandRef = useRef(null)
   const reduced = useReducedMotion()
+  const isMobile = useIsMobile()
   // minReveal = flat on the floor, 1 = risen to full height.
   const [progress, setProgress] = useState(minReveal)
 
   useEffect(() => {
     // Under reduced motion the band is laid out in flow at full height instead
-    // of being scaled by scroll position, so there is nothing to track.
-    if (reduced) return undefined
+    // of being scaled by scroll position, so there is nothing to track. On
+    // phones there is no band at all.
+    if (reduced || isMobile) return undefined
     const el = bandRef.current
     if (!el) return undefined
 
@@ -110,7 +112,21 @@ export default function GradientFooter({
       win.removeEventListener('scroll', measure)
       win.removeEventListener('resize', measure)
     }
-  }, [minReveal, reduced])
+  }, [minReveal, reduced, isMobile])
+
+  // Phones get the footer without the glow. The band is sized in vh and pinned
+  // across the full width, so on a narrow screen it is a large saturated wash
+  // under the contact copy rather than the quiet rise it is on a wide one — and
+  // dropping it also drops the scroll listener and the blurred SVG on exactly
+  // the devices least able to afford them. No reserved padding either, since
+  // there is nothing to land in it.
+  if (isMobile) {
+    return (
+      <footer className={className} style={style}>
+        {children}
+      </footer>
+    )
+  }
 
   const colW = VBW / bars
 

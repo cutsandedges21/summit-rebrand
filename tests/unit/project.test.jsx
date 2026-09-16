@@ -16,17 +16,27 @@ function renderProject(slug) {
   )
 }
 
-const own = BUILDS.find((b) => b.own)
+// `own` has to be a build on the DEFAULT provenance sentence with a live url —
+// not merely the first `own` build, which is now Aurora and is neither. Picking
+// by position is what broke when Aurora went to the front of the running order.
+const own = BUILDS.find((b) => b.own && !b.provenance && b.url)
 const notOwn = BUILDS.find((b) => !b.own)
+const overridden = BUILDS.find((b) => b.own && b.provenance)
+const unlinked = BUILDS.find((b) => !b.url)
 
 describe('project case study', () => {
+  // One render of every case study in a single test, and each one splits its
+  // headline into per-character motion spans. At fourteen builds that fitted
+  // inside vitest's 5s default; the fifteenth pushed it to ~5.3s under parallel
+  // workers and it started failing roughly one run in four. The work is real,
+  // not a hang, so give it room rather than thinning the loop.
   it('renders a page for every build', () => {
     for (const build of BUILDS) {
       const { unmount } = renderProject(build.slug)
       expect(screen.getByTestId('project-page')).toBeInTheDocument()
       unmount()
     }
-  })
+  }, 20_000)
 
   it('shows the three case study sections', () => {
     renderProject(own.slug)
@@ -59,11 +69,30 @@ describe('project case study', () => {
     expect(screen.queryByText(/our approach/i)).not.toBeInTheDocument()
   })
 
+  // Commissioned work is still "built here", but the default sentence denies it
+  // was commissioned — so a build carrying `provenance` must show its own words
+  // and never the default's.
+  it('lets a build override the provenance sentence without losing the chip', () => {
+    renderProject(overridden.slug)
+    expect(screen.getByText(/built here/i)).toBeInTheDocument()
+    expect(screen.getByText(overridden.provenance)).toBeInTheDocument()
+    expect(screen.queryByText(/not commissioned by a client/i)).not.toBeInTheDocument()
+  })
+
   it('links to the live site when there is one', () => {
     renderProject(own.slug)
     const link = screen.getByRole('link', { name: /visit the live site/i })
     expect(link).toHaveAttribute('href', own.url)
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
+  })
+
+  // Aurora was the only build without a url and it has one now, so there may be
+  // nothing to exercise. The `build.url &&` guard is still live code and the
+  // next in-progress build will land on it, so this stays and stands down
+  // rather than being deleted and rediscovered the hard way.
+  it.skipIf(!unlinked)('renders no Visit link at all when a build has no live site', () => {
+    renderProject(unlinked.slug)
+    expect(screen.queryByRole('link', { name: /visit the live site/i })).not.toBeInTheDocument()
   })
 
   it('offers a link onward to the next project', () => {

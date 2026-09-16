@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { BUILDS } from '../../src/lib/builds.js'
 
 /**
  * Scroll, then wait for the page to actually stop. Lenis eases every wheel
@@ -67,16 +68,15 @@ test.describe('desktop', () => {
     await expect(items.nth(0)).toHaveAttribute('data-active', 'false')
   })
 
-  test('the corridor is actually moving', async ({ page }) => {
+  // The corridor was parked on 2026-09-15 — the moving screenshots behind the
+  // headline distracted from it. This used to assert the cards were in motion;
+  // it now asserts nothing is running back there, which is the property that
+  // would actually regress if SHOW_STREAM were flipped by accident. The
+  // corridor's own behaviour is covered in tests/unit/hero.test.jsx.
+  test('no corridor runs behind the headline', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByTestId('hero-stage')).toHaveAttribute('data-static', 'false')
-
-    // data-static is a declaration of intent; this is the corridor's own
-    // transform, which is what the visitor sees.
-    const card = page.getByTestId('stream-card').first()
-    const before = await card.evaluate((el) => getComputedStyle(el).transform)
-    await page.waitForTimeout(600)
-    expect(await card.evaluate((el) => getComputedStyle(el).transform)).not.toBe(before)
+    await expect(page.getByTestId('hero-stage')).toBeVisible()
+    await expect(page.getByTestId('stream-card')).toHaveCount(0)
   })
 
   // The preview column was static once, which left a ~380x373 hole beside the
@@ -144,7 +144,12 @@ test.describe('mobile', () => {
   // sized entirely in cqw — shares of its own container's width — so it holds
   // its proportions at any size and has no mobile branch to collapse to. What
   // matters on a phone is that it is fully present and fully inside the frame.
-  test('the corridor renders in full and stays inside the frame', async ({ page }) => {
+  // Skipped, not deleted: these two drive the corridor through the real hero,
+  // and the hero no longer renders it (Hero.jsx, SHOW_STREAM). The assertions
+  // are still the right ones — flipping that switch back on should mean
+  // un-skipping these in the same commit. The corridor's markup and geometry
+  // stay covered in tests/unit/hero.test.jsx meanwhile.
+  test.skip('the corridor renders in full and stays inside the frame', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('stream-card')).toHaveCount(18)
 
@@ -247,7 +252,7 @@ test.describe('mobile', () => {
             ).length,
         ),
       )
-      .toBe(14)
+      .toBe(BUILDS.length)
   })
 
   // The index tracks scroll through an observer that is deliberately not
@@ -263,7 +268,8 @@ test.describe('mobile', () => {
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce' })
 
-  test('the corridor freezes as a finished still', async ({ page }) => {
+  // Skipped for the same reason as above — see SHOW_STREAM in Hero.jsx.
+  test.skip('the corridor freezes as a finished still', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByTestId('hero-stage')).toHaveAttribute('data-static', 'true')
 

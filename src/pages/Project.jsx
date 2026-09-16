@@ -106,13 +106,17 @@ export default function Project() {
         </div>
 
         {/* Provenance, stated rather than implied. Spec §2: nothing on this site
-            may present someone else's website as our work. */}
+            may present someone else's website as our work.
+            `build.provenance` overrides the sentence for builds the default does
+            not describe — commissioned work, where "not commissioned" is simply
+            false. The chip is not overridable: we either built it or we did not. */}
         <p className="mt-6 font-sans text-[12px] leading-relaxed text-ink-muted">
           {build.own ? (
             <>
               <span className="bg-accent px-2 py-0.5 font-semibold text-ink">Built here</span>
               <span className="ml-3">
-                A concept build — made to show what we can do, not commissioned by a client.
+                {build.provenance ??
+                  'A concept build — made to show what we can do, not commissioned by a client.'}
               </span>
             </>
           ) : (

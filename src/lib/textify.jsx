@@ -166,7 +166,27 @@ function Piece({ mask, origin, variants, children, block }) {
   return (
     <span
       className={`${flow} overflow-hidden align-bottom`}
-      style={{ paddingBottom: '0.16em', marginBottom: '-0.16em' }}
+      // The mask has to clip vertically — that is the whole reveal — but it must
+      // not clip horizontally, and overflow-hidden does not take an axis.
+      //
+      // A glyph's ink is not bounded by its advance width. The italic display
+      // face overhangs to the right by a real margin, so per-character clipping
+      // sliced the terminals clean off the `e` and the `r` of "answer" in the
+      // hero: the arm of the r just stopped at a vertical edge. Padding the box
+      // out and pulling the same distance back as negative margin gives the ink
+      // room to render while leaving the advance width — and so the kerning and
+      // the line breaks — exactly where they were.
+      //
+      // Both sides, because italics lean left at the baseline as much as they
+      // lean right at the x-height.
+      style={{
+        paddingBottom: '0.16em',
+        marginBottom: '-0.16em',
+        paddingLeft: '0.12em',
+        marginLeft: '-0.12em',
+        paddingRight: '0.12em',
+        marginRight: '-0.12em',
+      }}
     >
       {body}
     </span>

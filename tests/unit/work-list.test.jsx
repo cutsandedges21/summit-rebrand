@@ -10,7 +10,7 @@ const renderList = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 describe('WorkList', () => {
   it('lists every build by default', () => {
     renderList(<WorkList builds={BUILDS} />)
-    expect(screen.getAllByTestId('work-row')).toHaveLength(14)
+    expect(screen.getAllByTestId('work-row')).toHaveLength(BUILDS.length)
   })
 
   it('limits the list when given a limit', () => {

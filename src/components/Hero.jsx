@@ -37,6 +37,13 @@ const AXIS = 84
 // thin out, and these five come round roughly twice per rail.
 const STREAM_SLUGS = ['cuts-and-edges', 'brand-cosmetics', 'drinksom', 'air-center', 'halcyon']
 
+// The corridor is parked, not removed — turned off on 2026-09-15 because the
+// moving screenshots behind the headline were more distracting than persuasive.
+// Everything it needs is still here and still tested (tests/unit/hero.test.jsx
+// exercises ImageStreamHero directly): flip this to true and the hero is exactly
+// as it was. AXIS, fadeBelow and the card derivatives below are all its.
+const SHOW_STREAM = false
+
 const STREAM = STREAM_SLUGS
   // Resolved against BUILDS rather than hand-written, so a slug that is renamed
   // or retired drops out here instead of pointing the corridor at a 404 — which
@@ -54,6 +61,7 @@ export default function Hero() {
   return (
     <ImageStreamHero
       images={STREAM}
+      stream={SHOW_STREAM}
       axis={AXIS}
       speed={22}
       // The rails are wider than they are tall by the time they exit, so at this
@@ -65,7 +73,16 @@ export default function Hero() {
       data-testid="hero-stage"
       data-static={String(reduced)}
     >
-      <div className="relative flex min-h-[92vh] flex-col items-center justify-start pt-[14vh] text-center">
+      {/* The top-weighted setting exists for the corridor: the type had to sit
+          high so the cards could sweep through the empty lower half. With the
+          corridor parked that half is just a hole, so the content centres
+          instead. Both settings live here rather than in the false branch only,
+          so turning SHOW_STREAM back on restores the original hero exactly. */}
+      <div
+        className={`relative flex min-h-[92vh] flex-col items-center text-center ${
+          SHOW_STREAM ? 'justify-start pt-[14vh]' : 'justify-center pb-[4vh]'
+        }`}
+      >
         <Textify as="p" preset="riseWords" className="label mb-5" amount={0.2}>
           Web design, build and upkeep — Montreal
         </Textify>

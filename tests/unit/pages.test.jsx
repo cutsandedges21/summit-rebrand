@@ -4,13 +4,14 @@ import { MemoryRouter } from 'react-router-dom'
 import Portfolio from '../../src/pages/Portfolio.jsx'
 import Services from '../../src/pages/Services.jsx'
 import Pricing from '../../src/pages/Pricing.jsx'
+import { BUILDS } from '../../src/lib/builds.js'
 
 const wrap = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
 describe('portfolio page', () => {
-  it('shows all fourteen builds with the filter', () => {
+  it('shows every build with the filter', () => {
     wrap(<Portfolio />)
-    expect(screen.getAllByTestId('work-row')).toHaveLength(14)
+    expect(screen.getAllByTestId('work-row')).toHaveLength(BUILDS.length)
     expect(screen.getByTestId('work-filter')).toBeInTheDocument()
   })
 
