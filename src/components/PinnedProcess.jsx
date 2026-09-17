@@ -104,7 +104,7 @@ export default function PinnedProcess() {
             style={{ fontSize: 'var(--text-section)' }}
           >
             Four steps, <br />
-            start to live.
+            start to finish
           </Textify>
 
           {/* Desktop only, and not for layout reasons. The index tracks the

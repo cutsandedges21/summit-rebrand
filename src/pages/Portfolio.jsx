@@ -11,7 +11,7 @@ export default function Portfolio() {
         heading={
           <>
             Sites built to be <em>used</em>, <br />
-            not admired.
+            not admired
           </>
         }
         /* Sells at a glance; it does not disclaim. Provenance is stated on each

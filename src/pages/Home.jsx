@@ -127,7 +127,7 @@ export default function Home() {
           style={{ fontSize: 'var(--text-section)' }}
         >
           Tell us what the site <br />
-          has to <em>do</em>.
+          has to <em>do</em>
         </Textify>
         <Reveal
           as="p"

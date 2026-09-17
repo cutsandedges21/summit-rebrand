@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_NOTE } from '../lib/plans.js'
+import { PLANS, ADDON_GROUPS, CARE_PLUS, PRICING_BASE_NOTE, PRICING_NOTE } from '../lib/plans.js'
 import PageHeader from '../components/PageHeader.jsx'
 import Reveal, { RevealItem } from '../components/Reveal.jsx'
 import Textify from '../lib/textify.jsx'
@@ -13,8 +13,8 @@ export default function Pricing() {
     <div data-testid="pricing-page" className="px-6 py-16 md:px-12">
       <PageHeader
         label="What it costs"
-        heading="Simple, honest pricing."
-        intro="Three plans, one flat monthly rate each, plus a one-time build fee. No hidden fees."
+        heading="Simple, honest pricing"
+        intro="Three plans, one flat monthly base rate each, plus a one-time build fee. No hidden fees — anything on top of the base is quoted before it is billed."
       />
 
       <div ref={plans}>
@@ -69,6 +69,19 @@ export default function Pricing() {
       </Reveal>
       </div>
 
+      {/* Sits with the plan columns rather than in the footnote block below,
+          because it qualifies the figure printed on every card. A base rate the
+          visitor only discovers in the Terms is the hidden fee this page claims
+          not to have. */}
+      <Reveal
+        as="p"
+        variant="up"
+        data-testid="pricing-base-note"
+        className="mt-10 max-w-2xl border-t border-ink pt-4 font-sans text-[13px] leading-relaxed text-ink-muted"
+      >
+        {PRICING_BASE_NOTE}
+      </Reveal>
+
       <section className="mt-24 border-t border-rule pt-14">
         <Reveal as="p" variant="up" duration={0.7} className="label mb-4">
           Optional extras
@@ -79,7 +92,7 @@ export default function Pricing() {
           className="font-display leading-tight tracking-tight"
           style={{ fontSize: 'var(--text-section)' }}
         >
-          Add-ons.
+          Add-ons
         </Textify>
         <div className="mt-10 grid gap-10 md:grid-cols-2">
           {ADDON_GROUPS.map((group) => (

@@ -109,6 +109,20 @@ export const TERMS_SECTIONS = [
       'Invoices are due by the date stated on the invoice. Late or missed payments may result in work being paused or the site being taken offline until the account is brought current.',
     ],
   },
+  // Added deliberately, not ported. The header above says not to quietly
+  // rewrite this file; this section was requested, and it commits the business
+  // to a position on third-party costs, so it is written out in full rather
+  // than gestured at. Mirrors PRICING_BASE_NOTE in lib/plans.js — if the
+  // charges listed here change, change that note too.
+  {
+    h: 'Base Rates & Additional Charges',
+    body: [
+      'The monthly rate quoted for your plan is a base rate, not a cap. It covers the services listed in that plan and nothing beyond them. Additional charges apply for anything outside the plan, and are quoted to you before they are billed.',
+      'Additional charges include: add-ons taken alongside your plan, such as unlimited edits, Google Business Profile management, analytics reporting, copywriting, and booking or scheduling systems; work beyond the hours your plan includes; extra pages, new features, and project work outside the agreed scope; and third-party costs.',
+      'Third-party costs are charged by providers other than us. They include domain registration and renewal, business email hosting, premium plugins, themes, fonts, and stock media licences, booking, SMS, and scheduling providers, payment processing fees, and any advertising spend. These prices are set by the provider, are subject to their own terms, and may change without notice to us.',
+      'We may, at our discretion, cover a third-party charge on your behalf or carry it within your plan. We are under no obligation to do so, any such arrangement applies only to the specific charge agreed, and it may be withdrawn on notice for future billing periods. Whether a third-party service is purchased at all, and at what tier, remains your decision as the client. If you decline a third-party service, we are not responsible for any resulting loss of functionality.',
+    ],
+  },
   {
     h: 'Your Responsibilities',
     body: [

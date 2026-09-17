@@ -21,7 +21,7 @@ export default function Contact() {
     <div data-testid="contact-page" className="px-6 py-16 md:px-12">
       <PageHeader
         label="Get in touch"
-        heading="Let's build something."
+        heading="Let's build something"
         intro="Tell us about your business — no commitment, no pressure. We reply within 24 hours."
       />
 

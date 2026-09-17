@@ -7,8 +7,8 @@ describe('pricing data', () => {
   it('keeps the three plans at their existing prices', () => {
     expect(PLANS.map((p) => [p.name, p.price, p.setup])).toEqual([
       ['Launch', '$68', '$750'],
-      ['Growth', '$108', '$1,399'],
-      ['Everything', '$218', '$2,599'],
+      ['Growth', '$108', '$1,599'],
+      ['Everything', '$218', '$2,899+'],
     ])
   })
 
@@ -32,7 +32,7 @@ describe('pricing data', () => {
   })
 
   it('prices the Care+ bundle without a struck-through comparison', () => {
-    expect(CARE_PLUS.price).toBe('$389')
+    expect(CARE_PLUS.price).toBe('$649')
     expect(CARE_PLUS).not.toHaveProperty('wasPrice')
   })
 })

@@ -42,7 +42,7 @@ export default function About() {
 
   return (
     <div data-testid="about-page" className="px-6 py-16 md:px-12">
-      <PageHeader label="Who you are hiring" heading="Small studio. Montreal." />
+      <PageHeader label="Who you are hiring" heading="We're a small studio in Montreal" />
 
       <div className="mt-10 grid gap-12 md:grid-cols-[minmax(0,1fr)_260px] md:gap-20">
         <Reveal variant="fade" stagger={0.1} className="max-w-xl font-sans leading-relaxed text-ink-muted">
