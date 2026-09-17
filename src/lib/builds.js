@@ -167,6 +167,28 @@ const CATALOGUE = [
   },
   // `provenance` overrides the default "concept build, not commissioned" line,
   // which would be untrue here.
+  { slug: 'heavn-one',       name: 'HEAVN One',      category: 'Retail',       image: '/builds/heavn-one-hero.jpg',        blurb: 'Desk luminaire. One product, photographed like an object rather than listed like a spec sheet.',
+    own: true,
+    // No url, so this has to say why — see the provenance test in
+    // tests/unit/builds.test.js. It is also the honest line: nothing was
+    // commissioned here and nothing is deployed.
+    provenance: 'A concept piece, made from inspiration rather than a brief — not commissioned, and not deployed.',
+    year: '2026',
+    discipline: 'Concept exercise',
+    challenge: 'A single premium product has to justify its price before it explains itself. Lead with the specification and it reads as hardware; lead with the claim and there is nothing to look at.',
+    approach: 'Show the luminaire at scale and lit by its own light, and hold the numbers back until someone has scrolled far enough to want them.',
+    outcome: 'The object does the persuading and the specification closes it, which is the order a considered purchase is actually made in.',
+  },
+  { slug: 'da-maria',        name: 'Da Maria',       category: 'Food & drink', image: '/builds/da-maria-hero.jpg',         blurb: 'Italian restaurant. Menu, reservations and the room itself, with the booking link never more than one tap away.',
+    own: true,
+    provenance: 'A commissioned build for a working restaurant — real work, not a concept piece.',
+    url: 'https://da-maria-demo.vercel.app/',
+    year: '2026',
+    discipline: 'Design & build',
+    challenge: 'A restaurant site carries four jobs at once — menu, reservations, the shop, and the atmosphere that makes someone want any of them. Most sites pick one and bury the rest a click deeper.',
+    approach: 'Separate pages for menu, reservations and shop, each reachable from anywhere, with the photography carrying the room rather than a paragraph describing it.',
+    outcome: 'The three things people came to do are one tap apart, and the atmosphere is doing its work behind them instead of standing in their way.',
+  },
   { slug: 'aurora',          name: 'Aurora',         category: 'Retail',       image: '/builds/aurora-hero.jpg',           blurb: 'Handmade swimwear. One silhouette, seven colourways, and a page that takes on the colour of whichever one you are looking at.',
     own: true,
     provenance: 'A commissioned build, in progress — shown here before launch.',
@@ -193,8 +215,13 @@ const ORDER = [
   'aurora',
   'cuts-and-edges',
   'air-center',
-  'piment',
+  // Da Maria took Piment's place in the home page's top five on 2026-09-16.
+  // Both are restaurants, so only one of them belongs in a five-slot teaser;
+  // Piment stays immediately behind it rather than dropping to the catalogue
+  // tail, which keeps the portfolio's running order intact.
+  'da-maria',
   'drinksom',
+  'piment',
   'khufus',
   'lamborghini',
   'brand-cosmetics',

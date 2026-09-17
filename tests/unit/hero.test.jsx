@@ -40,7 +40,7 @@ describe('Hero', () => {
   it('renders the headline', () => {
     renderHero()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      /businesses that answer the phone/i,
+      /businesses that refuse to blend in/i,
     )
   })
 

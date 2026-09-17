@@ -13,7 +13,10 @@ import { EASE } from '../lib/textify.jsx'
 const SUFFIX = 'mossimo Studios'
 
 const TITLES = {
-  '/': 'Websites for businesses that answer the phone',
+  // The home tab says the brand and nothing else. Every other route keeps
+  // "<page> — mossimo Studios"; titleFor skips the suffix when they match, so
+  // this does not come out as "mossimo Studios — mossimo Studios".
+  '/': SUFFIX,
   '/portfolio': 'Portfolio',
   '/services': 'Services',
   '/pricing': 'Pricing',
@@ -32,7 +35,7 @@ const TITLES = {
  */
 function titleFor(pathname) {
   const known = TITLES[pathname]
-  if (known) return `${known} — ${SUFFIX}`
+  if (known) return known === SUFFIX ? SUFFIX : `${known} — ${SUFFIX}`
 
   const build = BUILDS.find((b) => pathname === `/portfolio/${b.slug}`)
   if (build) return `${build.name} — ${SUFFIX}`

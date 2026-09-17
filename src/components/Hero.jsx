@@ -4,6 +4,7 @@ import { BUILDS } from '../lib/builds.js'
 import { useReducedMotion } from '../lib/motion.js'
 import Textify, { EASE } from '../lib/textify.jsx'
 import ImageStreamHero from './ImageStreamHero.jsx'
+import Orbit from './Orbit.jsx'
 import Magnetic from './Magnetic.jsx'
 
 // The hero's imagery is the corridor in ImageStreamHero: two rails of build
@@ -44,16 +45,45 @@ const STREAM_SLUGS = ['cuts-and-edges', 'brand-cosmetics', 'drinksom', 'air-cent
 // as it was. AXIS, fadeBelow and the card derivatives below are all its.
 const SHOW_STREAM = false
 
-const STREAM = STREAM_SLUGS
-  // Resolved against BUILDS rather than hand-written, so a slug that is renamed
-  // or retired drops out here instead of pointing the corridor at a 404 — which
-  // is exactly how cuts-and-edges and gloryn were silently missing before.
-  .map((slug) => BUILDS.find((build) => build.slug === slug))
-  .filter(Boolean)
-  .map((build) => ({
-    src: `/builds/stream/${build.slug}.jpg`,
-    alt: build.name,
-  }))
+// The orbit that replaced the parked corridor as the hero's imagery: a ring of
+// six screenshots turning around the headline. See Orbit.jsx for the geometry.
+//
+// Eight, not the whole catalogue. The ring spaces its cards evenly around 360°,
+// so the count IS the spacing, and the ring is deliberately wider than the frame
+// — only an arc of it is ever on screen. Too few and that arc is empty for long
+// stretches as it turns; the reference runs ten for the same reason. Eight is
+// the ceiling before the corners start touching and the ring reads as a solid
+// wheel rather than as separate pieces of work.
+//
+// The five commissioned builds lead. The three concepts that follow are carried
+// on their images alone, being the strongest in the set. That ordering is the
+// argument the hero makes — the first thing on the site is real work for real
+// businesses, not a speculative reel.
+const ORBIT_SLUGS = [
+  'cuts-and-edges',
+  'heavn-one',
+  'gloryn',
+  'aurora',
+  'da-maria',
+  'halcyon',
+  'air-center',
+  'sterling',
+]
+
+// Resolved against BUILDS rather than hand-written, so a slug that is renamed
+// or retired drops out here instead of pointing at a 404 — which is exactly how
+// cuts-and-edges and gloryn were silently missing from the corridor before.
+const cards = (slugs) =>
+  slugs
+    .map((slug) => BUILDS.find((build) => build.slug === slug))
+    .filter(Boolean)
+    .map((build) => ({
+      src: `/builds/stream/${build.slug}.jpg`,
+      alt: build.name,
+    }))
+
+const STREAM = cards(STREAM_SLUGS)
+const ORBIT = cards(ORBIT_SLUGS)
 
 export default function Hero() {
   const reduced = useReducedMotion()
@@ -73,19 +103,30 @@ export default function Hero() {
       data-testid="hero-stage"
       data-static={String(reduced)}
     >
+      {/* Behind the type and before it in the DOM, so the headline paints over
+          the ring without either one needing a z-index. The section above is
+          already overflow-hidden, which is what keeps the ring from widening
+          the document on a narrow screen. */}
+      {!SHOW_STREAM && <Orbit images={ORBIT} />}
+
       {/* The top-weighted setting exists for the corridor: the type had to sit
           high so the cards could sweep through the empty lower half. With the
-          corridor parked that half is just a hole, so the content centres
-          instead. Both settings live here rather than in the false branch only,
-          so turning SHOW_STREAM back on restores the original hero exactly. */}
+          corridor parked the content centres instead — which is also exactly
+          where the orbit wants it, in the hole at the middle of the ring. Both
+          settings live here rather than in the false branch only, so turning
+          SHOW_STREAM back on restores the original hero exactly. */}
       <div
         className={`relative flex min-h-[92vh] flex-col items-center text-center ${
           SHOW_STREAM ? 'justify-start pt-[14vh]' : 'justify-center pb-[4vh]'
         }`}
       >
-        <Textify as="p" preset="riseWords" className="label mb-5" amount={0.2}>
-          Web design, build and upkeep — Montreal
-        </Textify>
+        {/* The eyebrow above the headline is off for now — the headline opens the
+            page on its own. Restore it by putting back:
+              <Textify as="p" preset="riseWords" className="label mb-5" amount={0.2}>
+                Website design, local SEO and upkeep — Montreal
+              </Textify>
+            The h1's delay of 0.1 was set to follow that line in, and still reads
+            as a beat before the headline without it. */}
 
         {/* Textify's own banner configuration: per-character masked rise,
             stagger 0.025, duration 0.7, expo.inOut. The explicit space before
@@ -98,10 +139,12 @@ export default function Hero() {
           delay={0.1}
           amount={0.2}
           className="font-display leading-[1.02] tracking-tight"
-          style={{ fontSize: 'var(--text-hero)' }}
+          // Scaled off the shared token rather than shrinking the token itself:
+          // --text-hero is the site-wide display size and other pages lean on it.
+          style={{ fontSize: 'calc(var(--text-hero) * 0.88)' }}
         >
-          We build <em>websites</em> for businesses <br />
-          that <em>answer</em> the phone.
+          <em>Beautiful</em> websites for businesses <br />
+          that refuse to <em>blend in</em>
         </Textify>
 
         <Textify
@@ -111,7 +154,8 @@ export default function Hero() {
           amount={0.2}
           className="mt-7 max-w-lg font-sans text-ink-muted"
         >
-          Design, build, local SEO and upkeep — handled start to finish, in one place.
+          We turn your brand into a digital experience people notice, remember, and want to
+          come back to
         </Textify>
 
         <fm.div

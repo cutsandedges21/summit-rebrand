@@ -156,24 +156,11 @@ export default function Project() {
         ))}
       </div>
 
-      {build.url && (
-        <Reveal variant="up" className="mt-10">
-          <a
-            href={build.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative inline-block overflow-hidden bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase"
-          >
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100 motion-reduce:transition-none"
-            />
-            <span className="relative transition-colors duration-500 group-hover:text-paper group-focus-visible:text-paper">
-              Visit the live site ↗
-            </span>
-          </a>
-        </Reveal>
-      )}
+      {/* No "Visit the live site" button. Removed on the owner's instruction:
+          the case study is the portfolio, and sending someone off to a third
+          party from it costs the visit. `url` is still carried on every build
+          in lib/builds.js — it is the record of where the work lives, and the
+          provenance test still reads it — it is simply not linked from here. */}
 
       <Reveal as="nav" variant="up" className="mt-20 border-t border-rule pt-6">
         <p className="label mb-2">Next</p>

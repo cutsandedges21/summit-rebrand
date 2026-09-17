@@ -82,10 +82,33 @@ export default function Nav() {
   const theme = useBackdropTheme()
   const { pathname } = useLocation()
 
+  // Where the bar stops floating and takes a background. Off the top of the
+  // page that is 40px, but on a route with a hero it is the whole hero: the
+  // orbit is a ring of cards arcing over the top of the frame, and a filled
+  // bar sitting across their path cuts a straight edge through every card that
+  // passes under it. Nothing above the fold should look cropped by furniture.
+  //
+  // Measured off the hero rather than assumed to be 92vh, which is only its
+  // MINIMUM height — long copy or a short window makes it taller, and the bar
+  // would then fill in while the cards were still going by. Falls back to 40
+  // on every route that has no hero, which is the behaviour it always had.
+  const [gate, setGate] = useState(40)
+
+  useEffect(() => {
+    const measure = () => {
+      const hero = document.querySelector('[data-testid="hero-stage"]')
+      setGate(hero ? hero.offsetTop + hero.offsetHeight : 40)
+    }
+
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [pathname])
+
   // Hide on the way down, reappear the moment you scroll up. Never while the
   // menu is open: retracting the bar would take the close button with it.
   useMotionValueEvent(scrollY, 'change', (y) => {
-    setLanded(y > 40)
+    setLanded(y > gate)
     if (reduced || open) return
     const previous = scrollY.getPrevious() ?? 0
     setHidden(y > 140 && y > previous)

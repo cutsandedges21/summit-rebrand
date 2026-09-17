@@ -27,7 +27,7 @@ export default function Home() {
       <div className="px-6 md:px-12">
         <Reveal variant="up" duration={0.7}>
           <Link to="/portfolio" className="label group inline-flex items-center gap-2 underline">
-            All fifteen builds
+            All seventeen builds
             <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(.87,0,.13,1)] group-hover:translate-x-1.5 motion-reduce:transition-none">
               →
             </span>

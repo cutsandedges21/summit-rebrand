@@ -79,18 +79,22 @@ describe('project case study', () => {
     expect(screen.queryByText(/not commissioned by a client/i)).not.toBeInTheDocument()
   })
 
-  it('links to the live site when there is one', () => {
+  // The inverse of what this used to assert. The Visit button was removed on
+  // the owner's instruction — the case study IS the portfolio, and sending
+  // someone to a third party from it costs the visit. `url` is still carried in
+  // lib/builds.js as the record of where the work lives, so the thing worth
+  // guarding is that carrying it never puts a link back on the page.
+  it('sends nobody off-site, even for builds that carry a url', () => {
+    expect(own.url, 'pick a build with a url or this proves nothing').toBeTruthy()
     renderProject(own.slug)
-    const link = screen.getByRole('link', { name: /visit the live site/i })
-    expect(link).toHaveAttribute('href', own.url)
-    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
+    expect(screen.queryByRole('link', { name: /visit the live site/i })).not.toBeInTheDocument()
+    const offsite = screen
+      .queryAllByRole('link')
+      .filter((a) => /^https?:/.test(a.getAttribute('href') ?? ''))
+    expect(offsite.map((a) => a.getAttribute('href'))).toEqual([])
   })
 
-  // Aurora was the only build without a url and it has one now, so there may be
-  // nothing to exercise. The `build.url &&` guard is still live code and the
-  // next in-progress build will land on it, so this stays and stands down
-  // rather than being deleted and rediscovered the hard way.
-  it.skipIf(!unlinked)('renders no Visit link at all when a build has no live site', () => {
+  it.skipIf(!unlinked)('renders no Visit link for a build with no live site either', () => {
     renderProject(unlinked.slug)
     expect(screen.queryByRole('link', { name: /visit the live site/i })).not.toBeInTheDocument()
   })
