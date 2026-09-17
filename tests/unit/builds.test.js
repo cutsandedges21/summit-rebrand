@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { BUILDS, CATEGORIES, filterBuilds } from '../../src/lib/builds.js'
 
 describe('concept builds', () => {
-  it('has seventeen builds', () => {
-    expect(BUILDS).toHaveLength(17)
+  it('has eighteen builds', () => {
+    expect(BUILDS).toHaveLength(18)
   })
 
   it('gives every build a slug, name, category and image', () => {

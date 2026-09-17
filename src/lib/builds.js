@@ -199,6 +199,19 @@ const CATALOGUE = [
     approach: 'The page wears the colour. Hovering a shade, or opening it, tweens the whole ground to that tone and floats the garment straight onto the tint instead of parking it in a white box.',
     outcome: 'Seven near-identical products read as seven distinct things, because the page commits to one of them completely for as long as it is being looked at.',
   },
+  // An inspiration piece, not a build — hence own: false and the Study
+  // discipline. Every line below was written with the three captures open:
+  // the day/night toggle, the 25-residence count and the New Golden Mile
+  // location are all stated on the page itself.
+  { slug: 'era-residence',   name: 'ERA Residence', category: 'Hospitality & wellness', image: '/builds/era-residence-hero.jpg',  blurb: 'Residences in Estepona. A masthead over open sky, a by day / by night switch, and an enquiry never further than the corner.',
+    own: false,
+    url: 'https://era-residence.com/',
+    year: '2026',
+    discipline: 'Study',
+    challenge: 'A gated development of twenty-five homes is sold long before anyone can walk through one. The page has to carry a place that does not exist yet, to a buyer deciding on feeling first and floorplans second.',
+    approach: 'A display masthead sits on open sky with the render underneath it, and a single by day / by night toggle re-lights the whole scene rather than opening a gallery. Select an Apartment and Book a call stay pinned in the corner through every section.',
+    outcome: 'The scale of the typography and the quiet of the palette do the persuading, and the two things a serious enquirer needs are reachable from any point on a very long page.',
+  },
 ]
 
 /**
