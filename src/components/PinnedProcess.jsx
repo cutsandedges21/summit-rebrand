@@ -7,6 +7,56 @@ import Textify, { EASE } from '../lib/textify.jsx'
 import Reveal from './Reveal.jsx'
 import { useBackdrop } from './Backdrop.jsx'
 
+/**
+ * One step, and one colour event. Its own component because useBackdrop is a
+ * hook and there are four of these in a map — and because the backdrop resolves
+ * the TIGHTEST themed box around the middle of the viewport, so a step nested
+ * inside the section's clay outranks it while it holds the line. The step needs
+ * two refs on one node: the backdrop's, and the parent's for the observer and
+ * for scrollToElement, hence the callback that feeds both.
+ */
+function ProcessStep({ step, mobile, onNode }) {
+  const backdrop = useBackdrop(step.theme)
+
+  return (
+    <div
+      data-testid="process-step"
+      data-backdrop-theme={step.theme}
+      ref={(el) => {
+        backdrop.current = el
+        onNode(el)
+      }}
+      className="border-t border-rule py-10 first:border-t-0 first:pt-0 md:min-h-[62vh]"
+    >
+      {/* Carries the number the index used to own on mobile. Kept as its
+          own node so the title stays one text node for getByText and a
+          screen reader. */}
+      {mobile && <p className="label mb-2">{step.num}</p>}
+      {/* Reveal, not a split: these four titles are the section's
+          actual content rather than display type, and splitting them
+          would scatter each one across a span per character — which is
+          how both getByText and a screen reader lose the sentence. */}
+      <Reveal
+        as="h3"
+        variant="up"
+        amount={0.4}
+        className="font-display leading-[1.1] tracking-tight"
+        style={{ fontSize: 'var(--text-sub)' }}
+      >
+        {step.title}
+      </Reveal>
+      <Reveal
+        as="p"
+        variant="up"
+        delay={0.12}
+        className="mt-3 max-w-md font-sans leading-relaxed text-ink-muted"
+      >
+        {step.body}
+      </Reveal>
+    </div>
+  )
+}
+
 export default function PinnedProcess() {
   const [activeIndex, setActiveIndex] = useState(0)
   const stepRefs = useRef([])
@@ -89,6 +139,7 @@ export default function PinnedProcess() {
                     {i === activeIndex && (
                       <motion.span
                         layoutId="process-marker"
+                        data-process-marker
                         className="absolute inset-0 bg-accent"
                         transition={{ duration: 0.5, ease: EASE.expoInOut }}
                       />
@@ -106,40 +157,14 @@ export default function PinnedProcess() {
 
         <div className="flex-1">
           {STEPS.map((step, i) => (
-            <div
+            <ProcessStep
               key={step.num}
-              data-testid="process-step"
-              ref={(el) => {
+              step={step}
+              mobile={mobile}
+              onNode={(el) => {
                 stepRefs.current[i] = el
               }}
-              className="border-t border-rule py-10 first:border-t-0 first:pt-0 md:min-h-[62vh]"
-            >
-              {/* Carries the number the index used to own on mobile. Kept as its
-                  own node so the title stays one text node for getByText and a
-                  screen reader. */}
-              {mobile && <p className="label mb-2">{step.num}</p>}
-              {/* Reveal, not a split: these four titles are the section's
-                  actual content rather than display type, and splitting them
-                  would scatter each one across a span per character — which is
-                  how both getByText and a screen reader lose the sentence. */}
-              <Reveal
-                as="h3"
-                variant="up"
-                amount={0.4}
-                className="font-display leading-[1.1] tracking-tight"
-                style={{ fontSize: 'var(--text-sub)' }}
-              >
-                {step.title}
-              </Reveal>
-              <Reveal
-                as="p"
-                variant="up"
-                delay={0.12}
-                className="mt-3 max-w-md font-sans leading-relaxed text-ink-muted"
-              >
-                {step.body}
-              </Reveal>
-            </div>
+            />
           ))}
         </div>
       </div>

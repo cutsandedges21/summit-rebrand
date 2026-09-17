@@ -34,7 +34,11 @@ const DOES_NOT_SUIT = [
 ]
 
 export default function About() {
-  const fit = useBackdrop('clay')
+  // The fit block is what this page is actually for — who the studio suits and
+  // who it does not — so it gets the colour, the way Pricing gives pink to the
+  // plans. Butter is the logo yellow, and it re-derives the ink ramp and the
+  // accent marker under [data-backdrop='butter'] in index.css.
+  const fit = useBackdrop('butter')
 
   return (
     <div data-testid="about-page" className="px-6 py-16 md:px-12">

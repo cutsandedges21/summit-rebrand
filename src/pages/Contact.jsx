@@ -13,7 +13,9 @@ const LINKS = [
 
 export default function Contact() {
   // The page's colour event sits on the one thing it is asking you to do.
-  const reach = useBackdrop('pink')
+  // Sage, so pink stays the pricing colour rather than being the house wash on
+  // every page — same green step 03 takes in the homepage process.
+  const reach = useBackdrop('sage')
 
   return (
     <div data-testid="contact-page" className="px-6 py-16 md:px-12">

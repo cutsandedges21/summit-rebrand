@@ -9,6 +9,9 @@ import Magnetic from './Magnetic.jsx'
  * Wrapped in <Magnetic>, which is inert on touch and under reduced motion.
  */
 export default function AccentButton({ to, href, children, className = '', ...rest }) {
+  // data-accent-button is the hook index.css uses to outline this on the butter
+  // backdrop, where the accent fill and the plate are the same yellow and the
+  // button would otherwise have no edge at all. See [data-backdrop='butter'].
   const classes =
     'group relative inline-block overflow-hidden bg-accent px-5 py-3 font-sans text-[11px] font-semibold tracking-[0.06em] uppercase ' +
     className
@@ -28,11 +31,11 @@ export default function AccentButton({ to, href, children, className = '', ...re
   return (
     <Magnetic>
       {to ? (
-        <Link to={to} className={classes} {...rest}>
+        <Link to={to} className={classes} data-accent-button {...rest}>
           {inner}
         </Link>
       ) : (
-        <a href={href} className={classes} {...rest}>
+        <a href={href} className={classes} data-accent-button {...rest}>
           {inner}
         </a>
       )}

@@ -15,6 +15,20 @@ export const THEMES = {
   paper: '#f9f7ef',
   clay: '#ebe5d8',
   pink: '#ff98e2',
+  // The four process steps, each taking the page as it reaches the middle of
+  // the viewport. Pink is spoken for by pricing, so this ladder runs warm to
+  // cool to blank instead: the logo yellow at plate weight, a cool sky, a green
+  // between them, then white as the section hands back to the page.
+  //
+  // Pitched at the pink's saturation rather than as pale tints, which means
+  // they are real colour plates and the ink ramp has to be re-derived against
+  // each one — see the [data-backdrop] blocks in index.css. On butter that
+  // includes --color-accent: the step index marker is the logo yellow, and on a
+  // full-strength yellow plate it would otherwise vanish.
+  butter: '#f8e34b',
+  sky: '#8ecff2',
+  sage: '#9adfb4',
+  blank: '#ffffff',
 }
 
 export const BACKDROP_EASE = 'cubic-bezier(0.445, 0.05, 0.55, 0.95)'

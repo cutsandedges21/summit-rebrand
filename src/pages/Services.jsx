@@ -23,7 +23,12 @@ export default function Services() {
   // Only the grid is themed. The backdrop resolves on whichever themed section
   // owns the middle of the viewport, so a short block would flash its colour
   // for a few hundred pixels and read as a glitch.
-  const grid = useBackdrop('clay')
+  //
+  // Sky rather than clay, matching what Pricing does with pink: the page's main
+  // event gets a real colour plate, one per page. Sky is the same blue step 02
+  // takes on the homepage process, so "what we do" reads as one colour across
+  // both places it appears.
+  const grid = useBackdrop('sky')
 
   return (
     <div data-testid="services-page" className="px-6 py-16 md:px-12">

@@ -100,6 +100,56 @@
   --color-rule: #d96fbb;
 }
 
+/* Same correction, same reason, for the four process plates. These are pitched
+   at the pink's saturation, not as pale tints, so the cream-sampled greys miss
+   on them the same way. Each ramp is a darkened tint of its own plate, so the
+   section keeps one hue rather than dropping neutral grey onto colour.
+
+   Butter is the logo yellow, which is also the accent, so the process index's
+   active marker lands as a yellow chip on a yellow page — 1.69:1, invisible,
+   and it is the one element on screen whose whole job is to say where you are.
+   Amber does not rescue it either; anything still reading as yellow tops out
+   near 2:1 on this plate. So on butter that marker alone inverts to ink with
+   paper type: 13.3:1 and 15.9:1.
+
+   Targeted at the marker rather than at --color-accent, which would have been
+   the shorter rule and the wrong one — the token is also the fill on every
+   AccentButton, and remapping it to ink would have made those ink-on-ink. */
+[data-backdrop='butter'] {
+  --color-ink-muted: #56501f;
+  --color-ink-faint: #6d6635;
+  --color-rule: #c4ae2b;
+}
+
+[data-backdrop='butter'] [data-process-marker] {
+  background-color: var(--color-ink);
+}
+
+[data-backdrop='butter'] [data-testid='process-index-item'][data-active='true'] {
+  color: var(--color-paper);
+}
+
+/* Same collision, second victim: AccentButton's fill is the logo yellow too, so
+   on butter the About page's "Start a project" CTA lost its edges and read as a
+   line of plain text. An outline rather than an inverted fill, because the
+   button's whole behaviour is ink sweeping up from the bottom on hover — fill it
+   with ink at rest and the hover has nowhere to go. */
+[data-backdrop='butter'] [data-accent-button] {
+  outline: 1px solid var(--color-ink);
+}
+
+[data-backdrop='sky'] {
+  --color-ink-muted: #1f4a63;
+  --color-ink-faint: #33607a;
+  --color-rule: #4f9cc7;
+}
+
+[data-backdrop='sage'] {
+  --color-ink-muted: #1f5437;
+  --color-ink-faint: #33684b;
+  --color-rule: #55ab7e;
+}
+
 @utility label {
   font-family: var(--font-sans);
   font-size: 11px;
